@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Mission Planner — Ukurra</title>
+<meta name="theme-color" content="#FFFFFF">
+<meta name="description" content="Rencanakan jalur misi pemetaan drone dan ekspor ke KMZ atau JSON.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+<link rel="stylesheet" href="assets/css/theme.css">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- ══════════ TOP BAR ══════════ -->
+<div id="topbar">
+  <a href="index.html" class="app-brand" data-i18n-title="app.kembaliBeranda">
+    <span class="brand-mark"><img src="assets/icons/logo.png" alt="Ukurra" width="34" height="34"></span>
+    <b>Ukurra</b>
+  </a>
+
+  <div id="searchwrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="search" data-i18n-ph="app.cariLokasi" placeholder="Cari lokasi…" autocomplete="off">
+  </div>
+
+  <div class="seg">
+    <button id="bm-sat" class="active" data-bm="sat">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7 9 3 3 9l4 4"/><path d="m17 11 4 4-6 6-4-4"/><path d="m8 12 4 4"/><path d="M16 4h.01M20 8h.01"/></svg>
+      <span data-i18n="app.satelit">Satelit</span>
+    </button>
+    <button id="bm-osm" data-bm="osm">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m9 20-6-3V4l6 3m0 13 6-3m-6 3V7m6 10 6 3V7l-6-3m0 13V4"/></svg>
+      <span data-i18n="app.jalan">Jalan</span>
+    </button>
+  </div>
+
+  <div class="lang-switch">
+    <button type="button" data-lang="id">ID</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
+  <button id="avatar" data-i18n-title="app.akun">?</button>
+</div>
+
+<!-- ══════════ DESKTOP RAIL ══════════ -->
+<nav id="rail">
+  <button class="rail-btn active" data-pane="drone">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9h6v6H9z"/><path d="M9 9 4.5 4.5M15 9l4.5-4.5M9 15l-4.5 4.5M15 15l4.5 4.5"/><circle cx="4.5" cy="4.5" r="2"/><circle cx="19.5" cy="4.5" r="2"/><circle cx="4.5" cy="19.5" r="2"/><circle cx="19.5" cy="19.5" r="2"/></svg>
+    <span class="tip" data-i18n="nav.drone">Drone</span>
+  </button>
+  <button class="rail-btn" data-pane="area">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M12 3v18"/></svg>
+    <span class="tip" data-i18n="app.area">Area Survei</span>
+  </button>
+  <button class="rail-btn" data-pane="param">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+    <span class="tip" data-i18n="app.parameter">Parameter</span>
+  </button>
+  <div class="rail-sep"></div>
+  <button class="rail-btn" data-pane="export">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+    <span class="tip" data-i18n="app.ekspor">Ekspor</span>
+  </button>
+</nav>
+
+<!-- ══════════ DOCK ══════════ -->
+<section id="dock">
+  <div class="dock-grip" id="grip"></div>
+
+  <div class="dock-head">
+    <div class="dock-title">
+      <h2 id="dock-h">Pilih Drone</h2>
+      <button class="dock-close" id="dock-close" aria-label="Tutup panel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="ss-hero">
+      <div class="ss-hero-val" data-stat="photos">–</div>
+      <div class="ss-hero-lbl" data-i18n="app.fotoDiambil">Foto yang diambil</div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="ss"><div class="ss-val" data-stat="gsd">–</div><div class="ss-lbl" data-i18n="app.gsdL">GSD cm</div></div>
+      <div class="ss"><div class="ss-val" data-stat="dur">–</div><div class="ss-lbl" data-i18n="app.durasiL">Durasi</div></div>
+      <div class="ss"><div class="ss-val" data-stat="area">–</div><div class="ss-lbl" data-i18n="app.luasL">Luas</div></div>
+      <div class="ss"><div class="ss-val" data-stat="bat">–</div><div class="ss-lbl" data-i18n="app.bateraiL">Baterai</div></div>
+      <div class="ss"><div class="ss-val" data-stat="jalur">–</div><div class="ss-lbl" data-i18n="app.jalurL">Jalur</div></div>
+    </div>
+
+    <div class="m-tabs" id="m-tabs">
+      <button class="active" data-pane="drone" data-i18n="nav.drone">Drone</button>
+      <button data-pane="area" data-i18n="app.areaS">Area</button>
+      <button data-pane="param" data-i18n="app.parameter">Parameter</button>
+      <button data-pane="export" data-i18n="app.ekspor">Ekspor</button>
+    </div>
+  </div>
+
+  <div class="dock-body">
+
+    <!-- ── PANE: DRONE ── -->
+    <div class="pane active" id="pane-drone">
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.modelDrone">Model Drone</span>
+        <div id="drone-list"></div>
+      </div>
+      <div class="note tip" id="drone-note"></div>
+    </div>
+
+    <!-- ── PANE: AREA ── -->
+    <div class="pane" id="pane-area">
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.gambarImpor">Gambar atau Impor</span>
+        <div class="pane-actions">
+          <button class="act" id="btn-draw">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/></svg>
+            <span><span data-i18n="app.gambarPoligon">Gambar Poligon</span><small data-i18n="app.gambarPoligonSub">Klik di peta untuk menandai sudut</small></span>
+          </button>
+          <button class="act danger" id="btn-clear">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+            <span><span data-i18n="app.hapusArea">Hapus Area</span><small data-i18n="app.hapusAreaSub">Mulai lagi dari nol</small></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.imporBerkas">Impor Berkas</span>
+        <div id="drop">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+          <b data-i18n="app.pilihBerkas">Pilih berkas KML / KMZ</b>
+          <span data-i18n="app.atauSeret">atau seret ke sini</span>
+        </div>
+      </div>
+
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.misiTersimpan">Misi Tersimpan</span>
+        <div id="daftar-misi"></div>
+      </div>
+
+      <div class="note">
+        <span data-i18n-html="app.setelahArea"></span>
+        Klik ikon <b>+</b> di tengah garis untuk menambah sudut, dan
+        klik kanan atau tekan lama pada titik untuk menghapusnya.
+      </div>
+    </div>
+
+    <!-- ── PANE: PARAMETER ── -->
+    <div class="pane" id="pane-param">
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.terbang">Terbang</span>
+        <div class="row2">
+          <div class="field">
+            <label data-i18n="app.ketinggian">Ketinggian (m)</label>
+            <input type="number" id="in-alt" value="120" min="10" max="500" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label data-i18n="app.kecepatan">Kecepatan (m/s)</label>
+            <input type="number" id="in-spd" value="12.7" min="1" max="15" step="0.1" inputmode="decimal">
+          </div>
+        </div>
+      </div>
+
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.overlapSidelap">Overlap &amp; Sidelap</span>
+        <div class="row2">
+          <div class="field">
+            <label data-i18n="app.overlap">Overlap (%)</label>
+            <input type="number" id="in-ovl" value="75" min="10" max="95" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label data-i18n="app.sidelap">Sidelap (%)</label>
+            <input type="number" id="in-sdl" value="75" min="10" max="95" inputmode="numeric">
+          </div>
+        </div>
+        <div class="note" style="margin-top:9px">
+          <span data-i18n-html="app.overlapNote"></span>
+        </div>
+      </div>
+
+      <div class="grp">
+        <div class="slider-head">
+          <span class="grp-label" style="margin:0" data-i18n="app.sudutJalur">Sudut Jalur</span>
+          <b id="v-dir">0°</b>
+        </div>
+        <input type="range" id="s-dir" min="0" max="359" step="1" value="0">
+        <div class="range-marks"><span>0°</span><span>90°</span><span>180°</span><span>270°</span><span>359°</span></div>
+
+        <label class="sakelar" for="c-silang">
+          <input type="checkbox" id="c-silang">
+          <span>
+            <b data-i18n="app.gridSilang">Grid Silang</b>
+            <small data-i18n="app.gridSilangKet">Terbang dua arah tegak lurus. Foto dua kali lipat, tapi DSM dan volume jauh lebih akurat.</small>
+          </span>
+        </label>
+      </div>
+
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.keamanan">Keamanan</span>
+        <div class="row2">
+          <div class="field">
+            <label data-i18n="app.sinyalHilang">Sinyal Hilang</label>
+            <select id="sel-signal">
+              <option value="rth">RTH</option>
+              <option value="hover">Hover</option>
+              <option value="continue">Continue</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="app.setelahSelesai">Setelah Selesai</label>
+            <select id="sel-finish">
+              <option value="rth">RTH</option>
+              <option value="hover">Hover</option>
+            </select>
+          </div>
+        </div>
+        <div class="note" style="margin-top:9px">
+          <b>RTH</b> — kembali dan mendarat di titik lepas landas.
+          <span data-i18n-html="app.hoverNote"></span>
+        </div>
+      </div>
+
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.kamera">Kamera</span>
+        <div class="note">
+          <span data-i18n-html="app.gimbalNote"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANE: EXPORT ── -->
+    <div class="pane" id="pane-export">
+      <div id="batas-wp" hidden></div>
+
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.statusAkun">Status Akun</span>
+        <div class="note" id="quota-label" data-i18n="app.memeriksa">Memeriksa…</div>
+        <button class="btn btn-accent btn-sm" id="btn-upgrade"
+                style="width:100%;margin-top:9px;display:none">
+          <span data-i18n="app.upgradeBtn">Berlangganan &mdash; Rp 599.000/tahun</span>
+        </button>
+      </div>
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.ringkasan">Ringkasan Misi</span>
+        <div class="note" id="export-summary" data-i18n="app.belumAdaMisi">Belum ada misi. Gambar area survei terlebih dahulu.</div>
+      </div>
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.formatKeluaran">Format Keluaran</span>
+        <div class="note tip" id="export-format"></div>
+      </div>
+      <div class="grp">
+        <span class="grp-label" data-i18n="app.simpanJuga">Simpan Juga Sebagai</span>
+        <div class="pane-actions">
+          <button class="act" id="btn-csv">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            <span><span data-i18n="app.tabelCsv">Tabel CSV</span><small data-i18n="app.tabelCsvSub">Daftar koordinat waypoint</small></span>
+          </button>
+          <button class="act" id="btn-json">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1"/></svg>
+            <span><span data-i18n="app.rincianJson">Rincian JSON</span><small data-i18n="app.rincianJsonSub">Parameter lengkap misi</small></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dock-foot">
+    <button class="btn btn-accent" id="btn-export">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+      <span id="export-label" data-i18n="app.eksporWaypoint">Ekspor Waypoint</span>
+    </button>
+  </div>
+</section>
+
+<!-- ══════════ TOOLBAR SAAT MENGGAMBAR ══════════ -->
+<div id="draw-bar" class="hidden">
+  <button class="db-btn danger" id="db-cancel">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    Batalkan Polygon
+  </button>
+</div>
+
+<!-- ══════════ HUD ══════════ -->
+<div id="kartu-bagi" hidden></div>
+
+<div id="hud">
+  <span data-hud="coord">–</span>
+  <span><span data-i18n="app.zoomL">Zoom</span> <b data-hud="zoom">–</b></span>
+  <span><span data-i18n="app.jalurL">Jalur</span> <b data-hud="strips">–</b></span>
+  <span><span data-i18n="app.jarakL">Jarak</span> <b data-hud="dist">–</b></span>
+  <span><span data-i18n="app.fotoL">Foto</span> <b data-hud="photos">–</b></span>
+</div>
+
+<!-- ══════════ EMPTY STATE ══════════ -->
+<div id="empty">
+  <button class="modal-x" id="empty-x" aria-label="Tutup">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="ico">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M12 3v18"/></svg>
+  </div>
+  <h3 data-i18n="app.belumAdaArea">Belum ada area survei</h3>
+  <p class="empty-full" data-i18n-html="app.belumAdaAreaSub"></p>
+  <p class="empty-ringkas" data-i18n-html="app.belumAdaAreaHp">Buka tab <b>Area</b> &rarr; <b>Gambar Poligon</b>, atau impor KML/KMZ.</p>
+</div>
+
+<!-- ══════════ AUTH GATE ══════════ -->
+<div id="gate" class="hidden">
+  <div class="modal-card">
+    <div style="text-align:center;margin-bottom:22px">
+      <img src="assets/icons/logo.png" alt="Ukurra" style="width:52px;height:52px;margin:0 auto 14px;display:block;object-fit:contain">
+      <h3 style="font-size:20px;font-weight:800;margin-bottom:6px">Masuk untuk mulai memetakan</h3>
+      <p style="font-size:13.5px;color:var(--dim);line-height:1.6" data-i18n="app.misiTersimpan"></p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="oauth-btn" data-provider="google">
+        <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C37 40.2 44 35 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+        Lanjutkan dengan Google
+      </button>
+    </div>
+
+    <div id="gate-note" style="display:none;margin-top:14px;padding:11px 13px;border-radius:var(--r-md);background:#FFFBEB;border:1px solid #FDE68A;font-size:12px;color:#92400E;line-height:1.6"></div>
+
+    <div id="gate-guest-wrap">
+      <div style="display:flex;align-items:center;gap:12px;margin:18px 0 14px">
+        <span style="flex:1;height:1px;background:var(--line)"></span>
+        <span style="font-size:11px;color:var(--dim-2)">atau</span>
+        <span style="flex:1;height:1px;background:var(--line)"></span>
+      </div>
+      <button class="btn btn-ghost" id="gate-guest" style="width:100%">Coba Dulu Tanpa Akun</button>
+    </div>
+    <a href="index.html" style="display:block;text-align:center;font-size:12px;color:var(--dim-2);margin-top:14px">← Kembali ke beranda</a>
+  </div>
+</div>
+
+<!-- ══════════ ACCOUNT SHEET ══════════ -->
+<div class="modal-scrim" id="acct">
+  <div class="modal-card" style="max-width:340px">
+    <button class="modal-x" id="acct-x" aria-label="Tutup">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div style="display:flex;align-items:center;gap:13px;margin-bottom:22px">
+      <div id="acct-av" style="width:48px;height:48px;border-radius:50%;background:var(--surface-3) center/cover no-repeat;border:1px solid var(--line);display:grid;place-items:center;font-size:17px;font-weight:800;color:var(--accent-d)">?</div>
+      <div style="min-width:0">
+        <div id="acct-name" style="font-size:15px;font-weight:800">Pilot</div>
+        <div id="acct-mail" style="font-size:12px;color:var(--dim-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+      </div>
+    </div>
+    <div class="pane-actions">
+      <button class="act" data-install data-install-open>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+        <span>Pasang Aplikasi<small>Buka layar penuh dari layar utama</small></span>
+      </button>
+      <a class="act" href="index.html">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Beranda<small>Kembali ke halaman utama</small></span>
+      </a>
+      <button class="act danger" id="btn-signout">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+        <span>Keluar<small>Akhiri sesi ini</small></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<input type="file" id="file-input" accept=".kml,.kmz" hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/pwa.js"></script>
+<script src="assets/js/quota.js"></script>
+<script src="assets/js/upgrade.js"></script>
+<script src="assets/js/vertex-tools.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

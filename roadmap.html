@@ -1,0 +1,428 @@
+<title>Jalur Produksi Ukurra</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   Jalur Produksi Ukurra — dari kondisi proyek sekarang sampai bisa
+   dipakai pengguna sungguhan. Menggantikan isi usang di ROADMAP.md
+   (paket lifetime, pendaftaran merek/HKI) — murni teknis & urutan.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --bg: #F7F9FC;
+  --surface: #FFFFFF;
+  --surface-2: #F0F4F9;
+  --line: #DFE6EF;
+  --line-2: #C9D4E2;
+  --text: #16222F;
+  --dim: #5A6B7D;
+  --dim-2: #8A99AB;
+
+  --accent: #0EA5E9;
+  --accent-d: #0284C7;
+  --accent-wash: #E9F6FD;
+
+  --ok: #0E9F6E;
+  --ok-wash: #E6F8F1;
+  --warn: #D97706;
+  --warn-wash: #FEF3E2;
+  --block: #DC2626;
+  --block-wash: #FDECEC;
+
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B0F15;
+    --surface: #12171F;
+    --surface-2: #171D27;
+    --line: #262E3A;
+    --line-2: #333E4D;
+    --text: #E7ECF2;
+    --dim: #96A3B3;
+    --dim-2: #67748A;
+
+    --accent: #4FB8EF;
+    --accent-d: #7DD3FC;
+    --accent-wash: rgba(79,184,239,.12);
+
+    --ok: #34D399;
+    --ok-wash: rgba(52,211,153,.1);
+    --warn: #F6B93B;
+    --warn-wash: rgba(246,185,59,.1);
+    --block: #F87171;
+    --block-wash: rgba(248,113,113,.1);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B0F15;
+  --surface: #12171F;
+  --surface-2: #171D27;
+  --line: #262E3A;
+  --line-2: #333E4D;
+  --text: #E7ECF2;
+  --dim: #96A3B3;
+  --dim-2: #67748A;
+
+  --accent: #4FB8EF;
+  --accent-d: #7DD3FC;
+  --accent-wash: rgba(79,184,239,.12);
+
+  --ok: #34D399;
+  --ok-wash: rgba(52,211,153,.1);
+  --warn: #F6B93B;
+  --warn-wash: rgba(246,185,59,.1);
+  --block: #F87171;
+  --block-wash: rgba(248,113,113,.1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 44px 0 64px; }
+
+/* ── Header ── */
+.hd { margin-bottom: 36px; }
+.hd .eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--accent-d); margin-bottom: 10px;
+}
+.hd h1 {
+  font-size: clamp(26px, 4.5vw, 36px); font-weight: 800; letter-spacing: -.02em;
+  line-height: 1.15; text-wrap: balance; margin-bottom: 12px;
+}
+.hd p { font-size: 15px; color: var(--dim); max-width: 60ch; }
+
+/* ── Snapshot kondisi ── */
+.snap {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 28px 0 40px;
+}
+.snap-card {
+  border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--surface);
+}
+.snap-card .n { font-family: var(--mono); font-size: 22px; font-weight: 700; }
+.snap-card.ok .n { color: var(--ok); }
+.snap-card.todo .n { color: var(--warn); }
+.snap-card .l { font-size: 12.5px; color: var(--dim); margin-top: 4px; }
+
+/* ── Timeline ── */
+.tl { position: relative; }
+.tl::before {
+  content: ""; position: absolute; left: 21px; top: 10px; bottom: 10px; width: 2px;
+  background: var(--line);
+}
+.stage { position: relative; padding-left: 56px; margin-bottom: 14px; }
+.stage-dot {
+  position: absolute; left: 0; top: 2px; width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-weight: 700; font-size: 16px;
+  background: var(--surface); border: 2px solid var(--line); color: var(--dim);
+  z-index: 1;
+}
+.stage.ok .stage-dot { border-color: var(--ok); color: var(--ok); background: var(--ok-wash); }
+.stage.block .stage-dot { border-color: var(--block); color: var(--block); background: var(--block-wash); }
+
+.stage-card {
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;
+}
+.stage-head {
+  padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+  user-select: none;
+}
+.stage-head:hover { background: var(--surface-2); }
+.stage-head .ti { flex: 1; min-width: 0; }
+.stage-head h2 { font-size: 16.5px; font-weight: 800; letter-spacing: -.01em; }
+.stage-head .sub { font-size: 12.5px; color: var(--dim); margin-top: 2px; }
+.badge {
+  flex-shrink: 0; font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 100px; white-space: nowrap;
+}
+.badge.ok { background: var(--ok-wash); color: var(--ok); }
+.badge.todo { background: var(--warn-wash); color: var(--warn); }
+.badge.block { background: var(--block-wash); color: var(--block); }
+.chev { flex-shrink: 0; width: 18px; height: 18px; color: var(--dim-2); transition: transform .2s; }
+.stage-card.open .chev { transform: rotate(90deg); }
+
+.stage-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--line); }
+.stage-card.open .stage-body { display: block; padding-top: 16px; }
+.stage-body p { font-size: 13.5px; color: var(--dim); margin-bottom: 12px; }
+.stage-body ol, .stage-body ul { padding-left: 20px; margin-bottom: 12px; }
+.stage-body li { font-size: 13.5px; margin-bottom: 7px; line-height: 1.6; }
+.stage-body code {
+  font-family: var(--mono); font-size: 12px; background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px;
+}
+.verify {
+  margin-top: 14px; padding: 12px 15px; border-radius: 10px;
+  background: var(--accent-wash); border: 1px solid var(--accent);
+  font-size: 13px;
+}
+.verify b { color: var(--accent-d); }
+.note {
+  margin-top: 14px; padding: 12px 15px; border-radius: 10px;
+  background: var(--warn-wash); border: 1px solid var(--warn);
+  font-size: 13px;
+}
+.note b { color: var(--warn); }
+
+/* ── Paralel ── */
+.paralel {
+  margin-top: 40px; padding: 18px 20px; border-radius: 14px;
+  background: var(--surface); border: 1px dashed var(--line-2);
+}
+.paralel h3 { font-size: 14px; font-weight: 800; margin-bottom: 8px; }
+.paralel p { font-size: 13px; color: var(--dim); }
+
+/* ── Penutup ── */
+.done-box {
+  margin-top: 40px; padding: 22px 24px; border-radius: 16px;
+  background: var(--ok-wash); border: 1px solid var(--ok);
+}
+.done-box h3 { font-size: 16px; font-weight: 800; color: var(--ok); margin-bottom: 8px; }
+.done-box p { font-size: 13.5px; color: var(--text); }
+
+.foot { margin-top: 36px; font-size: 12px; color: var(--dim-2); text-align: center; }
+
+@media (max-width: 480px) {
+  .snap { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="wrap">
+
+  <div class="hd">
+    <div class="eyebrow">Ukurra &middot; Jalur Produksi</div>
+    <h1>Dari kondisi sekarang, sampai bisa dipakai pengguna sungguhan.</h1>
+    <p>Murni jalur teknis: hosting, akun, pembayaran, dan distribusi. Tidak ada
+      pendaftaran merek, HKI, atau izin usaha — itu bisa menyusul kapan saja
+      dan tidak menghalangi produk berjalan. Paket lifetime juga sudah tidak
+      dipakai; harga sekarang dua paket: <b>Standard</b> Rp 599.000/tahun dan
+      <b>Organisasi</b> Rp 5.999.000/tahun (lewat kontak manual).</p>
+  </div>
+
+  <div class="snap">
+    <div class="snap-card ok">
+      <div class="n">6</div>
+      <div class="l">Sudah dibangun di kode — login, jatah, skema database, aplikasi desktop, halaman harga</div>
+    </div>
+    <div class="snap-card todo">
+      <div class="n">5</div>
+      <div class="l">Butuh tindakan di luar kode — domain, akun Supabase, akun pembayaran, 2 halaman legal</div>
+    </div>
+  </div>
+
+  <div class="tl" id="tl">
+
+    <!-- 1 -->
+    <div class="stage ok" data-s="1">
+      <div class="stage-dot">1</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Web hidup di hosting</h2><div class="sub">± 30 menit &middot; gratis, belum pakai domain</div></div>
+          <span class="badge ok">Siap dikerjakan</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p>Memastikan hostingnya jalan dulu sebelum menyentuh apa pun yang lain.</p>
+          <ol>
+            <li>Buat akun GitHub dan Cloudflare.</li>
+            <li>Jadikan folder <code>LetsMap</code> repo Git, <code>git push</code> ke GitHub (aman dibuat publik — hanya anon key Supabase yang ikut, dirancang untuk sisi peramban).</li>
+            <li>Cloudflare &rarr; <b>Workers &amp; Pages &rarr; Create &rarr; Pages &rarr; Connect to Git</b>, pilih repo.</li>
+            <li>Build command dikosongkan, build output <code>/</code> — situs ini tanpa build step.</li>
+            <li><b>Save and Deploy.</b></li>
+          </ol>
+          <div class="verify"><b>Cek:</b> buka <code>https://&lt;nama-proyek&gt;.pages.dev</code> di HP. Landing page tampil, bisa "Add to Home screen". Login belum jalan — itu normal, masih mode tamu.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="stage ok" data-s="2">
+      <div class="stage-dot">2</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Database &amp; jatah uji coba</h2><div class="sub">± 20 menit &middot; <code>supabase-schema.sql</code> sudah siap</div></div>
+          <span class="badge ok">File siap, tinggal jalankan</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p>Jatah uji coba (2 misi, 1 proyek olah data) dihitung di server lewat tabel ini — bukan di peramban, jadi tidak bisa direset dengan hapus data.</p>
+          <ol>
+            <li>Buat proyek di <code>supabase.com</code>, region <b>Southeast Asia (Singapore)</b>.</li>
+            <li><b>SQL Editor &rarr; New query</b>, tempel seluruh isi <code>supabase-schema.sql</code>, jalankan.</li>
+          </ol>
+          <div class="verify"><b>Cek:</b> di <b>Table Editor</b>, tabel <code>profiles</code> ada dengan kolom <code>plan</code>, <code>missions_used</code>, <code>projects_used</code>.</div>
+          <div class="note"><b>Catatan free tier:</b> proyek yang tidak disentuh 7 hari akan dijeda — buka dashboard sekali seminggu selama masih sepi.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="stage block" data-s="3">
+      <div class="stage-dot">3</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Login Google</h2><div class="sub">± 30 menit &middot; butuh halaman Privasi &amp; Syarat lebih dulu</div></div>
+          <span class="badge block">Terhalang</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p>Alurnya: peramban &rarr; Google &rarr; <b>Supabase</b> &rarr; kembali ke situs. Yang didaftarkan ke Google adalah alamat Supabase, bukan alamat situs sendiri — ini yang paling sering tertukar.</p>
+          <ol>
+            <li>Google Cloud Console &rarr; proyek baru <code>Ukurra</code>.</li>
+            <li><b>OAuth consent screen</b>: User type External, nama app <code>Ukurra</code>, scope cukup <code>email</code> <code>profile</code> <code>openid</code>. <b>Privacy Policy URL</b> dan <b>Terms of Service URL</b> wajib diisi — lihat Tahap 7.</li>
+            <li><b>Credentials &rarr; OAuth client ID</b>, type Web application. Redirect URI <b>satu baris saja</b>: <code>https://&lt;ref-proyek&gt;.supabase.co/auth/v1/callback</code>.</li>
+            <li>Supabase &rarr; <b>Authentication &rarr; Providers &rarr; Google</b>, aktifkan, tempel Client ID + Secret.</li>
+            <li>Supabase &rarr; <b>Authentication &rarr; URL Configuration</b>: Site URL = <code>https://&lt;nama-proyek&gt;.pages.dev</code>; Redirect URLs tambahkan <code>https://&lt;nama-proyek&gt;.pages.dev/**</code> dan <code>ukurra://auth</code> (baris kedua ini dipakai aplikasi desktop — tanpa itu login Studio ditolak).</li>
+            <li>Isi <code>assets/js/config.js</code>: <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> dari Supabase &rarr; Project Settings &rarr; API. Push.</li>
+          </ol>
+          <div class="verify"><b>Cek:</b> login dengan Google di situsnya. Tabel <code>profiles</code> di Supabase harus muncul satu baris, <code>plan = free</code>, <code>missions_used = 0</code>. Ekspor satu misi &rarr; muat ulang &rarr; angkanya jadi 1.</div>
+          <div class="note"><b>Tanpa halaman Privasi/Syarat (Tahap 7)</b>, OAuth cuma bisa mode Testing — maksimal 100 akun yang harus didaftarkan manual satu-satu di Google Cloud Console. Tidak bisa dipakai publik.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="stage todo" data-s="4">
+      <div class="stage-dot">4</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Domain ukurra.com</h2><div class="sub">± 20 menit &middot; pengeluaran pertama, ± Rp 165.000/tahun</div></div>
+          <span class="badge todo">Belum dibeli</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <ol>
+            <li>Cloudflare &rarr; <b>Domain Registration &rarr; Register Domain</b>, cari <code>ukurra.com</code> (Cloudflare jual di harga modal).</li>
+            <li><b>Workers &amp; Pages &rarr; proyek &rarr; Custom domains</b>, masukkan <code>ukurra.com</code> — DNS dan HTTPS terpasang sendiri kalau domainnya dibeli di Cloudflare.</li>
+            <li>Supabase &rarr; <b>URL Configuration</b>: ubah Site URL ke <code>https://ukurra.com</code>, tambahkan <code>https://ukurra.com/**</code> ke Redirect URLs.</li>
+          </ol>
+          <div class="verify"><b>Cek:</b> <code>https://ukurra.com</code> terbuka dengan kunci HTTPS, login Google masih jalan dari alamat baru.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="stage todo" data-s="5">
+      <div class="stage-dot">5</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Pembayaran</h2><div class="sub">± 30 menit &middot; Lynk.id atau Mayar.id</div></div>
+          <span class="badge todo">Belum dibuat</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p>Hanya paket <b>Standard</b> yang butuh checkout swalayan. Paket <b>Organisasi</b> dijual lewat tombol "Hubungi Kami" (<code>mailto:</code>) yang sudah ada — tidak perlu produk pembayaran untuk itu.</p>
+          <ol>
+            <li>Buat akun di <b>Lynk.id</b> (paling cepat) atau <b>Mayar.id</b> (ada webhook, lebih cocok kalau sudah ramai).</li>
+            <li>Buat <b>dua produk terpisah</b> — Standard Tahunan Rp 599.000 dan Standard Bulanan Rp 69.000. Lynk/Mayar tidak membaca parameter <code>?plan=</code> yang dikirim situsnya, jadi memang harus dua produk, bukan satu produk dengan dua harga.</li>
+            <li>Tempel tautan produk <b>Tahunan</b> (yang ditonjolkan) ke <code>CHECKOUT_URL</code> di <code>config.js</code>.</li>
+          </ol>
+          <p><b>Aktivasi manual dulu:</b> sampai webhook dibuat, jadikan akun Standard lewat SQL Editor setelah pembayaran masuk (perintahnya ada di bagian bawah <code>supabase-schema.sql</code>). Untuk puluhan pembeli pertama ini masih wajar.</p>
+          <div class="verify"><b>Cek:</b> klik "Mulai Berlangganan" di situs, sampai ke halaman Lynk/Mayar dengan harga yang benar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5b -->
+    <div class="stage ok" data-s="5b">
+      <div class="stage-dot">5b</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Sambungkan aplikasi desktop</h2><div class="sub">Login &amp; gerbang jatah sudah dibangun di kode</div></div>
+          <span class="badge ok">Tinggal isi config</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p>Ukurra Studio memakai akun Google yang sama dengan web, supaya jatah uji coba tidak bisa diulang dengan berpindah aplikasi. Alur login (PKCE lewat peramban sistem + protokol <code>ukurra://</code>) dan gerbang jatah (1 proyek) <b>sudah selesai dibangun</b> — di <code>LetsMapApp/auth.js</code>, dipanggil dari <code>main.js</code>. Tinggal isi kredensial.</p>
+          <ol>
+            <li>Buka <code>LetsMapApp/config.js</code>, isi <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>, <code>CHECKOUT_URL</code> — <b>sama persis</b> dengan nilai di web.</li>
+            <li>Pastikan <code>ukurra://auth</code> sudah ada di Redirect URLs Supabase (Tahap 3).</li>
+            <li>Bangun ulang installer-nya supaya <code>config.js</code> yang terisi ikut terpaket.</li>
+          </ol>
+          <div class="verify"><b>Cek:</b> buka Ukurra Studio, klik "Masuk dengan Google", peramban terbuka lalu kembali ke aplikasi dengan nama akun tampil. Olah satu proyek sampai selesai &rarr; di Supabase, <code>projects_used</code> jadi 1. Coba olah lagi &rarr; ajakan berlangganan muncul.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="stage todo" data-s="6">
+      <div class="stage-dot">6</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Bagikan installer desktop</h2><div class="sub">Cloudflare R2 &middot; installer ± 600&ndash;800 MB</div></div>
+          <span class="badge todo">Belum di-hosting</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p>Jauh di atas batas 25 MiB per berkas di Cloudflare Pages — installer tidak boleh ikut masuk repo web. R2: 10 GB gratis, dan yang menentukan, <b>unduhan tidak ditagih</b>.</p>
+          <ol>
+            <li>Cloudflare &rarr; <b>R2 &rarr; Create bucket</b>, nama <code>ukurra-rilis</code>.</li>
+            <li>Unggah <code>Ukurra-Studio-Setup.exe</code>.</li>
+            <li><b>Settings &rarr; Public access &rarr; Connect custom domain</b>, pakai <code>unduh.ukurra.com</code>.</li>
+          </ol>
+          <p>Tautannya jadi <code>https://unduh.ukurra.com/Ukurra-Studio-Setup.exe</code> — tombol "Unduh Ukurra Studio" di landing page sudah dipasang dan menunggu tautan ini hidup, tidak perlu sentuh kode lagi.</p>
+          <p>Unduhan sengaja <b>tidak dikunci di balik pembayaran</b> — batas 1 proyek gratis sudah ditegakkan di dalam aplikasi sendiri (Tahap 5b), jadi mengunci tautan unduhan hanya menyusahkan pengguna sah.</p>
+          <div class="verify"><b>Cek:</b> klik tombol "Unduh Ukurra Studio" di landing page, installer terunduh.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="stage block" data-s="7">
+      <div class="stage-dot">7</div>
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="ti"><h2>Halaman Privasi &amp; Syarat Penggunaan</h2><div class="sub">Wajib untuk OAuth Google keluar dari mode Testing</div></div>
+          <span class="badge block">Belum ada</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+        <div class="stage-body">
+          <p><code>privacy.html</code> dan <code>terms.html</code> belum ada di proyek ini. Tanpa dua halaman ini terpasang di OAuth consent screen (Tahap 3), Google membatasi login ke mode Testing — maksimal 100 akun, didaftarkan manual satu-satu. Produk tidak bisa dipakai publik tanpa ini.</p>
+          <ol>
+            <li>Tulis <code>privacy.html</code> — data apa yang dikumpulkan (email dari Google, data misi/proyek), untuk apa, disimpan di mana (Supabase), cara pengguna minta dihapus.</li>
+            <li>Tulis <code>terms.html</code> — syarat pakai, batasan tanggung jawab, kebijakan uji coba &amp; langganan.</li>
+            <li>Pasang keduanya di repo, deploy, lalu tempel URL-nya ke OAuth consent screen di Google Cloud Console.</li>
+            <li>Ajukan verifikasi/publish app di Google Cloud Console supaya keluar dari mode Testing.</li>
+          </ol>
+          <div class="verify"><b>Cek:</b> OAuth consent screen berstatus "In production", bukan "Testing". Akun Google mana pun bisa login tanpa didaftarkan manual lebih dulu.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="paralel">
+    <h3>Boleh dikerjakan belakangan, tidak menghalangi peluncuran teknis</h3>
+    <p>Tinjauan hukum soal lisensi AGPL OpenDroneMap (ODM dipanggil sebagai program terpisah, tidak dimodifikasi — polanya sudah dirancang untuk ini) sebaiknya selesai sebelum rupiah pertama masuk, tapi tidak menghalangi tahap 1&ndash;7 di atas berjalan. Kerjakan paralel, bukan sebagai gerbang.</p>
+  </div>
+
+  <div class="done-box">
+    <h3>Setelah tahap 1&ndash;7 selesai</h3>
+    <p>Siapa pun bisa buka <code>ukurra.com</code>, login dengan Google, pakai mission planner dengan jatah 2 misi gratis, unduh Ukurra Studio dan olah 1 proyek gratis, lalu berlangganan Standard lewat Lynk/Mayar kalau jatahnya habis — semua tanpa campur tangan manual, kecuali mengaktifkan status Standard lewat SQL Editor sampai webhook dibangun.</p>
+  </div>
+
+  <p class="foot">Dibuat dari pembacaan langsung kode &amp; dokumentasi proyek saat ini. Detail tiap tahap juga ada di <code>DEPLOY.md</code>.</p>
+
+</div>
+
+<script>
+document.getElementById('tl').addEventListener('click', (e) => {
+  const head = e.target.closest('.stage-head');
+  if (!head) return;
+  head.closest('.stage-card').classList.toggle('open');
+});
+// Tahap pertama yang masih "todo"/"block" dibuka otomatis.
+(function () {
+  const first = document.querySelector('.stage.todo .stage-card, .stage.block .stage-card');
+  if (first) first.classList.add('open');
+})();
+</script>

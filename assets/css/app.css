@@ -1,0 +1,600 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Ukurra — Mission Planner (tema terang)
+   Desktop : rail ikon + panel melayang
+   Mobile  : top bar + bottom sheet yang bisa ditarik
+   ═══════════════════════════════════════════════════════════════════ */
+
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+#map{position:fixed;inset:0;z-index:0;background:var(--surface-3)}
+
+/* ═══ LEAFLET ══════════════════════════════════════════════════════ */
+.leaflet-container{background:var(--surface-3);font-family:var(--font)}
+.leaflet-control-attribution{
+  background:rgba(255,255,255,.86)!important;
+  color:var(--dim-2)!important;
+  font-size:10px!important;padding:2px 8px!important;
+}
+.leaflet-control-attribution a{color:var(--accent-d)!important}
+.leaflet-bar{border:none!important;box-shadow:var(--shadow-sm)!important}
+.leaflet-bar a,.leaflet-bar a:hover{
+  background:var(--surface)!important;color:var(--text)!important;
+  border-color:var(--line)!important;
+  width:34px!important;height:34px!important;line-height:34px!important;
+}
+.leaflet-bar a:hover{background:var(--accent-wash)!important;color:var(--accent-d)!important}
+.leaflet-bar a:first-child{border-radius:9px 9px 0 0!important}
+.leaflet-bar a:last-child{border-radius:0 0 9px 9px!important}
+.leaflet-draw{display:none!important}
+
+.leaflet-tooltip{
+  background:var(--text)!important;color:#fff!important;
+  border:none!important;box-shadow:var(--shadow-sm)!important;
+  font-size:11px!important;font-weight:600!important;
+  padding:4px 9px!important;border-radius:6px!important;
+}
+.leaflet-tooltip-top::before{border-top-color:var(--text)!important}
+.leaflet-tooltip-right::before{border-right-color:var(--text)!important}
+
+.loc-btn{
+  width:34px!important;height:34px!important;
+  display:flex!important;align-items:center;justify-content:center;
+  background:var(--surface)!important;color:var(--text)!important;
+  border:1px solid var(--line)!important;border-radius:9px!important;
+  margin-bottom:6px!important;
+}
+.loc-btn:hover{color:var(--accent-d)!important}
+.loc-btn.loading svg{animation:spin .8s linear infinite}
+
+/* ═══ TOP BAR ══════════════════════════════════════════════════════ */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:700;
+  padding:calc(12px + var(--sat)) 14px 12px;
+  display:flex;align-items:center;gap:10px;
+  pointer-events:none;
+}
+#topbar>*{pointer-events:auto}
+
+/* kartu putih supaya tetap terbaca di atas citra satelit yang gelap/hijau */
+.app-brand{
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+  padding:3px 14px 3px 3px;border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);
+  transition:border-color .18s;
+}
+.app-brand:hover{border-color:var(--accent)}
+.app-brand .brand-mark{
+  width:30px;height:30px;display:grid;place-items:center;
+}
+.app-brand .brand-mark img{width:100%;height:100%;object-fit:contain}
+.app-brand b{font-size:14.5px;font-weight:800;color:var(--text)}
+
+#searchwrap{position:relative;flex:1;max-width:340px}
+#search{
+  width:100%;padding:10px 15px 10px 38px;
+  border-radius:var(--r-pill);
+  background:var(--surface);
+  border:1px solid var(--line);
+  font-size:13px;outline:none;
+  box-shadow:var(--shadow-sm);
+  transition:border-color .18s;
+}
+#search::placeholder{color:var(--dim-2)}
+#search:focus{border-color:var(--accent)}
+#searchwrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim-2);pointer-events:none}
+
+.seg{
+  display:flex;gap:2px;padding:3px;margin-left:auto;
+  border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);
+}
+.seg button{
+  padding:7px 14px;border-radius:var(--r-pill);
+  font-size:12px;font-weight:700;color:var(--dim);
+  display:flex;align-items:center;gap:6px;
+  transition:background .18s, color .18s;
+}
+.seg button.active{background:var(--accent);color:#fff}
+.seg button:not(.active):hover{color:var(--text)}
+
+#avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--line);
+  background:var(--surface) center/cover no-repeat;
+  display:grid;place-items:center;
+  font-size:13px;font-weight:800;color:var(--accent-d);
+  box-shadow:var(--shadow-sm);
+  transition:border-color .18s;
+}
+#avatar:hover{border-color:var(--accent)}
+
+/* ═══ RAIL (desktop) ═══════════════════════════════════════════════ */
+#rail{
+  position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:650;
+  display:flex;flex-direction:column;gap:4px;padding:6px;
+  border-radius:var(--r-lg);
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-md);
+}
+.rail-btn{
+  position:relative;
+  width:44px;height:44px;border-radius:11px;
+  display:grid;place-items:center;color:var(--dim);
+  transition:background .18s, color .18s;
+}
+.rail-btn:hover{background:var(--surface-3);color:var(--text)}
+.rail-btn.active{background:var(--accent);color:#fff}
+.rail-btn .tip{
+  position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);
+  padding:5px 10px;border-radius:7px;white-space:nowrap;
+  background:var(--text);color:#fff;
+  font-size:11.5px;font-weight:600;
+  opacity:0;pointer-events:none;transition:opacity .16s;
+}
+.rail-btn:hover .tip{opacity:1}
+.rail-sep{height:1px;background:var(--line);margin:3px 5px}
+
+/* ═══ DOCK ═════════════════════════════════════════════════════════ */
+#dock{
+  position:fixed;z-index:680;
+  left:76px;top:74px;width:330px;
+  max-height:calc(100dvh - 150px);
+  display:flex;flex-direction:column;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  transition:opacity .2s ease;
+}
+#dock.hidden{opacity:0;pointer-events:none}
+
+.dock-grip{display:none}
+
+.dock-head{padding:14px 16px 0;flex-shrink:0}
+.dock-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dock-title h2{font-size:14.5px;font-weight:800}
+.dock-close{
+  width:27px;height:27px;border-radius:7px;display:grid;place-items:center;
+  color:var(--dim-2);background:var(--surface-3);
+  transition:background .18s, color .18s;
+}
+.dock-close:hover{background:var(--line);color:var(--text)}
+
+/* Jumlah foto diangkat jadi sorotan utama di atas, karena itu angka
+   pertama yang dicari pengguna: menentukan berapa baterai dan berapa
+   lama pengolahan nanti. Sebelumnya ia kotak kelima di baris kedua,
+   berukuran sama dengan GSD, dan nyaris tidak terlihat. */
+.ss-hero{
+  /* Mendatar, bukan bertumpuk: angka di kiri, labelnya di kanan.
+     Versi bertumpuk setinggi 67px, dan bersama lima kotak di bawahnya
+     menghabiskan hampir separuh panel sebelum pengguna sampai ke
+     kolom parameter. */
+  display:flex;align-items:baseline;justify-content:center;gap:8px;
+  padding:7px 10px;margin-bottom:6px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-d) 100%);
+  color:#fff;box-shadow:0 2px 8px rgba(14,165,233,.22);
+}
+.ss-hero-val{font-size:21px;font-weight:800;line-height:1.1;white-space:nowrap;letter-spacing:-.02em}
+.ss-hero-lbl{
+  font-family:var(--mono);font-size:8px;letter-spacing:.09em;
+  text-transform:uppercase;opacity:.85;white-space:nowrap;
+}
+
+/* ── daftar misi tersimpan ── */
+#daftar-misi{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.misi-kosong{font-size:11.5px;color:var(--dim-2);line-height:1.5;padding:2px}
+.misi-baris{
+  display:flex;align-items:stretch;gap:4px;border:1px solid var(--line);
+  border-radius:9px;background:var(--surface-2);overflow:hidden;
+}
+.misi-baris:hover{border-color:var(--accent)}
+.misi-buka{
+  flex:1;min-width:0;text-align:left;padding:7px 9px;border:none;background:none;
+  cursor:pointer;color:var(--text);
+}
+.misi-buka b{display:block;font-size:12px;font-weight:700;line-height:1.3;outline:none}
+.misi-buka b:focus{background:var(--accent-wash);border-radius:3px}
+.misi-buka small{
+  display:block;font-family:var(--mono);font-size:9.5px;color:var(--dim-2);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.misi-mata{
+  width:30px;flex-shrink:0;border:none;background:none;color:#B4C0CE;
+  cursor:pointer;display:grid;place-items:center;
+}
+.misi-mata svg{width:15px;height:15px}
+.misi-mata:hover{color:var(--accent-d);background:var(--accent-wash)}
+.misi-baris.tampil{border-color:var(--accent);background:var(--accent-wash)}
+.misi-baris.tampil .misi-mata{color:var(--accent-d)}
+
+.misi-hapus{
+  width:26px;flex-shrink:0;border:none;background:none;color:#B4C0CE;
+  font-size:16px;cursor:pointer;
+}
+.misi-hapus:hover{background:#FEE2E2;color:#DC2626}
+
+/* Sakelar dengan keterangan di bawahnya — dipakai untuk pilihan yang
+   perlu dijelaskan, bukan sekadar dinyalakan. */
+.sakelar{
+  display:flex;gap:9px;align-items:flex-start;margin-top:11px;cursor:pointer;
+  padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);
+}
+.sakelar:hover{border-color:var(--accent)}
+.sakelar input{width:15px;height:15px;margin-top:1px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+.sakelar b{display:block;font-size:12.5px;font-weight:700;line-height:1.3}
+.sakelar small{display:block;font-size:10.5px;color:var(--dim);line-height:1.45;margin-top:2px}
+
+.stats-strip{
+  /* Lima kolom sebaris. Dulu 3+2 karena kotaknya besar, tapi dua baris
+     itu yang membuat blok statistik memakan separuh panel. Dengan
+     angka 11px dan label 7px, kelimanya muat dalam satu baris dan
+     tingginya turun dari dua baris jadi satu. */
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+  padding-bottom:10px;border-bottom:1px solid var(--line);
+}
+.ss{
+  text-align:center;padding:5px 2px;border-radius:7px;
+  background:var(--surface-2);border:1px solid var(--line);
+  min-width:0;
+}
+.ss-val{font-size:11px;font-weight:800;line-height:1.15;white-space:nowrap}
+.ss-lbl{font-family:var(--mono);font-size:7px;letter-spacing:.04em;text-transform:uppercase;color:var(--dim-2);margin-top:1px}
+
+.dock-body{flex:1;overflow-y:auto;padding:14px 16px 16px;overscroll-behavior:contain}
+.pane{display:none}
+.pane.active{display:block}
+
+/* ═══ FORM ═════════════════════════════════════════════════════════ */
+.grp{margin-bottom:16px}
+.grp:last-child{margin-bottom:0}
+.grp-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--dim-2);margin-bottom:9px;display:block;
+}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+.field label{
+  display:block;font-size:10.5px;font-weight:700;color:var(--dim-2);
+  text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;
+}
+.field input[type=number],.field select{
+  width:100%;padding:10px 12px;
+  background:var(--surface-2);border:1.5px solid var(--line);
+  border-radius:9px;
+  font-size:14px;font-weight:700;outline:none;
+  transition:border-color .18s, background .18s;
+  -moz-appearance:textfield;
+}
+.field input[type=number]:focus,.field select:focus{border-color:var(--accent);background:var(--surface)}
+.field select{cursor:pointer;font-size:13px}
+
+.slider-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+.slider-head b{font-size:18px;font-weight:800;color:var(--accent-d);font-family:var(--mono)}
+input[type=range]{
+  width:100%;height:6px;-webkit-appearance:none;appearance:none;
+  background:var(--surface-3);border:1px solid var(--line);
+  border-radius:3px;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--accent);border:3px solid #fff;cursor:pointer;
+  box-shadow:0 1px 4px rgba(14,165,233,.4);
+}
+input[type=range]::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;background:var(--accent);
+  border:3px solid #fff;cursor:pointer;
+}
+.range-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--dim-2);margin-top:6px}
+
+#drop{
+  border:1.5px dashed var(--line-2);border-radius:11px;
+  padding:20px 14px;text-align:center;cursor:pointer;
+  background:var(--surface-2);color:var(--dim);
+  transition:border-color .18s, background .18s, color .18s;
+}
+#drop:hover,#drop.over{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-d)}
+#drop svg{margin:0 auto 8px;opacity:.6}
+#drop b{display:block;font-size:13px;font-weight:700;color:var(--text)}
+#drop:hover b{color:var(--accent-d)}
+#drop span{font-size:11px;color:var(--dim-2);display:block;margin-top:3px}
+
+.note{
+  background:var(--surface-2);border:1px solid var(--line);
+  border-left:3px solid var(--accent);
+  border-radius:8px;padding:11px 13px;
+  font-size:11.5px;color:var(--dim);line-height:1.7;
+}
+.note b{color:var(--text)}
+
+.pane-actions{display:flex;flex-direction:column;gap:8px}
+.act{
+  display:flex;align-items:center;gap:11px;
+  padding:12px 14px;border-radius:10px;
+  background:var(--surface-2);border:1.5px solid var(--line);
+  font-size:13px;font-weight:700;text-align:left;
+  transition:background .18s, border-color .18s, color .18s;
+}
+.act:hover{background:var(--accent-wash);border-color:var(--accent)}
+.act.active{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-d)}
+.act.danger:hover{border-color:var(--danger);color:var(--danger);background:#FEF2F2}
+.act svg{flex-shrink:0}
+.act small{display:block;font-size:10.5px;font-weight:500;color:var(--dim-2);margin-top:1px}
+
+.drone-opt{
+  display:flex;align-items:center;gap:11px;width:100%;
+  padding:11px 13px;border-radius:10px;margin-bottom:6px;
+  background:var(--surface-2);border:1.5px solid var(--line);
+  transition:background .18s, border-color .18s;text-align:left;
+}
+.drone-opt:hover{border-color:var(--line-2)}
+.drone-opt.active{background:var(--accent-wash);border-color:var(--accent)}
+.drone-opt .dn{flex:1;min-width:0}
+.drone-opt .dn b{display:block;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drone-opt .dn span{font-family:var(--mono);font-size:10px;color:var(--dim-2)}
+.drone-opt .check{width:17px;height:17px;flex-shrink:0;color:var(--accent);opacity:0;transition:opacity .16s}
+.drone-opt.active .check{opacity:1}
+
+.dock-foot{padding:0 16px 16px;flex-shrink:0}
+#btn-export{width:100%}
+
+/* ═══ TOOLBAR SAAT MENGGAMBAR ══════════════════════════════════════ */
+#draw-bar{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:68px;z-index:690;
+  display:flex;align-items:center;gap:7px;
+  padding:7px;border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-lg);
+}
+#draw-bar.hidden{display:none}
+.db-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:var(--r-pill);
+  background:var(--surface-2);border:1px solid var(--line);
+  font-size:12.5px;font-weight:700;color:var(--text);
+  white-space:nowrap;
+  transition:background .18s, border-color .18s, color .18s;
+}
+.db-btn:hover:not(:disabled){background:var(--accent-wash);border-color:var(--accent);color:var(--accent-d)}
+.db-btn:disabled{opacity:.4;cursor:not-allowed}
+.db-btn.danger:hover{background:#FEF2F2;border-color:var(--danger);color:var(--danger)}
+
+/* ═══ HUD ══════════════════════════════════════════════════════════ */
+/* ── kartu keterangan pemecahan misi ──
+   Kanan atas, di bawah bilah atas: sudut kanan bawah sudah dipakai
+   kendali zum dan tombol lokasi, kiri bawah dipakai HUD. */
+#kartu-bagi{
+  position:fixed;right:14px;top:72px;z-index:640;width:236px;
+  padding:12px 13px 11px;border-radius:13px;
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-lg);
+
+  /* Area yang sangat luas bisa terpecah jadi belasan bagian, dan
+     daftarnya akan melewati tepi layar. Tingginya dibatasi, lalu yang
+     DIGULIR hanya daftarnya — judul, sebab, dan catatan kaki tetap
+     terlihat. Kalau seluruh kartu yang digulir, keterangan "kenapa
+     dipecah" hilang begitu pengguna mencari bagian terakhir.
+
+     Sisa 120px di bawah dijaga supaya kartu tidak menutupi kendali zum
+     dan tombol lokasi di sudut kanan bawah. */
+  display:flex;flex-direction:column;
+  max-height:calc(100vh - 72px - 120px);
+}
+#kartu-bagi[hidden]{display:none}
+.kb-kepala,.kb-sebab,.kb-kaki{flex-shrink:0}
+.kb-kepala{display:flex;align-items:flex-start;gap:8px}
+.kb-kepala b{flex:1;font-size:12.5px;font-weight:800;line-height:1.3;color:var(--text)}
+.kb-sebab{margin:5px 0 9px;font-size:11px;color:var(--dim);line-height:1.5}
+.kb-legenda{
+  display:flex;flex-direction:column;gap:4px;
+  flex:1;min-height:0;overflow-y:auto;
+  /* Ruang kecil di kanan supaya batang gulir tidak menimpa angkanya. */
+  padding-right:2px;margin-right:-2px;
+}
+.kb-legenda::-webkit-scrollbar{width:5px}
+.kb-legenda::-webkit-scrollbar-track{background:transparent}
+.kb-legenda::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:3px}
+.kb-legenda::-webkit-scrollbar-thumb:hover{background:var(--dim-2)}
+.kb-baris{display:flex;align-items:center;gap:8px}
+.kb-warna{
+  width:16px;height:4px;border-radius:2px;flex-shrink:0;
+  border:1px solid rgba(0,0,0,.18);
+}
+.kb-nama{flex:1;font-size:11.5px;font-weight:600;color:var(--text)}
+.kb-jml{font-family:var(--mono);font-size:10px;color:var(--dim-2)}
+.kb-kaki{
+  margin:9px 0 0;padding-top:8px;border-top:1px solid var(--line);
+  font-size:10.5px;color:var(--dim-2);line-height:1.5;
+}
+
+@media (max-width:860px){
+  /* Di HP kartunya mengecil supaya tidak menutupi peta. */
+  #kartu-bagi{
+    right:10px;top:calc(60px + var(--sat,0px));width:198px;padding:10px 11px;
+    /* Di HP lembar bawah naik sampai separuh layar, jadi ruang yang
+       disisakan lebih besar. */
+    max-height:calc(100vh - 60px - var(--sat,0px) - 190px);
+  }
+  .kb-sebab,.kb-kaki{font-size:10px}
+}
+
+
+#hud{
+  position:fixed;left:14px;bottom:14px;z-index:640;
+  display:flex;gap:14px;align-items:center;
+  padding:8px 15px;border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);
+  font-family:var(--mono);font-size:10.5px;color:var(--dim-2);
+}
+#hud b{color:var(--text);font-weight:600}
+
+/* ═══ EMPTY STATE ══════════════════════════════════════════════════ */
+#empty{
+  position:fixed;top:50%;left:calc(50% + 100px);transform:translate(-50%,-50%);
+  z-index:620;text-align:center;max-width:320px;padding:26px 28px 22px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-xl);box-shadow:var(--shadow-lg);
+}
+#empty.gone{display:none}
+#empty .ico{
+  width:48px;height:48px;border-radius:14px;margin:0 auto 14px;
+  display:grid;place-items:center;color:var(--accent-d);
+  background:var(--accent-wash);
+}
+#empty h3{font-size:16px;font-weight:800;margin-bottom:6px}
+#empty p{font-size:12.5px;color:var(--dim);line-height:1.7}
+#empty .modal-x{top:10px;right:10px}
+#empty .empty-ringkas{display:none}
+
+/* ═══ AUTH GATE ════════════════════════════════════════════════════ */
+#gate{
+  position:fixed;inset:0;z-index:5000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(242,246,251,.82);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+#gate.hidden{display:none}
+
+/* ═══ MOBILE ═══════════════════════════════════════════════════════ */
+@media (max-width:860px){
+  #rail{display:none}
+  #hud{display:none}
+
+  #topbar{padding:calc(10px + var(--sat)) 12px 10px;gap:8px}
+  /* Nama merek disembunyikan di layar kecil, jadi bantalan kanannya ikut
+     dihapus — kalau tidak, pil logo jadi berat sebelah. */
+  .app-brand{padding:3px;gap:0}
+  .app-brand b{display:none}
+  #searchwrap{max-width:none}
+
+  /* basemap jadi tombol ikon melayang di bawah top bar */
+  .seg{
+    position:fixed;right:12px;top:calc(58px + var(--sat));
+    margin-left:0;flex-direction:column;gap:3px;z-index:660;
+    padding:3px;border-radius:13px;
+  }
+  /* Wadah pil (999px) membungkus tombol persegi terlihat tidak rapi saat
+     ditumpuk; radius keduanya disamakan supaya jadi satu kesatuan. */
+  .seg button{
+    width:36px;height:36px;padding:0;border-radius:10px;font-size:0;
+    justify-content:center;
+  }
+  .seg button svg{width:17px;height:17px}
+
+  /* Kartu dipindah ke sepertiga atas layar: cukup di bawah tombol
+     basemap, dan tidak lagi bisa tertutup lembar misi saat digeser
+     naik — posisi lamanya ikut tinggi lembar, yang berubah-ubah. */
+  #empty{
+    left:50%;top:calc(150px + var(--sat));bottom:auto;transform:translateX(-50%);
+    width:calc(100% - 32px);max-width:330px;padding:15px 17px 14px;
+  }
+  /* Versi ringkas: tanpa ikon besar, teksnya lebih pendek. */
+  #empty .ico{display:none}
+  #empty h3{font-size:14.5px;margin-bottom:4px;padding-right:22px;text-align:left}
+  #empty p{font-size:12px;line-height:1.6;text-align:left}
+  #empty .empty-full{display:none}
+  #empty .empty-ringkas{display:block}
+  #empty .modal-x{top:8px;right:8px}
+
+  /* ── bottom sheet ── */
+  #dock{
+    left:0;right:0;bottom:0;top:auto;width:auto;
+    height:88dvh;max-height:88dvh;
+    border-radius:20px 20px 0 0;
+    border-bottom:none;border-left:none;border-right:none;
+    transform:translateY(var(--sheet-y,60%));
+    transition:transform .34s var(--ease);
+    box-shadow:0 -6px 28px rgba(23,41,60,.14);
+  }
+  #dock.dragging{transition:none}
+  #dock.hidden{opacity:1;pointer-events:auto}
+
+  .dock-grip{
+    display:block;width:100%;padding:11px 0 7px;
+    cursor:grab;touch-action:none;flex-shrink:0;
+  }
+  .dock-grip::before{
+    content:'';display:block;width:40px;height:4.5px;border-radius:3px;
+    background:var(--line-2);margin:0 auto;
+  }
+  #dock.dragging .dock-grip::before{background:var(--accent)}
+
+  .dock-head{padding:0 16px}
+  .dock-title{margin-bottom:11px}
+
+  .m-tabs{display:flex;gap:6px;padding:0 0 13px;overflow-x:auto;scrollbar-width:none}
+  .m-tabs::-webkit-scrollbar{display:none}
+  .m-tabs button{
+    flex-shrink:0;padding:8px 15px;border-radius:var(--r-pill);
+    background:var(--surface-2);border:1px solid var(--line);
+    font-size:12.5px;font-weight:700;color:var(--dim);
+    transition:background .18s, color .18s, border-color .18s;
+  }
+  .m-tabs button.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .dock-body{padding:14px 16px 10px}
+  .dock-foot{padding:0 16px calc(16px + var(--sab))}
+
+  /* target sentuh lebih besar */
+  .field input[type=number],.field select{padding:12px 14px;font-size:15px}
+  .act{padding:14px}
+  .drone-opt{padding:13px 14px}
+  input[type=range]{height:8px}
+  input[type=range]::-webkit-slider-thumb{width:23px;height:23px}
+
+  .leaflet-bottom.leaflet-right{bottom:calc(var(--peek,150px) + 8px)}
+
+  #draw-bar{
+    bottom:calc(var(--peek,150px) + 14px);
+    left:12px;right:12px;transform:none;
+    padding:7px;justify-content:center;
+  }
+    .db-btn{flex:1;justify-content:center}
+}
+
+@media (min-width:861px){
+  .m-tabs{display:none}
+}
+
+/* ═══ VERTEX SAAT MENGGAMBAR ═══════════════════════════════════════ */
+.lm-vertex{background:none;border:none}
+.lm-vertex .lm-vx-box{
+  position:absolute;inset:0;
+  background:#fff;border:2px solid var(--accent);border-radius:3px;
+  box-shadow:0 1px 3px rgba(23,41,60,.25);
+}
+/* Tombol hanya ada pada titik terbaru; titik lain dibiarkan polos supaya
+   titik pertama tetap mudah diklik saat menutup poligon. */
+.lm-vertex .lm-vx,
+.lm-vertex .lm-ok{display:none}
+.lm-vertex.lm-vertex-last .lm-vx,
+.lm-vertex.lm-vertex-last.lm-can-finish .lm-ok{
+  position:absolute;top:-9px;
+  width:16px;height:16px;border-radius:50%;
+  display:grid;place-items:center;
+  color:#fff;border:1.5px solid #fff;
+  box-shadow:0 1px 4px rgba(23,41,60,.35);
+  cursor:pointer;padding:0;
+}
+/* minus di kiri atas, ceklis di kanan atas */
+.lm-vertex.lm-vertex-last .lm-vx{left:-9px;background:var(--danger)}
+.lm-vertex.lm-vertex-last.lm-can-finish .lm-ok{right:-9px;background:var(--ok)}
+.lm-vertex .lm-vx svg,
+.lm-vertex .lm-ok svg{width:11px;height:11px}
+.lm-vertex.lm-vertex-last .lm-vx:hover{background:#B91C1C}
+.lm-vertex.lm-vertex-last.lm-can-finish .lm-ok:hover{background:#047857}
+
+/* Peringatan batas waypoint. Sengaja mencolok: kegagalannya diam —
+   berkasnya diterima, lalu sebagian area tidak pernah terfoto. */
+#batas-wp{
+  display:flex;flex-direction:column;gap:5px;margin-bottom:16px;
+  padding:11px 12px;border-radius:10px;
+  background:#FFFBEB;border:1px solid #FDE68A;border-left:3px solid #F59E0B;
+}
+#batas-wp[hidden]{display:none}
+#batas-wp b{font-size:12.5px;font-weight:800;color:#92400E;line-height:1.3}
+#batas-wp span{font-size:11.5px;color:#92400E;line-height:1.5}
+#batas-wp .wp-saran{color:#065F46;font-weight:600}
