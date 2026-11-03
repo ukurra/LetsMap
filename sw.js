@@ -7,7 +7,7 @@
    • Nominatim  : selalu online, tidak pernah di-cache
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v24';
+const VERSION = 'v25';
 const SHELL = `ukurra-shell-${VERSION}`;
 const VENDOR = `ukurra-vendor-${VERSION}`;
 const TILES = `ukurra-tiles-${VERSION}`;

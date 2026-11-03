@@ -66,6 +66,19 @@
   });
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+  // Titik biru lokasi saat ini + lingkaran akurasi, mengikuti posisi
+  // selama aktif (watchPosition) — mirip tombol lokasi bawaan MapLibre/
+  // Google Maps, bukan sekali tembak lalu hilang.
+  let meMarker = null;
+  let meCircle = null;
+  let meWatchId = null;
+
+  const meIcon = L.divIcon({
+    className: 'me-dot-wrap',
+    html: '<div class="me-dot"><div class="me-pulse"></div></div>',
+    iconSize: [14, 14],
+  });
+
   const LocControl = L.Control.extend({
     options: { position: 'bottomright' },
     onAdd() {
@@ -73,18 +86,55 @@
       btn.title = 'Lokasi saya';
       btn.innerHTML =
         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>';
+
+      const stop = () => {
+        if (meWatchId !== null) navigator.geolocation.clearWatch(meWatchId);
+        meWatchId = null;
+        if (meMarker) map.removeLayer(meMarker);
+        if (meCircle) map.removeLayer(meCircle);
+        meMarker = meCircle = null;
+        btn.classList.remove('active', 'loading');
+      };
+
       L.DomEvent.on(btn, 'click', L.DomEvent.stopPropagation);
       L.DomEvent.on(btn, 'click', () => {
         if (!navigator.geolocation) return toast(T('msg.geoTidakDidukung'), 'err');
+
+        // Sudah aktif: klik lagi untuk mematikan pelacakan.
+        if (meWatchId !== null) return stop();
+
         btn.classList.add('loading');
-        navigator.geolocation.getCurrentPosition(
+        let sudahZoom = false;
+
+        meWatchId = navigator.geolocation.watchPosition(
           (pos) => {
-            map.flyTo([pos.coords.latitude, pos.coords.longitude], 16, { duration: 1.2 });
+            const ll = [pos.coords.latitude, pos.coords.longitude];
             btn.classList.remove('loading');
+            btn.classList.add('active');
+
+            if (!meMarker) {
+              meMarker = L.marker(ll, { icon: meIcon, interactive: false, zIndexOffset: 1000 }).addTo(map);
+              meCircle = L.circle(ll, {
+                radius: pos.coords.accuracy,
+                color: '#0EA5E9',
+                weight: 1,
+                fillColor: '#0EA5E9',
+                fillOpacity: 0.12,
+                interactive: false,
+              }).addTo(map);
+            } else {
+              meMarker.setLatLng(ll);
+              meCircle.setLatLng(ll).setRadius(pos.coords.accuracy);
+            }
+
+            if (!sudahZoom) {
+              map.flyTo(ll, 16, { duration: 1.2 });
+              sudahZoom = true;
+            }
           },
           () => {
             toast(T('msg.geoGagal'), 'err');
-            btn.classList.remove('loading');
+            stop();
           },
           { enableHighAccuracy: true, timeout: 10000 }
         );
