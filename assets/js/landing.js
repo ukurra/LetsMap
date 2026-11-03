@@ -138,15 +138,23 @@
     location.href = 'app.html';
   });
 
-  /* ── upgrade ke Pro ──────────────────────────────────────────────── */
-  $('#btn-pro').addEventListener('click', () => {
-    const url = (window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL) || '';
+  /* ── upgrade ke Pro — dua tombol, dua link checkout terpisah ────────
+     Mayar tidak membaca parameter ?plan= di URL, jadi satu-satunya
+     cara membedakan paket Tahunan vs Bulanan adalah link produknya
+     sendiri (lihat CHECKOUT_URL / CHECKOUT_URL_MONTHLY di config.js). */
+  function bukaCheckout(url) {
     if (!url) {
       toast(T('msg.checkoutBelumSiap'), 'warn');
       return;
     }
-    window.open(url + (url.includes('?') ? '&' : '?') + 'plan=monthly', '_blank', 'noopener');
-  });
+    window.open(url, '_blank', 'noopener');
+  }
+  $('#btn-pro').addEventListener('click', () =>
+    bukaCheckout(window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL)
+  );
+  $('#btn-pro-monthly').addEventListener('click', () =>
+    bukaCheckout(window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL_MONTHLY)
+  );
 
   /* ── reflect auth state in nav ───────────────────────────────────── */
   window.LMAuth.onChange((user) => {

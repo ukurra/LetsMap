@@ -268,7 +268,10 @@ footer{
 }
 .harga-kaki{
   margin-top:10px;text-align:center;font-size:11.5px;color:var(--dim-2);line-height:1.6;
+  cursor:pointer;
 }
+.harga-kaki b{transition:color .18s}
+.harga-kaki:hover b{color:var(--accent-d);text-decoration:underline}
 /* Di bawah 440px, bilah atas tidak muat: pemilih bahasa, tombol pasang,
    tombol Buat Misi, dan tombol laci berjajar melebihi lebar layar dan
    membuat seluruh halaman bisa digeser menyamping.
