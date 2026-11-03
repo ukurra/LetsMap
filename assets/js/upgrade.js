@@ -76,12 +76,15 @@ window.LMUpgrade = (() => {
     scrim.querySelector('#up-beli').addEventListener('click', () => {
       const pilih = scrim.querySelector('.up-plan.active');
       const id = pilih ? pilih.dataset.plan : 'monthly';
-      const url = (window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL) || '';
+      const cfg = window.LM_CONFIG || {};
+      // Tiap paket punya produk Mayar/Lynk sendiri dengan harga sendiri —
+      // tidak bisa dibedakan lewat parameter URL, lihat CHECKOUT_URL di config.js.
+      const url = id === 'monthly' ? cfg.CHECKOUT_URL_MONTHLY : cfg.CHECKOUT_URL;
       if (!url) {
         if (window.LMToast) window.LMToast(T('msg.checkoutBelumSiap'), 'warn');
         return;
       }
-      window.open(url + (url.includes('?') ? '&' : '?') + 'plan=' + id, '_blank', 'noopener');
+      window.open(url, '_blank', 'noopener');
     });
   }
 

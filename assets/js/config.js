@@ -9,9 +9,11 @@ window.LM_CONFIG = {
   SUPABASE_URL:      'https://kncxgifppwjtrnflradt.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuY3hnaWZwcHdqdHJuZmxyYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NjczMTYsImV4cCI6MjEwOTA0MzMxNn0.umyubqAQgmRldFwk-7cZ5H0aKTQbyyCmJ7ndkdWGfeU',
 
-  // ── Halaman pembayaran (Mayar.id / Lynk.id) ───────────────────────
-  // Paket dikirim sebagai parameter ?plan=yearly|monthly|lifetime
+  // ── Halaman pembayaran (Mayar.id) ──────────────────────────────────
+  // Dua link terpisah — Mayar tidak membaca parameter ?plan= di URL,
+  // jadi satu-satunya cara membedakan paket adalah produk/link itu sendiri.
   CHECKOUT_URL: 'https://ukurra.myr.id/pl/ukurra-standard-tahunan',
+  CHECKOUT_URL_MONTHLY: 'https://ukurra.myr.id/plink/ukurra-standard-bulanan',
 
 };
 
