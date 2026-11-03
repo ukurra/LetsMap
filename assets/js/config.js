@@ -13,7 +13,7 @@ window.LM_CONFIG = {
   // Dua link terpisah — Mayar tidak membaca parameter ?plan= di URL,
   // jadi satu-satunya cara membedakan paket adalah produk/link itu sendiri.
   CHECKOUT_URL: 'https://ukurra.myr.id/pl/ukurra-standard-tahunan',
-  CHECKOUT_URL_MONTHLY: 'https://ukurra.myr.id/plink/ukurra-standard-bulanan',
+  CHECKOUT_URL_MONTHLY: 'https://ukurra.myr.id/pl/ukurra-standard-bulanan',
 
 };
 
