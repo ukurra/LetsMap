@@ -13,5 +13,16 @@
 /assets/*
   Cache-Control: public, max-age=604800
 
+/* Kode berubah tiap deploy selama fase aktif ini — cache 7 hari di atas
+   membuat Cloudflare terus menyajikan versi lama walau sudah di-deploy
+   ulang (CF-Cache-Status: HIT, bukan bug di kode/service worker).
+   no-cache = selalu divalidasi ulang ke origin (lewat ETag, bukan
+   unduh ulang penuh kalau tidak berubah) - bukan "tanpa cache sama
+   sekali", cuma tidak pernah dipakai tanpa dicek dulu. */
+/assets/js/*
+  Cache-Control: no-cache
+/assets/css/*
+  Cache-Control: no-cache
+
 /assets/icons/*
   Cache-Control: public, max-age=2592000, immutable
