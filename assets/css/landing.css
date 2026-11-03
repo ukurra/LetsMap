@@ -226,6 +226,9 @@ footer{
 .foot-col h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim-2);margin-bottom:12px}
 .foot-col a{display:block;font-size:13.5px;color:var(--dim);padding:5px 0;transition:color .18s}
 .foot-col a:hover{color:var(--accent-d)}
+/* Tombol lapor: lebih spesifik dari ".foot-col a" di atas, supaya
+   warnanya tetap putih (bukan ikut abu-abu seperti link footer biasa). */
+.foot-col a.btn,.foot-col a.btn:hover{color:#fff;padding:12px 22px}
 .foot-about{font-size:13.5px;color:var(--dim);line-height:1.7;max-width:320px;margin-top:12px}
 .foot-bottom{
   display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;

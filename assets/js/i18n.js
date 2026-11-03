@@ -172,6 +172,8 @@ window.LMI18n = (() => {
       "foot.syarat": "Syarat Penggunaan",
       "foot.kontak": "Kontak",
       "foot.kontakSub": "Pertanyaan, saran, atau kerja sama",
+      "foot.lapor": "Lapor Masalah",
+      "foot.laporSub": "Bug, kendala teknis, atau aduan",
       "foot.peta": "Peta oleh OpenStreetMap & Esri.",
       "foot.dibuat": "Dibuat di Indonesia",
 
@@ -552,6 +554,8 @@ window.LMI18n = (() => {
       "foot.syarat": "Terms of Service",
       "foot.kontak": "Contact",
       "foot.kontakSub": "Questions, feedback, or partnerships",
+      "foot.lapor": "Report an Issue",
+      "foot.laporSub": "Bugs, technical issues, or complaints",
       "foot.peta": "Maps by OpenStreetMap & Esri.",
       "foot.dibuat": "Made in Indonesia",
 
