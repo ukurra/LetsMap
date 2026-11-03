@@ -18,12 +18,13 @@ const SECRET = Deno.env.get('MAYAR_WEBHOOK_SECRET') ?? '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 
-// Rp 599.000/tahun dan Rp 69.000/bulan — lihat assets/js/upgrade.js.
-// Dipetakan dari NOMINAL, bukan nama/ID produk, supaya tidak perlu
-// disinkronkan ulang kalau nama produk di Mayar diubah nanti.
-const PAKET: Record<number, { hari: number; label: string }> = {
-  599000: { hari: 365, label: 'tahunan' },
-  69000: { hari: 30, label: 'bulanan' },
+// ID produk asli dari Mayar (data.productId), dikonfirmasi lewat
+// transaksi uji sungguhan 2026-11-03 — bukan nominal lagi, karena
+// nominal bisa berubah kalau biaya admin ditanggung pembeli
+// (isAdminFeeBorneByCustomer) sementara ID produk selalu tetap.
+const PAKET: Record<string, { hari: number; label: string }> = {
+  'f31075f3-f5d5-4686-bc98-5a8b81b5681b': { hari: 365, label: 'tahunan' }, // Ukurra Standard — Tahunan
+  'd753abc3-1256-4b96-a074-fa89fd8f3f69': { hari: 30, label: 'bulanan' }, // Ukurra Standard — Bulanan
 };
 
 function cocokAman(a: string, b: string): boolean {
@@ -76,18 +77,18 @@ Deno.serve(async (req) => {
   }
 
   const email = (data.customerEmail ?? '').trim().toLowerCase();
-  const amount = Number(data.amount);
+  const productId = String(data.productId ?? '');
   const webhookId = String(data.id ?? '');
 
-  if (!email || !amount || !webhookId) {
-    console.error('[mayar-webhook] payload tidak lengkap:', { email, amount, webhookId });
+  if (!email || !productId || !webhookId) {
+    console.error('[mayar-webhook] payload tidak lengkap:', { email, productId, webhookId });
     return new Response('ok (incomplete, logged)', { status: 200 });
   }
 
-  const paket = PAKET[amount];
+  const paket = PAKET[productId];
   if (!paket) {
-    console.error('[mayar-webhook] nominal tidak dikenali, bukan produk Ukurra Standard:', amount);
-    return new Response('ok (unknown amount)', { status: 200 });
+    console.error('[mayar-webhook] productId tidak dikenali, bukan produk Ukurra Standard:', productId);
+    return new Response('ok (unknown product)', { status: 200 });
   }
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
