@@ -11,7 +11,7 @@ window.LM_CONFIG = {
 
   // ── Halaman pembayaran (Mayar.id / Lynk.id) ───────────────────────
   // Paket dikirim sebagai parameter ?plan=yearly|monthly|lifetime
-  CHECKOUT_URL: '',
+  CHECKOUT_URL: 'https://ukurra.myr.id/pl/ukurra-standard-tahunan',
 
 };
 

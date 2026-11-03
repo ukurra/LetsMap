@@ -95,12 +95,23 @@ create policy "kelola misi sendiri"
   with check (auth.uid() = user_id);
 
 -- ═══════════════════════════════════════════════════════════════════
--- Setelah pembayaran masuk, jadikan akun Pro lewat SQL Editor:
+-- Aktivasi manual (cadangan) lewat SQL Editor, kalau webhook di bawah
+-- gagal atau pembeli belum pernah login (profiles-nya belum ada):
 --
 --   update public.profiles
 --      set plan = 'pro',
 --          pro_until = now() + interval '1 year'   -- hapus baris ini untuk lifetime
 --    where email = 'pembeli@gmail.com';
---
--- Nanti ini diotomatiskan lewat webhook dari Mayar/Lynk.
 -- ═══════════════════════════════════════════════════════════════════
+
+-- Dipakai Edge Function supabase/functions/mayar-webhook supaya satu
+-- notifikasi pembayaran yang sama (dikirim ulang oleh Mayar) tidak
+-- memperpanjang masa aktif dua kali. RLS diaktifkan tanpa policy sama
+-- sekali — hanya service_role (dipakai Edge Function) yang bisa
+-- menyentuhnya, klien web/app tidak pernah mengaksesnya langsung.
+create table if not exists public.mayar_webhook_log (
+  id         text primary key,
+  created_at timestamptz not null default now()
+);
+
+alter table public.mayar_webhook_log enable row level security;
