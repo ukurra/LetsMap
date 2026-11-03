@@ -6,8 +6,8 @@
 
 window.LM_CONFIG = {
   // ── Supabase (https://supabase.com → Project Settings → API) ──────
-  SUPABASE_URL:      'ISI_SUPABASE_URL',
-  SUPABASE_ANON_KEY: 'ISI_SUPABASE_ANON_KEY',
+  SUPABASE_URL:      'https://kncxgifppwjtrnflradt.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuY3hnaWZwcHdqdHJuZmxyYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NjczMTYsImV4cCI6MjEwOTA0MzMxNn0.umyubqAQgmRldFwk-7cZ5H0aKTQbyyCmJ7ndkdWGfeU',
 
   // ── Halaman pembayaran (Mayar.id / Lynk.id) ───────────────────────
   // Paket dikirim sebagai parameter ?plan=yearly|monthly|lifetime

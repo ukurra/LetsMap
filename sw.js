@@ -7,12 +7,25 @@
    • Nominatim  : selalu online, tidak pernah di-cache
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v23';
+const VERSION = 'v24';
 const SHELL = `ukurra-shell-${VERSION}`;
 const VENDOR = `ukurra-vendor-${VERSION}`;
 const TILES = `ukurra-tiles-${VERSION}`;
 
 const TILE_LIMIT = 600;
+
+/* Cloudflare Pages mengarahkan "/app.html" → "/app" (307), diam-diam
+   diikuti oleh fetch(). Respons hasil pengalihan itu TIDAK BOLEH
+   disajikan langsung untuk FetchEvent navigasi — Chrome menolaknya
+   ("a redirected response was used for a request whose redirect mode
+   is not follow"), situs pun gagal total saat dibuka dari cache SW.
+   Dibuat ulang jadi Response segar (tanpa status "redirected") sebelum
+   disimpan atau dipakai menjawab permintaan. */
+async function bersihkanRedirect(res) {
+  if (!res || !res.redirected) return res;
+  const body = await res.clone().blob();
+  return new Response(body, { status: res.status, statusText: res.statusText, headers: res.headers });
+}
 
 const SHELL_FILES = [
   './',
@@ -47,8 +60,19 @@ self.addEventListener('install', (e) => {
   e.waitUntil(
     caches
       .open(SHELL)
-      // addAll gagal total kalau satu file meleset — pakai per-file supaya tahan banting.
-      .then((c) => Promise.all(SHELL_FILES.map((f) => c.add(f).catch(() => {}))))
+      // Per-file (bukan addAll) supaya satu berkas meleset tidak menggagalkan semua.
+      // fetch() manual (bukan c.add) karena responsnya perlu dibersihkan dari
+      // status "redirected" sebelum disimpan — lihat bersihkanRedirect().
+      .then((c) =>
+        Promise.all(
+          SHELL_FILES.map((f) =>
+            fetch(f)
+              .then(bersihkanRedirect)
+              .then((res) => (res && res.ok ? c.put(f, res) : null))
+              .catch(() => {})
+          )
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -143,6 +167,7 @@ self.addEventListener('fetch', (e) => {
       caches.open(SHELL).then(async (cache) => {
         const hit = await cache.match(req, { ignoreSearch: true });
         const net = fetch(req)
+          .then(bersihkanRedirect)
           .then((res) => {
             if (res.ok) cache.put(req, res.clone());
             return res;

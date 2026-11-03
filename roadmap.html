@@ -4,8 +4,8 @@
 <style>
 /* ═══════════════════════════════════════════════════════════════
    Jalur Produksi Ukurra — dari kondisi proyek sekarang sampai bisa
-   dipakai pengguna sungguhan. Menggantikan isi usang di ROADMAP.md
-   (paket lifetime, pendaftaran merek/HKI) — murni teknis & urutan.
+   dipakai pengguna sungguhan. v2: detail jauh lebih dalam per tahap
+   (navigasi menu persis, kenapa tiap langkah perlu, jebakan umum).
    ═══════════════════════════════════════════════════════════════ */
 :root {
   --bg: #F7F9FC;
@@ -87,10 +87,10 @@ body {
   padding-right: max(18px, env(safe-area-inset-right, 0px));
   padding-block: 0;
 }
-.wrap { max-width: 760px; margin: 0 auto; padding: 44px 0 64px; }
+.wrap { max-width: 780px; margin: 0 auto; padding: 44px 0 64px; }
 
 /* ── Header ── */
-.hd { margin-bottom: 36px; }
+.hd { margin-bottom: 30px; }
 .hd .eyebrow {
   font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .09em;
   text-transform: uppercase; color: var(--accent-d); margin-bottom: 10px;
@@ -101,17 +101,25 @@ body {
 }
 .hd p { font-size: 15px; color: var(--dim); max-width: 60ch; }
 
+/* ── Progress bar ── */
+.prog-wrap { margin: 24px 0 10px; }
+.prog-track { height: 8px; border-radius: 100px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--ok), var(--accent)); border-radius: 100px; }
+.prog-label { font-size: 12.5px; color: var(--dim); margin-top: 8px; font-weight: 600; }
+.prog-label b { color: var(--text); }
+
 /* ── Snapshot kondisi ── */
 .snap {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 28px 0 40px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0 36px;
 }
 .snap-card {
-  border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: var(--surface);
 }
 .snap-card .n { font-family: var(--mono); font-size: 22px; font-weight: 700; }
-.snap-card.ok .n { color: var(--ok); }
+.snap-card.done .n { color: var(--ok); }
 .snap-card.todo .n { color: var(--warn); }
-.snap-card .l { font-size: 12.5px; color: var(--dim); margin-top: 4px; }
+.snap-card.block .n { color: var(--block); }
+.snap-card .l { font-size: 11.5px; color: var(--dim); margin-top: 4px; line-height: 1.4; }
 
 /* ── Timeline ── */
 .tl { position: relative; }
@@ -123,16 +131,19 @@ body {
 .stage-dot {
   position: absolute; left: 0; top: 2px; width: 44px; height: 44px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-weight: 700; font-size: 16px;
+  font-family: var(--mono); font-weight: 700; font-size: 15px;
   background: var(--surface); border: 2px solid var(--line); color: var(--dim);
   z-index: 1;
 }
+.stage.done .stage-dot { border-color: var(--ok); color: #fff; background: var(--ok); }
 .stage.ok .stage-dot { border-color: var(--ok); color: var(--ok); background: var(--ok-wash); }
 .stage.block .stage-dot { border-color: var(--block); color: var(--block); background: var(--block-wash); }
+.stage-dot svg { width: 20px; height: 20px; }
 
 .stage-card {
   border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden;
 }
+.stage.done .stage-card { border-color: var(--ok); }
 .stage-head {
   padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px;
   user-select: none;
@@ -145,6 +156,7 @@ body {
   flex-shrink: 0; font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
   padding: 4px 10px; border-radius: 100px; white-space: nowrap;
 }
+.badge.done { background: var(--ok); color: #fff; }
 .badge.ok { background: var(--ok-wash); color: var(--ok); }
 .badge.todo { background: var(--warn-wash); color: var(--warn); }
 .badge.block { background: var(--block-wash); color: var(--block); }
@@ -154,11 +166,27 @@ body {
 .stage-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--line); }
 .stage-card.open .stage-body { display: block; padding-top: 16px; }
 .stage-body p { font-size: 13.5px; color: var(--dim); margin-bottom: 12px; }
+.stage-body .why {
+  font-size: 13px; color: var(--dim); margin-bottom: 14px; padding: 10px 14px;
+  background: var(--surface-2); border-left: 3px solid var(--line-2); border-radius: 0 8px 8px 0;
+}
+.stage-body .why b { color: var(--text); }
+.stage-body h3 {
+  font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--dim-2); margin: 18px 0 8px;
+}
+.stage-body h3:first-of-type { margin-top: 0; }
 .stage-body ol, .stage-body ul { padding-left: 20px; margin-bottom: 12px; }
-.stage-body li { font-size: 13.5px; margin-bottom: 7px; line-height: 1.6; }
+.stage-body ol > li { font-size: 13.5px; margin-bottom: 10px; line-height: 1.65; }
+.stage-body ul > li { font-size: 13.5px; margin-bottom: 7px; line-height: 1.6; }
+.stage-body ol ul { margin-top: 6px; margin-bottom: 0; }
 .stage-body code {
   font-family: var(--mono); font-size: 12px; background: var(--surface-2);
   border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px;
+}
+.stage-body kbd {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface-2);
+  border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 5px; padding: 1px 7px;
 }
 .verify {
   margin-top: 14px; padding: 12px 15px; border-radius: 10px;
@@ -172,6 +200,19 @@ body {
   font-size: 13px;
 }
 .note b { color: var(--warn); }
+.gotcha {
+  margin-top: 14px; padding: 12px 15px; border-radius: 10px;
+  background: var(--block-wash); border: 1px solid var(--block);
+  font-size: 13px;
+}
+.gotcha b { color: var(--block); }
+.gotcha ul { margin: 6px 0 0; padding-left: 18px; }
+.gotcha li { font-size: 12.5px; margin-bottom: 5px; }
+.done-note {
+  margin-top: 14px; padding: 12px 15px; border-radius: 10px;
+  background: var(--ok-wash); border: 1px solid var(--ok); font-size: 13px;
+}
+.done-note b { color: var(--ok); }
 
 /* ── Paralel ── */
 .paralel {
@@ -191,7 +232,7 @@ body {
 
 .foot { margin-top: 36px; font-size: 12px; color: var(--dim-2); text-align: center; }
 
-@media (max-width: 480px) {
+@media (max-width: 560px) {
   .snap { grid-template-columns: 1fr; }
 }
 </style>
@@ -199,68 +240,107 @@ body {
 <div class="wrap">
 
   <div class="hd">
-    <div class="eyebrow">Ukurra &middot; Jalur Produksi</div>
+    <div class="eyebrow">Ukurra &middot; Jalur Produksi &middot; v2</div>
     <h1>Dari kondisi sekarang, sampai bisa dipakai pengguna sungguhan.</h1>
-    <p>Murni jalur teknis: hosting, akun, pembayaran, dan distribusi. Tidak ada
-      pendaftaran merek, HKI, atau izin usaha — itu bisa menyusul kapan saja
-      dan tidak menghalangi produk berjalan. Paket lifetime juga sudah tidak
-      dipakai; harga sekarang dua paket: <b>Standard</b> Rp 599.000/tahun dan
-      <b>Organisasi</b> Rp 5.999.000/tahun (lewat kontak manual).</p>
+    <p>Murni jalur teknis: hosting, akun, pembayaran, dan distribusi. Setiap
+      tahap ditulis selengkap mungkin — navigasi menu persis, kenapa langkah
+      itu perlu (bukan cuma apa yang diklik), dan jebakan yang paling sering
+      bikin macet. Paket lifetime sudah tidak dipakai; harga sekarang dua
+      paket: <b>Standard</b> Rp 599.000/tahun dan <b>Organisasi</b>
+      Rp 5.999.000/tahun (lewat kontak manual).</p>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" style="width:31%"></div></div>
+    <div class="prog-label"><b>2,5</b> dari 8 tahap selesai</div>
   </div>
 
   <div class="snap">
-    <div class="snap-card ok">
-      <div class="n">6</div>
-      <div class="l">Sudah dibangun di kode — login, jatah, skema database, aplikasi desktop, halaman harga</div>
+    <div class="snap-card done">
+      <div class="n">2</div>
+      <div class="l">Selesai &amp; terverifikasi — web hidup di GitHub, database &amp; jatah berjalan</div>
+    </div>
+    <div class="snap-card done">
+      <div class="n">1</div>
+      <div class="l">Sudah dibangun di kode, tinggal diisi konfigurasi — login &amp; jatah desktop</div>
     </div>
     <div class="snap-card todo">
       <div class="n">5</div>
-      <div class="l">Butuh tindakan di luar kode — domain, akun Supabase, akun pembayaran, 2 halaman legal</div>
+      <div class="l">Masih butuh tindakan — domain, akun bayar, 2 halaman legal, installer</div>
     </div>
   </div>
 
   <div class="tl" id="tl">
 
-    <!-- 1 -->
-    <div class="stage ok" data-s="1">
-      <div class="stage-dot">1</div>
+    <!-- 1 — SELESAI -->
+    <div class="stage done" data-s="1">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Web hidup di hosting</h2><div class="sub">± 30 menit &middot; gratis, belum pakai domain</div></div>
-          <span class="badge ok">Siap dikerjakan</span>
+          <div class="ti"><h2>Web hidup di hosting</h2><div class="sub">Repo sudah di GitHub, commit <code>c35596a</code></div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Memastikan hostingnya jalan dulu sebelum menyentuh apa pun yang lain.</p>
+          <div class="done-note"><b>Sudah dikerjakan:</b> <code>git init</code> &rarr; 27 berkas di-commit &rarr; remote <code>origin</code> disambungkan ke <code>github.com/ukurra/LetsMap</code> &rarr; <code>git push -u origin main</code> berhasil. Kredensial akun <b>ukurra</b> sudah tersimpan di Git Credential Manager komputer ini, jadi push berikutnya tidak perlu login ulang.</div>
+
+          <h3>Yang masih perlu dipastikan</h3>
+          <p>Push ke GitHub baru separuh jalan — repo-nya perlu disambungkan ke Cloudflare Pages supaya benar-benar bisa diakses lewat URL publik. Kalau bagian ini belum dilakukan:</p>
           <ol>
-            <li>Buat akun GitHub dan Cloudflare.</li>
-            <li>Jadikan folder <code>LetsMap</code> repo Git, <code>git push</code> ke GitHub (aman dibuat publik — hanya anon key Supabase yang ikut, dirancang untuk sisi peramban).</li>
-            <li>Cloudflare &rarr; <b>Workers &amp; Pages &rarr; Create &rarr; Pages &rarr; Connect to Git</b>, pilih repo.</li>
-            <li>Build command dikosongkan, build output <code>/</code> — situs ini tanpa build step.</li>
-            <li><b>Save and Deploy.</b></li>
+            <li>Masuk <code>dash.cloudflare.com</code>. Kalau belum punya akun, daftar dulu (gratis, cukup email).</li>
+            <li>Sidebar kiri &rarr; <b>Workers &amp; Pages</b> &rarr; tombol <b>Create</b> &rarr; tab <b>Pages</b> &rarr; <b>Connect to Git</b>.</li>
+            <li>Kalau ini pertama kali, Cloudflare minta otorisasi akses ke akun GitHub <b>ukurra</b> — pilih "Only select repositories" lalu centang <code>LetsMap</code>, bukan "All repositories" (lebih aman, tidak kasih akses ke repo lain yang mungkin ada nanti).</li>
+            <li>Pilih repo <code>ukurra/LetsMap</code>, klik <b>Begin setup</b>.</li>
+            <li>Di halaman pengaturan build, isi persis begini:
+              <ul>
+                <li><b>Project name</b>: bebas, ini jadi bagian dari URL <code>.pages.dev</code> — misalnya <code>ukurra</code> supaya hasilnya <code>ukurra.pages.dev</code></li>
+                <li><b>Production branch</b>: <code>main</code></li>
+                <li><b>Framework preset</b>: <code>None</code></li>
+                <li><b>Build command</b>: <b>kosongkan</b> — situs ini file statis, tidak ada proses build</li>
+                <li><b>Build output directory</b>: <code>/</code></li>
+              </ul>
+            </li>
+            <li>Klik <b>Save and Deploy</b>. Build pertama biasanya selesai 30&ndash;90 detik.</li>
           </ol>
-          <div class="verify"><b>Cek:</b> buka <code>https://&lt;nama-proyek&gt;.pages.dev</code> di HP. Landing page tampil, bisa "Add to Home screen". Login belum jalan — itu normal, masih mode tamu.</div>
+
+          <div class="verify"><b>Cek:</b> buka <code>https://&lt;project-name&gt;.pages.dev</code> di HP. Landing page tampil, dan menu peramban menawarkan "Add to Home screen" / "Install app" (tanda <code>manifest.webmanifest</code> dan <code>sw.js</code> terbaca). Login belum jalan — itu normal, <code>config.js</code> masih placeholder sampai Tahap 3.</div>
+
+          <div class="gotcha">
+            <b>Kalau build gagal:</b>
+            <ul>
+              <li>Build output bukan <code>/</code> &rarr; Cloudflare mencari <code>index.html</code> di folder yang salah, hasilnya 404 di semua halaman.</li>
+              <li>Build command terisi sesuatu (misal <code>npm run build</code>) &rarr; akan gagal karena tidak ada <code>package.json</code> di repo ini. Pastikan benar-benar kosong.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 2 -->
-    <div class="stage ok" data-s="2">
-      <div class="stage-dot">2</div>
+    <!-- 2 — SELESAI -->
+    <div class="stage done" data-s="2">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Database &amp; jatah uji coba</h2><div class="sub">± 20 menit &middot; <code>supabase-schema.sql</code> sudah siap</div></div>
-          <span class="badge ok">File siap, tinggal jalankan</span>
+          <div class="ti"><h2>Database &amp; jatah uji coba</h2><div class="sub">Skema sudah dijalankan di Supabase</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Jatah uji coba (2 misi, 1 proyek olah data) dihitung di server lewat tabel ini — bukan di peramban, jadi tidak bisa direset dengan hapus data.</p>
+          <div class="why">Jatah uji coba (2 misi, 1 proyek olah data) dihitung <b>di server</b>, bukan di peramban — menghapus cache/cookie tidak mengembalikan jatah. Ini sebabnya butuh database sejak awal, bukan nanti-nanti.</div>
+
+          <div class="done-note"><b>Sudah dikerjakan:</b> proyek Supabase dibuat, seluruh isi <code>supabase-schema.sql</code> dijalankan lewat SQL Editor.</div>
+
+          <h3>Yang perlu dicek ulang supaya yakin benar-benar siap</h3>
           <ol>
-            <li>Buat proyek di <code>supabase.com</code>, region <b>Southeast Asia (Singapore)</b>.</li>
-            <li><b>SQL Editor &rarr; New query</b>, tempel seluruh isi <code>supabase-schema.sql</code>, jalankan.</li>
+            <li>Supabase dashboard &rarr; <b>Table Editor</b> (sidebar kiri). Pastikan ada 2 tabel: <code>profiles</code> (kolom <code>plan</code>, <code>pro_until</code>, <code>missions_used</code>, <code>projects_used</code>) dan <code>missions</code>.</li>
+            <li><b>Database &rarr; Functions</b>. Harus ada <code>ukurra_new_user</code> dan <code>ukurra_use_quota</code>. Kalau tidak ada, skemanya belum sepenuhnya jalan — jalankan ulang <code>supabase-schema.sql</code> (aman diulang, semua perintahnya pakai <code>create or replace</code> / <code>if not exists</code>).</li>
+            <li><b>Authentication &rarr; Policies</b>, tabel <code>profiles</code> harus punya policy <code>"baca profil sendiri"</code> dan RLS berstatus <b>Enabled</b> (ikon gembok hijau). Tanpa RLS aktif, siapa pun yang punya anon key bisa membaca profil orang lain.</li>
+            <li>Catat <b>Project Settings &rarr; API &rarr; Project URL</b> dan <b>anon public key</b> — dua nilai ini dipakai persis sama di Tahap 3 (web) dan Tahap 5b (desktop).</li>
           </ol>
-          <div class="verify"><b>Cek:</b> di <b>Table Editor</b>, tabel <code>profiles</code> ada dengan kolom <code>plan</code>, <code>missions_used</code>, <code>projects_used</code>.</div>
-          <div class="note"><b>Catatan free tier:</b> proyek yang tidak disentuh 7 hari akan dijeda — buka dashboard sekali seminggu selama masih sepi.</div>
+
+          <div class="verify"><b>Cek paling meyakinkan:</b> di SQL Editor, jalankan <code>select * from public.profiles;</code> — hasilnya boleh kosong (belum ada yang login), tapi query-nya harus sukses tanpa error "relation does not exist".</div>
+
+          <div class="note"><b>Catatan free tier Supabase:</b> proyek yang tidak disentuh 7 hari berturut-turut akan otomatis dijeda (statusnya "Paused" di dashboard) dan harus dibangunkan manual lewat tombol "Restore". Selama trafik masih sepi, buka dashboard-nya minimal sekali seminggu supaya tidak kaget tiba-tiba login gagal.</div>
         </div>
       </div>
     </div>
@@ -270,22 +350,71 @@ body {
       <div class="stage-dot">3</div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Login Google</h2><div class="sub">± 30 menit &middot; butuh halaman Privasi &amp; Syarat lebih dulu</div></div>
+          <div class="ti"><h2>Login Google</h2><div class="sub">± 30&ndash;45 menit &middot; paling banyak salah di sini</div></div>
           <span class="badge block">Terhalang</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Alurnya: peramban &rarr; Google &rarr; <b>Supabase</b> &rarr; kembali ke situs. Yang didaftarkan ke Google adalah alamat Supabase, bukan alamat situs sendiri — ini yang paling sering tertukar.</p>
+          <div class="why">Alurnya: peramban &rarr; Google &rarr; <b>Supabase</b> &rarr; kembali ke situs. Yang didaftarkan ke Google adalah alamat <b>Supabase</b>, bukan alamat <code>ukurra.com</code> — ini satu kalimat yang paling sering bikin orang salah isi kolom.</div>
+
+          <h3>A. Buat proyek &amp; consent screen di Google Cloud</h3>
           <ol>
-            <li>Google Cloud Console &rarr; proyek baru <code>Ukurra</code>.</li>
-            <li><b>OAuth consent screen</b>: User type External, nama app <code>Ukurra</code>, scope cukup <code>email</code> <code>profile</code> <code>openid</code>. <b>Privacy Policy URL</b> dan <b>Terms of Service URL</b> wajib diisi — lihat Tahap 7.</li>
-            <li><b>Credentials &rarr; OAuth client ID</b>, type Web application. Redirect URI <b>satu baris saja</b>: <code>https://&lt;ref-proyek&gt;.supabase.co/auth/v1/callback</code>.</li>
-            <li>Supabase &rarr; <b>Authentication &rarr; Providers &rarr; Google</b>, aktifkan, tempel Client ID + Secret.</li>
-            <li>Supabase &rarr; <b>Authentication &rarr; URL Configuration</b>: Site URL = <code>https://&lt;nama-proyek&gt;.pages.dev</code>; Redirect URLs tambahkan <code>https://&lt;nama-proyek&gt;.pages.dev/**</code> dan <code>ukurra://auth</code> (baris kedua ini dipakai aplikasi desktop — tanpa itu login Studio ditolak).</li>
-            <li>Isi <code>assets/js/config.js</code>: <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> dari Supabase &rarr; Project Settings &rarr; API. Push.</li>
+            <li>Buka <code>console.cloud.google.com</code>, login dengan akun Google yang akan jadi pemilik proyek (sebaiknya akun khusus <code>ukurra</code>, bukan akun pribadi, supaya kepemilikan jelas kalau nanti ada yang bantu kelola).</li>
+            <li>Pojok kiri atas, dropdown proyek &rarr; <b>New Project</b> &rarr; nama <code>Ukurra</code> &rarr; Create.</li>
+            <li>Sidebar &rarr; <b>APIs &amp; Services &rarr; OAuth consent screen</b>.</li>
+            <li>User type: <b>External</b> (karena ini produk publik, bukan internal organisasi Google Workspace).</li>
+            <li>Isi: App name <code>Ukurra</code>, User support email (email kamu), App logo (opsional tapi disarankan — pakai <code>assets/icons/icon-512.png</code> dari repo), Developer contact email.</li>
+            <li>Kolom <b>Privacy Policy URL</b> dan <b>Terms of Service URL</b> — <b>kosongkan dulu</b>, baru diisi setelah Tahap 7 selesai. Tanpa dua URL ini nanti, app tidak bisa di-publish ke production (lihat Tahap 7).</li>
+            <li>Scopes: tambahkan <code>.../auth/userinfo.email</code>, <code>.../auth/userinfo.profile</code>, <code>openid</code>. Ketiganya tergolong <b>non-sensitif</b> — ini penting, dijelaskan lebih lanjut di Tahap 7.</li>
+            <li>Test users: tambahkan emailmu sendiri dulu supaya bisa dites sebelum publish.</li>
           </ol>
-          <div class="verify"><b>Cek:</b> login dengan Google di situsnya. Tabel <code>profiles</code> di Supabase harus muncul satu baris, <code>plan = free</code>, <code>missions_used = 0</code>. Ekspor satu misi &rarr; muat ulang &rarr; angkanya jadi 1.</div>
-          <div class="note"><b>Tanpa halaman Privasi/Syarat (Tahap 7)</b>, OAuth cuma bisa mode Testing — maksimal 100 akun yang harus didaftarkan manual satu-satu di Google Cloud Console. Tidak bisa dipakai publik.</div>
+
+          <h3>B. Buat OAuth Client ID</h3>
+          <ol>
+            <li><b>Credentials &rarr; Create Credentials &rarr; OAuth client ID</b>.</li>
+            <li>Application type: <b>Web application</b>.</li>
+            <li><b>Authorized redirect URIs</b> — isi <b>satu baris persis ini</b>, ganti bagian ref dengan punyamu sendiri:
+              <ul><li><code>https://&lt;ref-proyekmu&gt;.supabase.co/auth/v1/callback</code></li></ul>
+              <code>&lt;ref-proyekmu&gt;</code> ada di Supabase &rarr; Project Settings &rarr; API &rarr; Project URL (bagian sebelum <code>.supabase.co</code>).
+            </li>
+            <li>Create. Simpan <b>Client ID</b> dan <b>Client Secret</b> yang muncul — Client Secret cuma ditampilkan sekali, kalau terlewat harus generate ulang.</li>
+          </ol>
+
+          <h3>C. Sambungkan ke Supabase</h3>
+          <ol>
+            <li>Supabase dashboard &rarr; <b>Authentication &rarr; Providers</b> &rarr; cari <b>Google</b> di daftar, klik untuk expand.</li>
+            <li>Toggle <b>Enable Sign in with Google</b> jadi aktif.</li>
+            <li>Tempel <b>Client ID</b> dan <b>Client Secret</b> dari langkah B. Save.</li>
+            <li><b>Authentication &rarr; URL Configuration</b>:
+              <ul>
+                <li><b>Site URL</b>: <code>https://&lt;project-name&gt;.pages.dev</code> (nanti diganti <code>https://ukurra.com</code> di Tahap 4)</li>
+                <li><b>Redirect URLs</b>, tambahkan dua baris:
+                  <ul>
+                    <li><code>https://&lt;project-name&gt;.pages.dev/**</code></li>
+                    <li><code>ukurra://auth</code> — ini dipakai aplikasi desktop. Tanpa baris ini, login di Ukurra Studio akan ditolak Supabase dengan pesan redirect tidak dikenal.</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>D. Isi konfigurasi web</h3>
+          <ol>
+            <li>Buka <code>assets/js/config.js</code> di repo lokal.</li>
+            <li>Isi <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> — ambil dari Supabase &rarr; Project Settings &rarr; API. <b>Jangan pernah</b> pakai <code>service_role key</code> di sini — yang benar <code>anon public key</code>.</li>
+            <li><code>git add assets/js/config.js && git commit -m "Sambungkan Supabase" && git push</code> — Cloudflare otomatis deploy ulang begitu push masuk, biasanya hidup dalam 1&ndash;2 menit.</li>
+          </ol>
+
+          <div class="verify"><b>Cek:</b> buka situs, klik login, pilih akun Google (yang sudah ditambahkan sebagai test user). Setelah redirect balik, di Supabase &rarr; Table Editor &rarr; <code>profiles</code> harus muncul satu baris baru berisi emailmu, <code>plan = free</code>, <code>missions_used = 0</code>. Buat satu misi lalu ekspor, muat ulang halaman — angka <code>missions_used</code> harus jadi 1.</div>
+
+          <div class="gotcha">
+            <b>Error yang sering muncul:</b>
+            <ul>
+              <li><b>"redirect_uri_mismatch"</b> dari Google — redirect URI di Google Cloud Console tidak persis sama dengan URL Supabase (beda huruf besar/kecil, trailing slash, atau http vs https juga dihitung beda).</li>
+              <li><b>Login "berhasil" tapi kembali ke halaman kosong/putih</b> — Site URL atau Redirect URLs di Supabase belum diisi dengan benar, atau belum menambahkan <code>/**</code> di akhir.</li>
+              <li><b>"Access blocked: this app's request is invalid"</b> — akun yang dipakai login belum ditambahkan sebagai Test user (normal selama masih mode Testing, selesai di Tahap 7).</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -301,11 +430,15 @@ body {
         </div>
         <div class="stage-body">
           <ol>
-            <li>Cloudflare &rarr; <b>Domain Registration &rarr; Register Domain</b>, cari <code>ukurra.com</code> (Cloudflare jual di harga modal).</li>
-            <li><b>Workers &amp; Pages &rarr; proyek &rarr; Custom domains</b>, masukkan <code>ukurra.com</code> — DNS dan HTTPS terpasang sendiri kalau domainnya dibeli di Cloudflare.</li>
-            <li>Supabase &rarr; <b>URL Configuration</b>: ubah Site URL ke <code>https://ukurra.com</code>, tambahkan <code>https://ukurra.com/**</code> ke Redirect URLs.</li>
+            <li>Cloudflare dashboard &rarr; <b>Domain Registration &rarr; Register Domain</b>, cari <code>ukurra.com</code>. Cloudflare menjual di harga modal (tanpa markup), biasanya salah satu yang termurah dibanding registrar lain.</li>
+            <li>Checkout, bayar (kartu kredit/debit). WHOIS privacy otomatis aktif di Cloudflare, gratis — data pendaftar tidak terbuka publik.</li>
+            <li>Domain otomatis masuk ke akun Cloudflare yang sama. Tidak perlu urus nameserver manual kalau beli langsung di Cloudflare.</li>
+            <li>Kembali ke <b>Workers &amp; Pages &rarr; proyekmu &rarr; Custom domains &rarr; Set up a custom domain</b>, masukkan <code>ukurra.com</code>. DNS record dan sertifikat HTTPS terpasang otomatis dalam beberapa menit.</li>
+            <li>Ulangi untuk <code>www.ukurra.com</code> kalau mau keduanya aktif (opsional, tapi disarankan supaya orang yang ketik "www." tidak mentok error).</li>
+            <li>Supabase &rarr; <b>Authentication &rarr; URL Configuration</b>: ubah <b>Site URL</b> jadi <code>https://ukurra.com</code>, tambahkan <code>https://ukurra.com/**</code> ke Redirect URLs. <b>Jangan hapus</b> baris <code>.pages.dev</code> yang lama — biarkan tetap ada sebagai cadangan selama masa transisi.</li>
           </ol>
-          <div class="verify"><b>Cek:</b> <code>https://ukurra.com</code> terbuka dengan kunci HTTPS, login Google masih jalan dari alamat baru.</div>
+          <div class="verify"><b>Cek:</b> <code>https://ukurra.com</code> terbuka dengan kunci HTTPS (bukan peringatan "Not Secure"), dan login Google masih berhasil dari alamat baru ini.</div>
+          <div class="note"><b>Domain .id:</b> kalau nanti juga mau <code>ukurra.id</code>, Cloudflare tidak menjual domain .id — perlu registrar Indonesia (Domainesia, Rumahweb, dll.), lalu arahkan nameserver-nya ke Cloudflare supaya tetap bisa dikelola dari satu dashboard.</div>
         </div>
       </div>
     </div>
@@ -320,14 +453,34 @@ body {
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Hanya paket <b>Standard</b> yang butuh checkout swalayan. Paket <b>Organisasi</b> dijual lewat tombol "Hubungi Kami" (<code>mailto:</code>) yang sudah ada — tidak perlu produk pembayaran untuk itu.</p>
+          <p>Hanya paket <b>Standard</b> yang butuh checkout swalayan. Paket <b>Organisasi</b> dijual lewat tombol "Hubungi Kami" (<code>mailto:</code>) yang sudah ada di <code>index.html</code> — tidak perlu produk pembayaran untuk itu sama sekali.</p>
+
+          <h3>Pilih penyedia</h3>
+          <ul>
+            <li><b>Lynk.id</b> — paling cepat disiapkan (bisa jadi dalam 15 menit), cocok untuk mulai. Potongan per transaksi sekitar 2&ndash;5% tergantung metode bayar, cek halaman harga mereka sendiri karena bisa berubah.</li>
+            <li><b>Mayar.id</b> — punya webhook bawaan, jadi status Standard bisa aktif otomatis setelah bayar tanpa campur tangan manual. Pertimbangkan kalau transaksi sudah mulai rutin.</li>
+          </ul>
+
+          <h3>Langkah di Lynk.id/Mayar.id</h3>
           <ol>
-            <li>Buat akun di <b>Lynk.id</b> (paling cepat) atau <b>Mayar.id</b> (ada webhook, lebih cocok kalau sudah ramai).</li>
-            <li>Buat <b>dua produk terpisah</b> — Standard Tahunan Rp 599.000 dan Standard Bulanan Rp 69.000. Lynk/Mayar tidak membaca parameter <code>?plan=</code> yang dikirim situsnya, jadi memang harus dua produk, bukan satu produk dengan dua harga.</li>
-            <li>Tempel tautan produk <b>Tahunan</b> (yang ditonjolkan) ke <code>CHECKOUT_URL</code> di <code>config.js</code>.</li>
+            <li>Daftar akun — butuh KTP dan rekening bank/e-wallet tujuan pencairan dana (verifikasi biasanya 1&ndash;2 hari kerja).</li>
+            <li>Buat <b>dua produk digital terpisah</b>:
+              <ul>
+                <li><b>Ukurra Standard — Tahunan</b>, harga Rp 599.000</li>
+                <li><b>Ukurra Standard — Bulanan</b>, harga Rp 69.000</li>
+              </ul>
+              Dua produk terpisah, <b>bukan</b> satu produk dua harga — karena Lynk/Mayar tidak membaca parameter <code>?plan=</code> yang dikirim situs (parameter itu cuma catatan internal situs, bukan sesuatu yang diproses penyedia pembayaran).
+            </li>
+            <li>Masing-masing produk dapat tautan unik, misal <code>https://lynk.id/ukurra/standard-tahunan</code>.</li>
+            <li>Tempel tautan produk <b>Tahunan</b> (yang ditonjolkan di antarmuka, lihat <code>assets/js/upgrade.js</code>) ke <code>CHECKOUT_URL</code> di <code>config.js</code>.</li>
           </ol>
-          <p><b>Aktivasi manual dulu:</b> sampai webhook dibuat, jadikan akun Standard lewat SQL Editor setelah pembayaran masuk (perintahnya ada di bagian bawah <code>supabase-schema.sql</code>). Untuk puluhan pembeli pertama ini masih wajar.</p>
-          <div class="verify"><b>Cek:</b> klik "Mulai Berlangganan" di situs, sampai ke halaman Lynk/Mayar dengan harga yang benar.</div>
+
+          <h3>Aktivasi — manual dulu, sampai ramai</h3>
+          <p>Sampai webhook dibangun, jadikan akun Standard lewat SQL Editor setiap kali ada pembayaran masuk:</p>
+          <p><code>update public.profiles set plan = 'pro', pro_until = now() + interval '1 year' where email = 'pembeli@contoh.com';</code></p>
+          <p>Perintah lengkapnya (termasuk versi bulanan) ada di bagian bawah <code>supabase-schema.sql</code>. Untuk puluhan pembeli pertama cara ini sepenuhnya wajar — jangan buru-buru bangun otomatisasi sebelum benar-benar butuh.</p>
+
+          <div class="verify"><b>Cek:</b> klik "Mulai Berlangganan" di situs, sampai ke halaman Lynk/Mayar dengan nama produk dan harga yang benar. Lakukan satu transaksi uji (nominal kecil kalau Lynk/Mayar mengizinkan mode sandbox, atau transaksi sungguhan Rp 599.000 kalau tidak ada mode uji) untuk memastikan dana benar-benar masuk sebelum diumumkan ke publik.</div>
         </div>
       </div>
     </div>
@@ -342,13 +495,24 @@ body {
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Ukurra Studio memakai akun Google yang sama dengan web, supaya jatah uji coba tidak bisa diulang dengan berpindah aplikasi. Alur login (PKCE lewat peramban sistem + protokol <code>ukurra://</code>) dan gerbang jatah (1 proyek) <b>sudah selesai dibangun</b> — di <code>LetsMapApp/auth.js</code>, dipanggil dari <code>main.js</code>. Tinggal isi kredensial.</p>
+          <div class="why">Ukurra Studio memakai akun Google yang sama dengan web, supaya jatah uji coba tidak bisa diulang dengan berpindah aplikasi. Alur login (PKCE lewat peramban sistem + protokol <code>ukurra://</code>, karena Google menolak OAuth di webview tertanam) dan gerbang jatah (1 proyek) <b>sudah selesai dibangun</b> di <code>LetsMapApp/auth.js</code>, dipanggil dari <code>main.js</code>. Tahap ini cuma soal mengisi nilai, bukan menulis kode baru.</div>
+
           <ol>
-            <li>Buka <code>LetsMapApp/config.js</code>, isi <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>, <code>CHECKOUT_URL</code> — <b>sama persis</b> dengan nilai di web.</li>
-            <li>Pastikan <code>ukurra://auth</code> sudah ada di Redirect URLs Supabase (Tahap 3).</li>
-            <li>Bangun ulang installer-nya supaya <code>config.js</code> yang terisi ikut terpaket.</li>
+            <li>Buka <code>LetsMapApp/config.js</code>.</li>
+            <li>Isi tiga nilai — <b>sama persis</b> dengan yang ada di <code>LetsMap/assets/js/config.js</code>:
+              <ul>
+                <li><code>SUPABASE_URL</code></li>
+                <li><code>SUPABASE_ANON_KEY</code></li>
+                <li><code>CHECKOUT_URL</code> (dari Tahap 5)</li>
+              </ul>
+            </li>
+            <li>Pastikan <code>ukurra://auth</code> sudah ada di Redirect URLs Supabase (sudah dikerjakan di Tahap 3 langkah C).</li>
+            <li>Bangun ulang installer-nya supaya <code>config.js</code> yang terisi ikut terpaket — lihat <code>README.md</code> bagian build untuk perintah tepatnya (biasanya lewat <code>npm run build</code> setelah Developer Mode Windows dinyalakan).</li>
           </ol>
-          <div class="verify"><b>Cek:</b> buka Ukurra Studio, klik "Masuk dengan Google", peramban terbuka lalu kembali ke aplikasi dengan nama akun tampil. Olah satu proyek sampai selesai &rarr; di Supabase, <code>projects_used</code> jadi 1. Coba olah lagi &rarr; ajakan berlangganan muncul.</div>
+
+          <div class="verify"><b>Cek:</b> buka Ukurra Studio hasil build, klik <b>Masuk dengan Google</b>. Peramban sistem terbuka ke halaman login Google, setelah menyetujui, jendela aplikasi kembali ke depan dan pil status di kanan atas berisi namamu. Olah satu proyek sampai selesai, lalu di Supabase &rarr; <code>profiles</code>: <code>projects_used</code> harus jadi 1. Coba olah proyek kedua — ajakan berlangganan harus muncul, bukan diizinkan lanjut.</div>
+
+          <div class="note"><b>Selama <code>config.js</code> masih placeholder</b> (seperti kondisi default repo), aplikasi berjalan tanpa login dan tanpa batas — ini sengaja, supaya pengembangan tidak terhenti menunggu backend. Tapi berarti installer yang dibagikan ke publik <b>harus</b> sudah berisi config yang benar, bukan versi development.</div>
         </div>
       </div>
     </div>
@@ -363,15 +527,22 @@ body {
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Jauh di atas batas 25 MiB per berkas di Cloudflare Pages — installer tidak boleh ikut masuk repo web. R2: 10 GB gratis, dan yang menentukan, <b>unduhan tidak ditagih</b>.</p>
+          <div class="why">Ukuran terukur: Ukurra Studio 487 MB + OpenDroneMap 1,1 GB setelah terpasang. Installer gabungan setelah kompresi NSIS sekitar 600&ndash;800 MB — jauh di atas batas 25 MiB per berkas di Cloudflare Pages, jadi <b>tidak boleh</b> ikut masuk repo web. R2 dipilih karena 10 GB gratis dan yang paling menentukan: <b>unduhan tidak ditagih bandwidth</b> — dengan installer seberat ini, 100 pengunduh saja sudah 70 GB trafik.</div>
+
           <ol>
-            <li>Cloudflare &rarr; <b>R2 &rarr; Create bucket</b>, nama <code>ukurra-rilis</code>.</li>
-            <li>Unggah <code>Ukurra-Studio-Setup.exe</code>.</li>
-            <li><b>Settings &rarr; Public access &rarr; Connect custom domain</b>, pakai <code>unduh.ukurra.com</code>.</li>
+            <li>Cloudflare dashboard &rarr; <b>R2 Object Storage &rarr; Create bucket</b>, nama <code>ukurra-rilis</code>, lokasi otomatis (biarkan default).</li>
+            <li>Upload <code>Ukurra-Studio-Setup.exe</code> — lewat dashboard (drag &amp; drop, cukup untuk sesekali) atau <code>wrangler</code> CLI kalau mau upload berulang lewat skrip.</li>
+            <li>Masuk bucket &rarr; <b>Settings &rarr; Public access &rarr; Connect Domain</b>, masukkan <code>unduh.ukurra.com</code>. Butuh domain <code>ukurra.com</code> sudah aktif di Cloudflare (Tahap 4).</li>
+            <li>Tunggu beberapa menit sampai DNS dan sertifikat terpasang.</li>
           </ol>
-          <p>Tautannya jadi <code>https://unduh.ukurra.com/Ukurra-Studio-Setup.exe</code> — tombol "Unduh Ukurra Studio" di landing page sudah dipasang dan menunggu tautan ini hidup, tidak perlu sentuh kode lagi.</p>
-          <p>Unduhan sengaja <b>tidak dikunci di balik pembayaran</b> — batas 1 proyek gratis sudah ditegakkan di dalam aplikasi sendiri (Tahap 5b), jadi mengunci tautan unduhan hanya menyusahkan pengguna sah.</p>
-          <div class="verify"><b>Cek:</b> klik tombol "Unduh Ukurra Studio" di landing page, installer terunduh.</div>
+
+          <p>Tautan jadinya <code>https://unduh.ukurra.com/Ukurra-Studio-Setup.exe</code> — <b>tombol "Unduh Ukurra Studio" di landing page sudah dipasang</b> dan mengarah persis ke tautan ini. Tidak perlu sentuh kode lagi; begitu 4 langkah di atas selesai, tombolnya langsung hidup.</p>
+
+          <div class="why">Unduhan sengaja <b>tidak dikunci di balik pembayaran</b> — siapa pun boleh mengunduh dan mencoba. Batas 1 proyek olah data gratis sudah ditegakkan di dalam aplikasi sendiri lewat akun Google + Supabase (Tahap 5b), jadi mengunci tautan unduhan hanya akan menyusahkan pengguna sah tanpa benar-benar mencegah pembajakan — installer yang bocor tetap butuh login untuk dipakai lebih dari satu proyek.</div>
+
+          <div class="verify"><b>Cek:</b> klik tombol "Unduh Ukurra Studio" di landing page yang sudah live, installer-nya benar-benar terunduh (bukan 404).</div>
+
+          <div class="note"><b>Alternatif:</b> GitHub Releases juga gratis dan tanpa batas bandwidth, tapi tautannya selalu publik sepenuhnya — kurang cocok kalau nanti ingin membedakan versi/akses tertentu. R2 tetap pilihan utama.</div>
         </div>
       </div>
     </div>
@@ -381,19 +552,43 @@ body {
       <div class="stage-dot">7</div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Halaman Privasi &amp; Syarat Penggunaan</h2><div class="sub">Wajib untuk OAuth Google keluar dari mode Testing</div></div>
+          <div class="ti"><h2>Halaman Privasi &amp; Syarat, lalu publish OAuth</h2><div class="sub">Wajib supaya tidak perlu daftarkan akun satu-satu</div></div>
           <span class="badge block">Belum ada</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p><code>privacy.html</code> dan <code>terms.html</code> belum ada di proyek ini. Tanpa dua halaman ini terpasang di OAuth consent screen (Tahap 3), Google membatasi login ke mode Testing — maksimal 100 akun, didaftarkan manual satu-satu. Produk tidak bisa dipakai publik tanpa ini.</p>
+          <div class="why"><code>privacy.html</code> dan <code>terms.html</code> belum ada di proyek ini. Tanpa dua halaman ini, OAuth consent screen di Google Cloud Console tertahan di status <b>Testing</b> — hanya akun yang didaftarkan manual satu-satu (maksimal 100) yang bisa login. Produk tidak bisa dipakai publik tanpa melewati tahap ini.</div>
+
+          <h3>A. Tulis dua halamannya</h3>
           <ol>
-            <li>Tulis <code>privacy.html</code> — data apa yang dikumpulkan (email dari Google, data misi/proyek), untuk apa, disimpan di mana (Supabase), cara pengguna minta dihapus.</li>
-            <li>Tulis <code>terms.html</code> — syarat pakai, batasan tanggung jawab, kebijakan uji coba &amp; langganan.</li>
-            <li>Pasang keduanya di repo, deploy, lalu tempel URL-nya ke OAuth consent screen di Google Cloud Console.</li>
-            <li>Ajukan verifikasi/publish app di Google Cloud Console supaya keluar dari mode Testing.</li>
+            <li><code>privacy.html</code> — jelaskan: data apa yang dikumpulkan (email &amp; nama dari Google, data misi/proyek yang disimpan), untuk apa dipakai, di mana disimpan (Supabase, server Singapura), berapa lama disimpan, dan cara pengguna minta akunnya dihapus (misalnya lewat email dukungan).</li>
+            <li><code>terms.html</code> — syarat pakai layanan, batasan tanggung jawab (hasil pengukuran bersifat estimasi, bukan jaminan akurasi survei legal), kebijakan jatah uji coba &amp; langganan, kebijakan pembatalan.</li>
+            <li>Taruh keduanya di root proyek (sejajar dengan <code>index.html</code>), style sederhana sudah cukup — tidak perlu desain rumit, yang penting isinya jelas dan jujur.</li>
           </ol>
-          <div class="verify"><b>Cek:</b> OAuth consent screen berstatus "In production", bukan "Testing". Akun Google mana pun bisa login tanpa didaftarkan manual lebih dulu.</div>
+
+          <h3>B. Terbitkan &amp; sambungkan ke Google</h3>
+          <ol>
+            <li><code>git add privacy.html terms.html && git commit -m "Tambah halaman Privasi & Syarat" && git push</code> — tunggu Cloudflare Pages selesai deploy ulang.</li>
+            <li>Google Cloud Console &rarr; <b>APIs &amp; Services &rarr; OAuth consent screen</b>, isi:
+              <ul>
+                <li><b>Privacy Policy URL</b>: <code>https://ukurra.com/privacy.html</code></li>
+                <li><b>Terms of Service URL</b>: <code>https://ukurra.com/terms.html</code></li>
+              </ul>
+            </li>
+            <li>Klik tombol <b>PUBLISH APP</b> — status berubah dari "Testing" ke <b>"In production"</b>.</li>
+          </ol>
+
+          <div class="why"><b>Kabar baiknya:</b> publish ini langsung aktif seketika, <b>tidak perlu menunggu tim review Google</b>. Itu karena scope yang dipakai (<code>email</code>, <code>profile</code>, <code>openid</code>) tergolong <b>non-sensitif</b>. Proses review manual Google yang bisa makan waktu berminggu-minggu (butuh video demo, audit kebijakan privasi, verifikasi domain lewat Search Console) hanya berlaku untuk app yang minta scope sensitif/restricted (akses Gmail, Drive, Kalender, dll.) — Ukurra tidak menyentuh scope itu sama sekali, jadi publish-nya murni klik tombol. Sebagai efek sampingnya, pengguna juga <b>tidak akan melihat layar peringatan "Google belum memverifikasi app ini"</b> — peringatan itu cuma muncul untuk app dengan scope sensitif.</div>
+
+          <div class="verify"><b>Cek paling meyakinkan:</b> minta teman atau pakai akun Google kedua yang <b>belum pernah</b> kamu tambahkan sebagai test user, coba login. Kalau berhasil masuk tanpa ditolak, berarti status sudah "In production" dan siapa pun bisa pakai.</div>
+
+          <div class="gotcha">
+            <b>Kalau tombol Publish tidak bisa diklik / muncul peringatan:</b>
+            <ul>
+              <li>Field wajib di consent screen belum lengkap — cek lagi App name, support email, developer email, dan dua URL legal sudah semua terisi.</li>
+              <li>Tampilan menu Google Cloud Console bisa berubah sewaktu-waktu — kalau nama tombol/field tidak persis sama saat kamu buka, cari istilah "Publish app" atau status "Testing / In production" di halaman OAuth consent screen, intinya tetap sama.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -402,12 +597,12 @@ body {
 
   <div class="paralel">
     <h3>Boleh dikerjakan belakangan, tidak menghalangi peluncuran teknis</h3>
-    <p>Tinjauan hukum soal lisensi AGPL OpenDroneMap (ODM dipanggil sebagai program terpisah, tidak dimodifikasi — polanya sudah dirancang untuk ini) sebaiknya selesai sebelum rupiah pertama masuk, tapi tidak menghalangi tahap 1&ndash;7 di atas berjalan. Kerjakan paralel, bukan sebagai gerbang.</p>
+    <p>Tinjauan hukum soal lisensi AGPL OpenDroneMap (ODM dipanggil sebagai program terpisah lewat <code>run.bat</code>, tidak pernah dimodifikasi — polanya sudah dirancang untuk menjaga kewajiban AGPL tetap pada ODM sendiri) sebaiknya selesai sebelum rupiah pertama masuk, tapi tidak menghalangi Tahap 1&ndash;7 di atas berjalan sama sekali. Kerjakan paralel, kapan saja sebelum benar-benar menerima pembayaran pertama — bukan sebagai gerbang yang menahan deploy.</p>
   </div>
 
   <div class="done-box">
     <h3>Setelah tahap 1&ndash;7 selesai</h3>
-    <p>Siapa pun bisa buka <code>ukurra.com</code>, login dengan Google, pakai mission planner dengan jatah 2 misi gratis, unduh Ukurra Studio dan olah 1 proyek gratis, lalu berlangganan Standard lewat Lynk/Mayar kalau jatahnya habis — semua tanpa campur tangan manual, kecuali mengaktifkan status Standard lewat SQL Editor sampai webhook dibangun.</p>
+    <p>Siapa pun bisa buka <code>ukurra.com</code>, login dengan akun Google mana pun tanpa didaftarkan dulu, pakai mission planner dengan jatah 2 misi gratis, unduh Ukurra Studio dan olah 1 proyek gratis, lalu berlangganan Standard lewat Lynk/Mayar kalau jatahnya habis — semua tanpa campur tangan manual dari kamu, kecuali mengaktifkan status Standard lewat SQL Editor sampai webhook pembayaran dibangun.</p>
   </div>
 
   <p class="foot">Dibuat dari pembacaan langsung kode &amp; dokumentasi proyek saat ini. Detail tiap tahap juga ada di <code>DEPLOY.md</code>.</p>
@@ -420,9 +615,9 @@ document.getElementById('tl').addEventListener('click', (e) => {
   if (!head) return;
   head.closest('.stage-card').classList.toggle('open');
 });
-// Tahap pertama yang masih "todo"/"block" dibuka otomatis.
+// Tahap pertama yang masih terhalang/butuh tindakan dibuka otomatis.
 (function () {
-  const first = document.querySelector('.stage.todo .stage-card, .stage.block .stage-card');
+  const first = document.querySelector('.stage.block .stage-card, .stage.todo .stage-card');
   if (first) first.classList.add('open');
 })();
 </script>
