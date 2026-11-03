@@ -94,10 +94,18 @@ Deno.serve(async (req) => {
 
   // Anti dobel-aktivasi kalau Mayar mengirim webhook yang sama lebih
   // dari sekali (retry) — id webhook dipakai sebagai kunci unik.
+  // PENTING: hanya pelanggaran unique constraint (23505, artinya id ini
+  // SUDAH diproses) yang boleh menghentikan aktivasi. Error lain (mis.
+  // tabelnya belum dibuat) tetap dilanjutkan ke aktivasi — kalau tidak,
+  // satu masalah infra diam-diam membuat semua pembayaran gagal aktif
+  // tanpa jejak, disangka "sudah pernah diproses".
   const { error: errLog } = await supabase.from('mayar_webhook_log').insert({ id: webhookId });
-  if (errLog) {
+  if (errLog && errLog.code === '23505') {
     console.log('[mayar-webhook] webhook id sudah pernah diproses, dilewati:', webhookId);
     return new Response('ok (duplicate)', { status: 200 });
+  }
+  if (errLog) {
+    console.error('[mayar-webhook] gagal catat log (lanjut aktivasi tetap jalan):', errLog.message);
   }
 
   const proUntil = new Date(Date.now() + paket.hari * 24 * 60 * 60 * 1000).toISOString();
