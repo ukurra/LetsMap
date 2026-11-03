@@ -1548,7 +1548,19 @@ ${pms}
     $$('#m-tabs button').forEach((b) => b.classList.toggle('active', b.dataset.pane === name));
     $('#dock-h').textContent = T(PANE_KEY[name]);
     $('#dock').classList.remove('hidden');
-    if (isMobile() && sheetState === 'peek') snapTo('half');
+
+    // Tiap pane berbagi satu dock-body yang sama — tanpa ini, posisi
+    // gulir tab sebelumnya terbawa ke pane baru dan bagian atasnya
+    // (mis. tombol "Gambar Poligon") tampak hilang/tertutup.
+    $('.dock-body').scrollTop = 0;
+
+    if (isMobile()) {
+      // Pane Parameter paling panjang (Terbang, Overlap/Sidelap,
+      // Safety, Kamera) — di posisi "half" bagian bawahnya terpotong.
+      // Buka penuh supaya semua field kebagian ruang.
+      if (name === 'param') snapTo('full');
+      else if (sheetState === 'peek') snapTo('half');
+    }
   }
 
   $$('.rail-btn').forEach((b) =>
@@ -1593,6 +1605,7 @@ ${pms}
   function snapTo(state) {
     if (!isMobile()) return;
     sheetState = state;
+    dock.dataset.sheet = state; // dipakai CSS untuk tombol tutup — lihat .dock-close
     const y = snapPoints()[state];
     dock.style.setProperty('--sheet-y', y + 'px');
     document.documentElement.style.setProperty('--peek', headHeight() + 'px');

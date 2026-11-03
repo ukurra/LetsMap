@@ -543,7 +543,13 @@ input[type=range]::-moz-range-thumb{
   .dock-head{padding:0 16px}
   .dock-title{margin-bottom:11px}
 
-  .m-tabs{display:flex;gap:6px;padding:0 0 13px;overflow-x:auto;scrollbar-width:none}
+  /* Tombol tutup hanya berguna saat lembar ditarik penuh ke atas —
+     saat "di bawah" (peek/half), menarik gagang ke bawah sudah cukup,
+     dan tombolnya cuma makan tempat di sebelah judul. */
+  .dock-close{display:none}
+  #dock[data-sheet="full"] .dock-close{display:grid}
+
+  .m-tabs{display:flex;gap:6px;margin-top:10px;padding:0 0 13px;overflow-x:auto;scrollbar-width:none}
   .m-tabs::-webkit-scrollbar{display:none}
   .m-tabs button{
     flex-shrink:0;padding:8px 15px;border-radius:var(--r-pill);
