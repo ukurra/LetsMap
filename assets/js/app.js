@@ -1665,6 +1665,32 @@ ${pms}
   grip.addEventListener('pointerup', onUp);
   grip.addEventListener('pointercancel', onUp);
 
+  // Lanjutan scroll di dalam isi pane: kalau lembar belum "full" dan
+  // isinya sudah mentok digulir sampai bawah, geser jari ke atas sekali
+  // lagi membuka lembar jadi full — sama seperti pola bottom sheet di
+  // Google Maps / Apple Maps. Pasif (tidak preventDefault) supaya tombol,
+  // input, dan scroll biasa di dalamnya tetap bekerja normal.
+  const dockBody = $('.dock-body');
+  let sentuhAwalY = null;
+  dockBody.addEventListener(
+    'touchstart',
+    (e) => { sentuhAwalY = e.touches[0].clientY; },
+    { passive: true }
+  );
+  dockBody.addEventListener(
+    'touchmove',
+    (e) => {
+      if (sentuhAwalY === null || !isMobile() || sheetState === 'full') return;
+      const dy = sentuhAwalY - e.touches[0].clientY; // positif = jari geser ke atas
+      const mentok = dockBody.scrollTop + dockBody.clientHeight >= dockBody.scrollHeight - 2;
+      if (dy > 12 && mentok) {
+        snapTo('full');
+        sentuhAwalY = null;
+      }
+    },
+    { passive: true }
+  );
+
   /* ═══ MAP EVENTS ═════════════════════════════════════════════════ */
   map.on('mousemove', (e) => {
     setHud('coord', e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5));
