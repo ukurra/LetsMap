@@ -251,22 +251,22 @@ body {
   </div>
 
   <div class="prog-wrap">
-    <div class="prog-track"><div class="prog-fill" style="width:31%"></div></div>
-    <div class="prog-label"><b>2,5</b> dari 8 tahap selesai</div>
+    <div class="prog-track"><div class="prog-fill" style="width:63%"></div></div>
+    <div class="prog-label"><b>5</b> dari 8 tahap selesai</div>
   </div>
 
   <div class="snap">
     <div class="snap-card done">
-      <div class="n">2</div>
-      <div class="l">Selesai &amp; terverifikasi — web hidup di GitHub, database &amp; jatah berjalan</div>
-    </div>
-    <div class="snap-card done">
-      <div class="n">1</div>
-      <div class="l">Sudah dibangun di kode, tinggal diisi konfigurasi — login &amp; jatah desktop</div>
+      <div class="n">5</div>
+      <div class="l">Selesai &amp; teruji — web hidup, login Google, domain ukurra.com, database, pembayaran otomatis</div>
     </div>
     <div class="snap-card todo">
-      <div class="n">5</div>
-      <div class="l">Masih butuh tindakan — domain, akun bayar, 2 halaman legal, installer</div>
+      <div class="n">2</div>
+      <div class="l">Tinggal dikerjakan — build &amp; hosting installer desktop (config-nya sudah terisi)</div>
+    </div>
+    <div class="snap-card block">
+      <div class="n">1</div>
+      <div class="l">Terhalang — 2 halaman legal &amp; publish OAuth ke Production, baru publik bisa login bebas</div>
     </div>
   </div>
 
@@ -346,15 +346,17 @@ body {
     </div>
 
     <!-- 3 -->
-    <div class="stage block" data-s="3">
-      <div class="stage-dot">3</div>
+    <div class="stage done" data-s="3">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Login Google</h2><div class="sub">± 30&ndash;45 menit &middot; paling banyak salah di sini</div></div>
-          <span class="badge block">Terhalang</span>
+          <div class="ti"><h2>Login Google</h2><div class="sub">Teruji dengan login sungguhan 2026-11-03</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
+          <div class="done-note"><b>Sudah dikerjakan:</b> OAuth Client ID dibuat, redirect URI Supabase terdaftar di Google Cloud Console (sempat salah &rarr; <code>redirect_uri_mismatch</code> &rarr; diperbaiki), Client ID/Secret tersambung ke Supabase, <code>config.js</code> terisi. Login dengan akun Google sungguhan berhasil, baris baru muncul di tabel <code>profiles</code>. Masih mode <b>Testing</b> di Google (maksimal 100 test user) — publish ke Production ada di Tahap 7.</div>
+
           <div class="why">Alurnya: peramban &rarr; Google &rarr; <b>Supabase</b> &rarr; kembali ke situs. Yang didaftarkan ke Google adalah alamat <b>Supabase</b>, bukan alamat <code>ukurra.com</code> — ini satu kalimat yang paling sering bikin orang salah isi kolom.</div>
 
           <h3>A. Buat proyek &amp; consent screen di Google Cloud</h3>
@@ -420,15 +422,16 @@ body {
     </div>
 
     <!-- 4 -->
-    <div class="stage todo" data-s="4">
-      <div class="stage-dot">4</div>
+    <div class="stage done" data-s="4">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Domain ukurra.com</h2><div class="sub">± 20 menit &middot; pengeluaran pertama, ± Rp 165.000/tahun</div></div>
-          <span class="badge todo">Belum dibeli</span>
+          <div class="ti"><h2>Domain ukurra.com</h2><div class="sub">Hidup, HTTPS aktif, login berhasil dari domain ini</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
+          <div class="done-note"><b>Sudah dikerjakan:</b> domain dibeli lewat Cloudflare Registrar, disambungkan sebagai custom domain ke Cloudflare Pages, HTTPS otomatis aktif, Site URL &amp; Redirect URLs di Supabase sudah diarahkan ke <code>https://ukurra.com</code>.</div>
           <ol>
             <li>Cloudflare dashboard &rarr; <b>Domain Registration &rarr; Register Domain</b>, cari <code>ukurra.com</code>. Cloudflare menjual di harga modal (tanpa markup), biasanya salah satu yang termurah dibanding registrar lain.</li>
             <li>Checkout, bayar (kartu kredit/debit). WHOIS privacy otomatis aktif di Cloudflare, gratis — data pendaftar tidak terbuka publik.</li>
@@ -444,43 +447,34 @@ body {
     </div>
 
     <!-- 5 -->
-    <div class="stage todo" data-s="5">
-      <div class="stage-dot">5</div>
+    <div class="stage done" data-s="5">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Pembayaran</h2><div class="sub">± 30 menit &middot; Lynk.id atau Mayar.id</div></div>
-          <span class="badge todo">Belum dibuat</span>
+          <div class="ti"><h2>Pembayaran</h2><div class="sub">Mayar.id &middot; aktivasi otomatis teruji transaksi sungguhan</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <p>Hanya paket <b>Standard</b> yang butuh checkout swalayan. Paket <b>Organisasi</b> dijual lewat tombol "Hubungi Kami" (<code>mailto:</code>) yang sudah ada di <code>index.html</code> — tidak perlu produk pembayaran untuk itu sama sekali.</p>
+          <div class="done-note">
+            <b>Sudah dikerjakan:</b> dua produk digital dibuat di Mayar (Tahunan Rp 599.000, Bulanan Rp 69.000), masing-masing dengan link pembayaran langsung sendiri di <code>CHECKOUT_URL</code> / <code>CHECKOUT_URL_MONTHLY</code> (<code>config.js</code> web &amp; desktop). Kartu harga landing page dan modal upgrade di dalam app punya tombol terpisah untuk tiap paket — bukan satu tombol dengan parameter <code>?plan=</code>, karena Mayar tidak membacanya.
+            <br><br>
+            Aktivasi Pro <b>otomatis</b> lewat Supabase Edge Function <code>supabase/functions/mayar-webhook</code>: menerima event <code>payment.received</code> dari Mayar, mencocokkan produk lewat <code>productId</code> asli (bukan nominal — nominal bisa berubah kalau biaya admin ditanggung pembeli), lalu set <code>plan='pro'</code> pada baris <code>profiles</code> yang emailnya cocok. Diuji dengan transaksi Rp 69.000 sungguhan 2026-11-03 — berhasil end-to-end.
+          </div>
 
-          <h3>Pilih penyedia</h3>
-          <ul>
-            <li><b>Lynk.id</b> — paling cepat disiapkan (bisa jadi dalam 15 menit), cocok untuk mulai. Potongan per transaksi sekitar 2&ndash;5% tergantung metode bayar, cek halaman harga mereka sendiri karena bisa berubah.</li>
-            <li><b>Mayar.id</b> — punya webhook bawaan, jadi status Standard bisa aktif otomatis setelah bayar tanpa campur tangan manual. Pertimbangkan kalau transaksi sudah mulai rutin.</li>
-          </ul>
+          <h3>Kenapa bukan tanda tangan/HMAC</h3>
+          <div class="why">Mayar tidak mendokumentasikan skema verifikasi tanda tangan untuk webhook-nya (dicek di <code>docs.mayar.id/integration/webhook</code>). Sebagai gantinya, URL function sendiri berisi token rahasia (<code>?secret=...</code>) sebagai pembuktian keaslian — disimpan sebagai secret Supabase <code>MAYAR_WEBHOOK_SECRET</code>, ditempel ke URL webhook di dashboard Mayar &rarr; Integration &rarr; Webhook.</div>
 
-          <h3>Langkah di Lynk.id/Mayar.id</h3>
-          <ol>
-            <li>Daftar akun — butuh KTP dan rekening bank/e-wallet tujuan pencairan dana (verifikasi biasanya 1&ndash;2 hari kerja).</li>
-            <li>Buat <b>dua produk digital terpisah</b>:
-              <ul>
-                <li><b>Ukurra Standard — Tahunan</b>, harga Rp 599.000</li>
-                <li><b>Ukurra Standard — Bulanan</b>, harga Rp 69.000</li>
-              </ul>
-              Dua produk terpisah, <b>bukan</b> satu produk dua harga — karena Lynk/Mayar tidak membaca parameter <code>?plan=</code> yang dikirim situs (parameter itu cuma catatan internal situs, bukan sesuatu yang diproses penyedia pembayaran).
-            </li>
-            <li>Masing-masing produk dapat tautan unik, misal <code>https://lynk.id/ukurra/standard-tahunan</code>.</li>
-            <li>Tempel tautan produk <b>Tahunan</b> (yang ditonjolkan di antarmuka, lihat <code>assets/js/upgrade.js</code>) ke <code>CHECKOUT_URL</code> di <code>config.js</code>.</li>
-          </ol>
+          <h3>Batasan yang masih ada: pembeli harus login dulu</h3>
+          <p>Aktivasi mencocokkan lewat <b>email</b> pada tabel <code>profiles</code> — baris itu baru ada setelah seseorang login Google minimal sekali (Tahap 3). Kalau ada yang bayar <b>sebelum</b> pernah login, function mencatat jelas di log siapa yang perlu diaktifkan manual, tidak gagal diam-diam. Aktivasi manualnya:</p>
+          <p><code>update public.profiles set plan = 'pro', pro_until = now() + interval '1 month' where email = 'pembeli@contoh.com';</code></p>
+          <p>(ganti <code>1 month</code> jadi <code>1 year</code> untuk paket Tahunan). Perintah ini juga ada di bagian bawah <code>supabase-schema.sql</code>.</p>
 
-          <h3>Aktivasi — manual dulu, sampai ramai</h3>
-          <p>Sampai webhook dibangun, jadikan akun Standard lewat SQL Editor setiap kali ada pembayaran masuk:</p>
-          <p><code>update public.profiles set plan = 'pro', pro_until = now() + interval '1 year' where email = 'pembeli@contoh.com';</code></p>
-          <p>Perintah lengkapnya (termasuk versi bulanan) ada di bagian bawah <code>supabase-schema.sql</code>. Untuk puluhan pembeli pertama cara ini sepenuhnya wajar — jangan buru-buru bangun otomatisasi sebelum benar-benar butuh.</p>
+          <div class="verify"><b>Cek:</b> di Mayar dashboard &rarr; Integration &rarr; Webhook, status harus "aktif". Kalau ada transaksi baru masuk, Supabase &rarr; Edge Functions &rarr; <code>mayar-webhook</code> &rarr; Logs harus menunjukkan <code>berhasil aktifkan Pro</code>, dan tabel <code>profiles</code> pembelinya berubah jadi <code>plan = 'pro'</code> otomatis tanpa disentuh manual.</div>
 
-          <div class="verify"><b>Cek:</b> klik "Mulai Berlangganan" di situs, sampai ke halaman Lynk/Mayar dengan nama produk dan harga yang benar. Lakukan satu transaksi uji (nominal kecil kalau Lynk/Mayar mengizinkan mode sandbox, atau transaksi sungguhan Rp 599.000 kalau tidak ada mode uji) untuk memastikan dana benar-benar masuk sebelum diumumkan ke publik.</div>
+          <div class="gotcha">
+            <b>Kalau mau ganti/tambah produk nanti:</b> ID produk Mayar dihardcode di <code>PAKET</code> pada <code>supabase/functions/mayar-webhook/index.ts</code> (bukan dibaca otomatis dari Mayar) — produk baru atau ganti harga perlu update manual di file itu lalu <code>supabase functions deploy mayar-webhook</code> ulang.
+          </div>
         </div>
       </div>
     </div>
