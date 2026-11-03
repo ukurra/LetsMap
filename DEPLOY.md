@@ -214,7 +214,7 @@ resminya, jadi **cek sendiri halaman harga masing-masing sebelum
 memutuskan**.
 
 **Hanya paket Standard yang butuh produk checkout.** Paket Organisasi
-dijual lewat tombol "Hubungi Kami" (`mailto:ukurra@gmail.com`) di
+dijual lewat tombol "Hubungi Kami" (`mailto:haloukurra@gmail.com`) di
 `index.html` — tidak ada pembayaran swalayan untuk itu, jadi tidak perlu
 dibuatkan produk di Lynk/Mayar.
 
