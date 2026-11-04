@@ -11,8 +11,8 @@
 create table if not exists public.profiles (
   id            uuid primary key references auth.users(id) on delete cascade,
   email         text,
-  plan          text not null default 'free',   -- 'free' | 'pro'
-  pro_until     timestamptz,                    -- null + plan='pro' = selamanya
+  plan          text not null default 'free',   -- 'free' | 'pro' | 'organisasi'
+  pro_until     timestamptz,                    -- null + plan='pro'/'organisasi' = selamanya
   missions_used int  not null default 0,
   projects_used int  not null default 0,
   created_at    timestamptz not null default now()
@@ -102,6 +102,14 @@ create policy "kelola misi sendiri"
 --      set plan = 'pro',
 --          pro_until = now() + interval '1 year'   -- hapus baris ini untuk lifetime
 --    where email = 'pembeli@gmail.com';
+--
+-- Organisasi dijual manual (kontak langsung, bukan checkout swalayan),
+-- jadi SELALU diaktifkan lewat SQL ini, bukan webhook:
+--
+--   update public.profiles
+--      set plan = 'organisasi',
+--          pro_until = null   -- isi tanggal kalau kontraknya bukan tanpa batas waktu
+--    where email = 'pembeli@contoh-organisasi.com';
 -- ═══════════════════════════════════════════════════════════════════
 
 -- Dipakai Edge Function supabase/functions/mayar-webhook supaya satu

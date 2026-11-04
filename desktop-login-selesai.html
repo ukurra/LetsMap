@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Login berhasil — Ukurra Studio</title>
+<style>
+  :root{color-scheme:light dark}
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100dvh;display:flex;align-items:center;justify-content:center;
+    padding:24px;background:#F2F6FB;color:#17293C;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .card{
+    width:100%;max-width:380px;text-align:center;
+    background:#FFFFFF;border:1px solid #DCE6F2;border-radius:18px;
+    padding:36px 30px;box-shadow:0 12px 36px rgba(23,41,60,.13);
+  }
+  .ico{
+    width:52px;height:52px;margin:0 auto 18px;border-radius:50%;
+    background:#EFF8FE;color:#0284C7;display:grid;place-items:center;
+  }
+  h1{font-size:18px;font-weight:800;margin:0 0 8px;letter-spacing:-.02em}
+  p{font-size:13.5px;color:#64788F;line-height:1.6;margin:0}
+  .manual{margin-top:18px;padding-top:16px;border-top:1px solid #DCE6F2}
+  .manual[hidden]{display:none}
+  a.btn{
+    display:inline-block;margin-top:10px;padding:10px 22px;border-radius:999px;
+    background:#0EA5E9;color:#fff;font-weight:700;font-size:13.5px;text-decoration:none;
+  }
+  @media (prefers-color-scheme:dark){
+    body{background:#0B1420;color:#E7EEF6}
+    .card{background:#122033;border-color:#1E3049;box-shadow:none}
+    .ico{background:#13293D;color:#38BDF8}
+    p{color:#93A5BC}
+    .manual{border-top-color:#1E3049}
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="ico">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h1>Login berhasil</h1>
+    <p id="msg">Mengalihkan kembali ke Ukurra Studio…</p>
+    <div class="manual" id="manual" hidden>
+      <p>Tidak otomatis terbuka? Tutup tab ini dan kembali ke jendela Ukurra Studio, atau klik tombol di bawah.</p>
+      <a class="btn" id="manual-link">Buka Ukurra Studio</a>
+    </div>
+  </div>
+<script>
+(function () {
+  var sasaran = 'ukurra://auth' + location.search;
+  var link = document.getElementById('manual-link');
+  link.href = sasaran;
+
+  // Serahkan ke OS/peramban untuk membuka protokol ukurra:// —
+  // tab ini sendiri tidak pernah "selesai memuat" apa pun setelah ini,
+  // jadi tombol manual di bawah disiapkan sebagai jalan keluar kalau
+  // peramban menahan/menolak pengalihan otomatis.
+  location.replace(sasaran);
+
+  setTimeout(function () {
+    document.getElementById('msg').textContent =
+      'Kalau Ukurra Studio belum terbuka otomatis setelah ini:';
+    document.getElementById('manual').hidden = false;
+  }, 1200);
+})();
+</script>
+</body>
+</html>
