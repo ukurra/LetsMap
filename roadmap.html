@@ -251,22 +251,14 @@ body {
   </div>
 
   <div class="prog-wrap">
-    <div class="prog-track"><div class="prog-fill" style="width:75%"></div></div>
-    <div class="prog-label"><b>6</b> dari 8 tahap selesai</div>
+    <div class="prog-track"><div class="prog-fill" style="width:100%"></div></div>
+    <div class="prog-label"><b>8</b> dari 8 tahap selesai — Ukurra siap dipakai publik</div>
   </div>
 
   <div class="snap">
-    <div class="snap-card done">
-      <div class="n">6</div>
-      <div class="l">Selesai &amp; teruji — web hidup, login Google, domain, database, pembayaran otomatis, aplikasi desktop</div>
-    </div>
-    <div class="snap-card todo">
-      <div class="n">1</div>
-      <div class="l">Tinggal dikerjakan — upload installer terbaru ke R2, sambungkan unduh.ukurra.com</div>
-    </div>
-    <div class="snap-card block">
-      <div class="n">1</div>
-      <div class="l">Terhalang — 2 halaman legal &amp; publish OAuth ke Production, baru publik bisa login bebas</div>
+    <div class="snap-card done" style="grid-column:1 / -1">
+      <div class="n">8/8</div>
+      <div class="l">Semua tahap selesai &amp; teruji — web hidup, login Google publik (OAuth In production), domain, database, pembayaran otomatis, aplikasi desktop, installer live di unduh.ukurra.com, halaman Privasi &amp; Syarat terbit. Siapa pun bisa daftar dan pakai tanpa campur tangan manual.</div>
     </div>
   </div>
 
@@ -501,12 +493,12 @@ body {
     </div>
 
     <!-- 6 -->
-    <div class="stage todo" data-s="6">
-      <div class="stage-dot">6</div>
+    <div class="stage done" data-s="6">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Bagikan installer desktop</h2><div class="sub">Cloudflare R2 &middot; installer ± 600&ndash;800 MB</div></div>
-          <span class="badge todo">Belum di-hosting</span>
+          <div class="ti"><h2>Bagikan installer desktop</h2><div class="sub">Live di unduh.ukurra.com (321 MB, dicek 200 OK)</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
@@ -523,7 +515,7 @@ body {
 
           <div class="why">Unduhan sengaja <b>tidak dikunci di balik pembayaran</b> — siapa pun boleh mengunduh dan mencoba. Batas 1 proyek olah data gratis sudah ditegakkan di dalam aplikasi sendiri lewat akun Google + Supabase (Tahap 5b), jadi mengunci tautan unduhan hanya akan menyusahkan pengguna sah tanpa benar-benar mencegah pembajakan — installer yang bocor tetap butuh login untuk dipakai lebih dari satu proyek.</div>
 
-          <div class="verify"><b>Cek:</b> klik tombol "Unduh Ukurra Studio" di landing page yang sudah live, installer-nya benar-benar terunduh (bukan 404).</div>
+          <div class="done-note"><b>Sudah dikerjakan:</b> bucket <code>ukurra-rilis</code> dibuat, installer (321 MB) diunggah lewat S3 API (dashboard Cloudflare membatasi unggahan di 300 MB, jadi dipakai jalur multipart upload), domain <code>unduh.ukurra.com</code> disambungkan. Dicek langsung: <code>https://unduh.ukurra.com/Ukurra-Studio-Setup.exe</code> membalas 200 OK dengan ukuran berkas yang persis cocok.</div>
 
           <div class="note"><b>Alternatif:</b> GitHub Releases juga gratis dan tanpa batas bandwidth, tapi tautannya selalu publik sepenuhnya — kurang cocok kalau nanti ingin membedakan versi/akses tertentu. R2 tetap pilihan utama.</div>
         </div>
@@ -531,47 +523,22 @@ body {
     </div>
 
     <!-- 7 -->
-    <div class="stage block" data-s="7">
-      <div class="stage-dot">7</div>
+    <div class="stage done" data-s="7">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Halaman Privasi &amp; Syarat, lalu publish OAuth</h2><div class="sub">Wajib supaya tidak perlu daftarkan akun satu-satu</div></div>
-          <span class="badge block">Belum ada</span>
+          <div class="ti"><h2>Halaman Privasi &amp; Syarat, lalu publish OAuth</h2><div class="sub">OAuth sudah "In production" — siapa pun bisa login tanpa didaftarkan dulu</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <div class="why"><code>privacy.html</code> dan <code>terms.html</code> belum ada di proyek ini. Tanpa dua halaman ini, OAuth consent screen di Google Cloud Console tertahan di status <b>Testing</b> — hanya akun yang didaftarkan manual satu-satu (maksimal 100) yang bisa login. Produk tidak bisa dipakai publik tanpa melewati tahap ini.</div>
-
-          <h3>A. Tulis dua halamannya</h3>
-          <ol>
-            <li><code>privacy.html</code> — jelaskan: data apa yang dikumpulkan (email &amp; nama dari Google, data misi/proyek yang disimpan), untuk apa dipakai, di mana disimpan (Supabase, server Singapura), berapa lama disimpan, dan cara pengguna minta akunnya dihapus (misalnya lewat email dukungan).</li>
-            <li><code>terms.html</code> — syarat pakai layanan, batasan tanggung jawab (hasil pengukuran bersifat estimasi, bukan jaminan akurasi survei legal), kebijakan jatah uji coba &amp; langganan, kebijakan pembatalan.</li>
-            <li>Taruh keduanya di root proyek (sejajar dengan <code>index.html</code>), style sederhana sudah cukup — tidak perlu desain rumit, yang penting isinya jelas dan jujur.</li>
-          </ol>
-
-          <h3>B. Terbitkan &amp; sambungkan ke Google</h3>
-          <ol>
-            <li><code>git add privacy.html terms.html && git commit -m "Tambah halaman Privasi & Syarat" && git push</code> — tunggu Cloudflare Pages selesai deploy ulang.</li>
-            <li>Google Cloud Console &rarr; <b>APIs &amp; Services &rarr; OAuth consent screen</b>, isi:
-              <ul>
-                <li><b>Privacy Policy URL</b>: <code>https://ukurra.com/privacy.html</code></li>
-                <li><b>Terms of Service URL</b>: <code>https://ukurra.com/terms.html</code></li>
-              </ul>
-            </li>
-            <li>Klik tombol <b>PUBLISH APP</b> — status berubah dari "Testing" ke <b>"In production"</b>.</li>
-          </ol>
-
-          <div class="why"><b>Kabar baiknya:</b> publish ini langsung aktif seketika, <b>tidak perlu menunggu tim review Google</b>. Itu karena scope yang dipakai (<code>email</code>, <code>profile</code>, <code>openid</code>) tergolong <b>non-sensitif</b>. Proses review manual Google yang bisa makan waktu berminggu-minggu (butuh video demo, audit kebijakan privasi, verifikasi domain lewat Search Console) hanya berlaku untuk app yang minta scope sensitif/restricted (akses Gmail, Drive, Kalender, dll.) — Ukurra tidak menyentuh scope itu sama sekali, jadi publish-nya murni klik tombol. Sebagai efek sampingnya, pengguna juga <b>tidak akan melihat layar peringatan "Google belum memverifikasi app ini"</b> — peringatan itu cuma muncul untuk app dengan scope sensitif.</div>
-
-          <div class="verify"><b>Cek paling meyakinkan:</b> minta teman atau pakai akun Google kedua yang <b>belum pernah</b> kamu tambahkan sebagai test user, coba login. Kalau berhasil masuk tanpa ditolak, berarti status sudah "In production" dan siapa pun bisa pakai.</div>
-
-          <div class="gotcha">
-            <b>Kalau tombol Publish tidak bisa diklik / muncul peringatan:</b>
-            <ul>
-              <li>Field wajib di consent screen belum lengkap — cek lagi App name, support email, developer email, dan dua URL legal sudah semua terisi.</li>
-              <li>Tampilan menu Google Cloud Console bisa berubah sewaktu-waktu — kalau nama tombol/field tidak persis sama saat kamu buka, cari istilah "Publish app" atau status "Testing / In production" di halaman OAuth consent screen, intinya tetap sama.</li>
-            </ul>
+          <div class="done-note">
+            <b>Sudah dikerjakan:</b> <code>privacy.html</code> dan <code>terms.html</code> dibuat &amp; live, lalu disambungkan di Google Cloud Console (sekarang bernama <b>Google Auth Platform</b> — tampilannya sudah berubah dari versi lama, field URL legalnya kini di menu <b>Branding</b>, tombol publish-nya di menu <b>Audience</b>). Domain <code>ukurra.com</code> juga sempat perlu ditambahkan manual ke <b>Authorized domains</b> di Branding sebelum Google mau menerima link privacy/terms-nya. Status consent screen sekarang <b>In production</b>.
           </div>
+
+          <div class="why">Publish ini aktif seketika, tidak perlu menunggu review manual Google, karena scope yang dipakai (<code>email</code>, <code>profile</code>, <code>openid</code>) tergolong non-sensitif. Proses review berminggu-minggu cuma berlaku untuk app yang minta scope sensitif/restricted (Gmail, Drive, Kalender, dll.) — Ukurra tidak menyentuh itu sama sekali.</div>
+
+          <div class="verify"><b>Cek paling meyakinkan:</b> minta teman atau pakai akun Google kedua yang belum pernah ditambahkan sebagai test user untuk login. Kalau berhasil masuk, status sudah benar-benar publik.</div>
         </div>
       </div>
     </div>
@@ -584,8 +551,8 @@ body {
   </div>
 
   <div class="done-box">
-    <h3>Setelah tahap 1&ndash;7 selesai</h3>
-    <p>Siapa pun bisa buka <code>ukurra.com</code>, login dengan akun Google mana pun tanpa didaftarkan dulu, pakai mission planner dengan jatah 2 misi gratis, unduh Ukurra Studio dan olah 1 proyek gratis, lalu berlangganan Standard lewat Lynk/Mayar kalau jatahnya habis — semua tanpa campur tangan manual dari kamu, kecuali mengaktifkan status Standard lewat SQL Editor sampai webhook pembayaran dibangun.</p>
+    <h3>Status sekarang — semua tahap selesai</h3>
+    <p>Siapa pun bisa buka <code>ukurra.com</code>, login dengan akun Google mana pun tanpa didaftarkan dulu, pakai mission planner dengan jatah 2 misi gratis, unduh Ukurra Studio dan olah 1 proyek gratis, lalu berlangganan Standard lewat Mayar kalau jatahnya habis — akun langsung aktif otomatis lewat webhook, <b>tanpa campur tangan manual</b> sama sekali (kecuali kasus langka: pembeli bayar sebelum pernah login, itu masih butuh aktivasi manual sekali lewat SQL Editor).</p>
   </div>
 
   <p class="foot">Dibuat dari pembacaan langsung kode &amp; dokumentasi proyek saat ini. Detail tiap tahap juga ada di <code>DEPLOY.md</code>.</p>
