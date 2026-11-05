@@ -27,6 +27,10 @@ const PAKET: Record<string, { hari: number; label: string }> = {
   'd753abc3-1256-4b96-a074-fa89fd8f3f69': { hari: 30, label: 'bulanan' }, // Ukurra Standard — Bulanan
 };
 
+// TODO: isi setelah produk "Ukurra Organisasi — Tahunan" dibuat di Mayar
+// dan diuji dengan transaksi sungguhan (sama seperti PAKET di atas).
+const ORGANISASI_PRODUCT_ID = '';
+
 function cocokAman(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let beda = 0;
@@ -85,13 +89,68 @@ Deno.serve(async (req) => {
     return new Response('ok (incomplete, logged)', { status: 200 });
   }
 
-  const paket = PAKET[productId];
-  if (!paket) {
-    console.error('[mayar-webhook] productId tidak dikenali, bukan produk Ukurra Standard:', productId);
-    return new Response('ok (unknown product)', { status: 200 });
+  const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+
+  // Organisasi: bukan satu pembeli, tapi 5 email tim yang sudah
+  // didaftarkan lewat formulir di index.html SEBELUM checkout (lihat
+  // organisasi_pending di supabase-schema.sql). Dicek duluan, sebelum
+  // PAKET di bawah, karena alurnya sama sekali berbeda dari Standard.
+  if (ORGANISASI_PRODUCT_ID && productId === ORGANISASI_PRODUCT_ID) {
+    const { data: pending, error: errPending } = await supabase
+      .from('organisasi_pending')
+      .select('id, team_emails')
+      .eq('buyer_email', email)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (errPending || !pending) {
+      console.error(
+        '[mayar-webhook] tidak ada pendaftaran Organisasi pending untuk email ini:',
+        email,
+        errPending?.message
+      );
+      return new Response('ok (no pending organisasi registration)', { status: 200 });
+    }
+
+    // Anti dobel-aktivasi, sama seperti Standard di bawah.
+    const { error: errLogOrg } = await supabase.from('mayar_webhook_log').insert({ id: webhookId });
+    if (errLogOrg && errLogOrg.code === '23505') {
+      console.log('[mayar-webhook] webhook id sudah pernah diproses, dilewati:', webhookId);
+      return new Response('ok (duplicate)', { status: 200 });
+    }
+
+    // Anggota tim yang SUDAH punya akun langsung diperbarui di sini.
+    // Yang belum pernah login tetap kebagian lewat trigger
+    // ukurra_new_user() begitu status di bawah jadi 'activated'.
+    const { error: errUpdateTeam } = await supabase
+      .from('profiles')
+      .update({ plan: 'organisasi', pro_until: null })
+      .in('email', pending.team_emails);
+
+    if (errUpdateTeam) {
+      console.error('[mayar-webhook] gagal update sebagian/semua profil tim organisasi:', errUpdateTeam.message);
+    }
+
+    const { error: errMarkActivated } = await supabase
+      .from('organisasi_pending')
+      .update({ status: 'activated', activated_at: new Date().toISOString() })
+      .eq('id', pending.id);
+
+    if (errMarkActivated) {
+      console.error('[mayar-webhook] gagal menandai organisasi_pending activated:', errMarkActivated.message);
+    }
+
+    console.log('[mayar-webhook] berhasil aktifkan Organisasi untuk:', pending.team_emails.join(', '));
+    return new Response('ok (organisasi activated)', { status: 200 });
   }
 
-  const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+  const paket = PAKET[productId];
+  if (!paket) {
+    console.error('[mayar-webhook] productId tidak dikenali, bukan produk Ukurra Standard/Organisasi:', productId);
+    return new Response('ok (unknown product)', { status: 200 });
+  }
 
   // Anti dobel-aktivasi kalau Mayar mengirim webhook yang sama lebih
   // dari sekali (retry) — id webhook dipakai sebagai kunci unik.

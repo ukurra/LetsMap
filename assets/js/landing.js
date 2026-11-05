@@ -133,6 +133,83 @@
     });
   });
 
+  /* ── daftar Organisasi (sebelum checkout) ────────────────────────
+     5 email tim disimpan dulu ke organisasi_pending (lewat anon key,
+     policy insert-only di supabase-schema.sql), baru diarahkan ke
+     Mayar. Webhook mengaktifkan kelimanya begitu pembayaran masuk —
+     lihat supabase/functions/mayar-webhook. */
+  const orgModal = $('#org-modal');
+  function openOrg() {
+    orgModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOrg() {
+    orgModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  const btnOrg = $('#btn-org');
+  if (btnOrg) btnOrg.addEventListener('click', openOrg);
+  $('#org-x').addEventListener('click', closeOrg);
+  orgModal.addEventListener('click', (e) => {
+    if (e.target === orgModal) closeOrg();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeOrg();
+  });
+
+  $('#org-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const note = $('#org-note');
+    note.style.display = 'none';
+
+    const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    const buyer = $('#org-buyer').value.trim().toLowerCase();
+    const team = $$('.org-team').map((i) => i.value.trim().toLowerCase());
+
+    if (!emailRe.test(buyer) || team.some((x) => !emailRe.test(x))) {
+      note.style.display = 'block';
+      note.textContent = T('org.gagalEmail');
+      return;
+    }
+    if (new Set(team).size !== team.length) {
+      note.style.display = 'block';
+      note.textContent = T('org.gagalDuplikat');
+      return;
+    }
+
+    const url = (window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL_ORGANISASI) || '';
+    if (!url) {
+      note.style.display = 'block';
+      note.textContent = T('org.checkoutBelumSiap');
+      return;
+    }
+
+    const btn = $('#org-submit');
+    const span = btn.querySelector('span');
+    const asli = span.textContent;
+    btn.disabled = true;
+    span.textContent = T('org.memproses');
+
+    try {
+      const client = window.LMAuth.db;
+      if (!client) throw new Error('NOT_CONFIGURED');
+      const { error } = await client
+        .from('organisasi_pending')
+        .insert({ buyer_email: buyer, team_emails: team });
+      if (error) throw error;
+
+      window.open(url, '_blank', 'noopener');
+      closeOrg();
+      $('#org-form').reset();
+    } catch {
+      note.style.display = 'block';
+      note.textContent = T('org.gagalSimpan');
+    } finally {
+      btn.disabled = false;
+      span.textContent = asli;
+    }
+  });
+
   /* ── upgrade ke Pro — dua tombol, dua link checkout terpisah ────────
      Mayar tidak membaca parameter ?plan= di URL, jadi satu-satunya
      cara membedakan paket Tahunan vs Bulanan adalah link produknya

@@ -111,6 +111,7 @@ window.LMI18n = (() => {
       "desk.c7": "Peta siap cetak",
       "desk.cta": "Lihat Paket & Harga",
       "desk.unduh": "Unduh Ukurra Studio",
+      "desk.unduhSub": "untuk Windows",
       "desk.p5": "Ukur & Ekspor Laporan",
       "desk.p6": "Cetak Peta PDF",
 
@@ -152,7 +153,7 @@ window.LMI18n = (() => {
       "harga.o5": "Dukungan prioritas",
       "harga.o6": "<b>Buka orthofoto dari luar</b>",
       "harga.o7": "<b>Gabung banyak orthofoto</b> jadi satu peta siap cetak",
-      "harga.hubungi": "Hubungi Kami",
+      "harga.hubungi": "Daftar Sekarang",
 
       "harga.catatan":
         "Pembayaran lewat QRIS, transfer bank, dan e-wallet.<br>" +
@@ -172,7 +173,7 @@ window.LMI18n = (() => {
       "foot.syarat": "Syarat Penggunaan",
       "foot.kontak": "Kontak",
       "foot.lapor": "Lapor Masalah",
-      "foot.laporSub": "Bug, kendala teknis, atau aduan",
+      "foot.laporSub": "Bug, kendala teknis, atau aduan. Kalau tombol di atas tidak langsung membuka aplikasi email, kirim manual ke <b>haloukurra@gmail.com</b>.",
       "foot.peta": "Peta oleh OpenStreetMap & Esri.",
       "foot.dibuat": "Dibuat di Indonesia",
 
@@ -184,8 +185,21 @@ window.LMI18n = (() => {
         "Dengan melanjutkan kamu menyetujui Syarat Penggunaan dan Kebijakan Privasi Ukurra.",
       "login.tutup": "Tutup",
       "login.belumAktif":
-        "Login belum aktif — kredensial Supabase belum diisi di assets/js/config.js. " +
-        'Sementara ini pakai "Coba Dulu Tanpa Akun".',
+        "Login belum aktif — kredensial Supabase belum diisi di assets/js/config.js.",
+
+      /* ── daftar Organisasi (sebelum checkout) ── */
+      "org.judul": "Daftar Paket Organisasi",
+      "org.sub":
+        "Isi email pembeli dan 5 akun Google yang akan diaktifkan. Begitu pembayaran berhasil, kelima akun otomatis jadi Organisasi — tidak perlu daftar ulang.",
+      "org.emailPembeli": "Email Pembeli",
+      "org.emailTim": "5 Akun Google yang Diaktifkan",
+      "org.lanjut": "Lanjut ke Pembayaran",
+      "org.memproses": "Menyimpan…",
+      "org.harga": "Rp 5.999.000/tahun, dibayar lewat Mayar.",
+      "org.gagalEmail": "Isi email pembeli dan kelima akun tim dengan benar.",
+      "org.gagalDuplikat": "Kelima akun tim harus berbeda satu sama lain.",
+      "org.gagalSimpan": "Gagal menyimpan pendaftaran, coba lagi.",
+      "org.checkoutBelumSiap": "Pembayaran Organisasi belum tersedia, hubungi haloukurra@gmail.com.",
       "login.gagal": "Gagal masuk. Coba lagi.",
 
       /* ── perencana: panel ── */
@@ -489,6 +503,7 @@ window.LMI18n = (() => {
       "desk.c7": "Print-ready maps",
       "desk.cta": "See Plans & Pricing",
       "desk.unduh": "Download Ukurra Studio",
+      "desk.unduhSub": "for Windows",
       "desk.p5": "Measure & Export Report",
       "desk.p6": "Print Map PDF",
 
@@ -531,7 +546,7 @@ window.LMI18n = (() => {
       "harga.o6":
         "<b>Open external orthophotos</b> — Agisoft, Pix4D, any GeoTIFF",
       "harga.o7": "<b>Combine many orthophotos</b> into one print-ready map",
-      "harga.hubungi": "Contact Us",
+      "harga.hubungi": "Register Now",
 
       "harga.catatan":
         "Payment by QRIS, bank transfer and e-wallet.<br>" +
@@ -551,7 +566,7 @@ window.LMI18n = (() => {
       "foot.syarat": "Terms of Service",
       "foot.kontak": "Contact",
       "foot.lapor": "Report an Issue",
-      "foot.laporSub": "Bugs, technical issues, or complaints",
+      "foot.laporSub": "Bugs, technical issues, or complaints. If the button above doesn't open your email app, send one manually to <b>haloukurra@gmail.com</b>.",
       "foot.peta": "Maps by OpenStreetMap & Esri.",
       "foot.dibuat": "Made in Indonesia",
 
@@ -563,9 +578,22 @@ window.LMI18n = (() => {
         "By continuing you agree to Ukurra’s Terms of Service and Privacy Policy.",
       "login.tutup": "Close",
       "login.belumAktif":
-        "Sign-in is not active yet — Supabase credentials are missing in " +
-        'assets/js/config.js. For now, use "Try Without an Account".',
+        "Sign-in is not active yet — Supabase credentials are missing in assets/js/config.js.",
       "login.gagal": "Sign-in failed. Please try again.",
+
+      /* ── Organisation sign-up (before checkout) ── */
+      "org.judul": "Register for the Organisation Plan",
+      "org.sub":
+        "Enter the buyer's email and the 5 Google accounts to activate. Once payment succeeds, all 5 accounts turn into Organisation automatically — no need to sign up again.",
+      "org.emailPembeli": "Buyer Email",
+      "org.emailTim": "5 Google Accounts to Activate",
+      "org.lanjut": "Continue to Payment",
+      "org.memproses": "Saving…",
+      "org.harga": "Rp 5,999,000/year, paid via Mayar.",
+      "org.gagalEmail": "Fill in the buyer email and all 5 team accounts correctly.",
+      "org.gagalDuplikat": "The 5 team accounts must all be different from each other.",
+      "org.gagalSimpan": "Could not save your registration, please try again.",
+      "org.checkoutBelumSiap": "Organisation checkout isn't set up yet — contact haloukurra@gmail.com.",
 
       /* ── planner: panels ── */
       "msg.geoTidakDidukung": "This browser does not support geolocation.",

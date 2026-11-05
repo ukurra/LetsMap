@@ -126,6 +126,16 @@ h2.sec-title{
 }
 .step-card h3{font-size:14.5px;font-weight:700;margin-bottom:6px}
 .step-card p{font-size:13px;color:var(--dim);line-height:1.66}
+.step-link{
+  display:inline-flex;align-items:center;gap:6px;margin-top:11px;
+  font-size:12px;font-weight:700;color:var(--accent-d);
+}
+.step-link:hover{text-decoration:underline}
+
+/* ── tombol unduh dengan logo Windows + sub-label ── */
+.btn-unduh{text-align:left}
+.btn-unduh-teks{display:flex;flex-direction:column;line-height:1.3}
+.btn-unduh-teks small{font-size:10px;font-weight:600;color:var(--dim-2);letter-spacing:.02em}
 
 /* ═══ DRONE GRID ═══════════════════════════════════════════════════ */
 .drone-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:10px}

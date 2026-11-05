@@ -28,15 +28,55 @@ create policy "baca profil sendiri"
   on public.profiles for select
   using (auth.uid() = id);
 
+-- ── paket Organisasi: 5 email tim didaftarkan sebelum bayar ────────
+-- Diisi dari formulir di index.html (sebelum login, lewat anon key),
+-- diaktifkan oleh webhook Mayar setelah pembayaran berhasil (lihat
+-- supabase/functions/mayar-webhook). Anggota tim yang emailnya belum
+-- pernah login langsung dapat plan='organisasi' begitu mereka login
+-- pertama kali — lihat ukurra_new_user() di bawah.
+create table if not exists public.organisasi_pending (
+  id           uuid primary key default gen_random_uuid(),
+  buyer_email  text not null,
+  team_emails  text[] not null,
+  status       text not null default 'pending',  -- 'pending' | 'activated'
+  created_at   timestamptz not null default now(),
+  activated_at timestamptz,
+  constraint organisasi_pending_lima_email check (array_length(team_emails, 1) = 5)
+);
+
+alter table public.organisasi_pending enable row level security;
+
+-- Formulir pembelian jalan SEBELUM login, jadi butuh insert dari anon
+-- key. Sengaja TANPA policy select/update/delete untuk anon — orang
+-- lain tidak boleh membaca atau mengubah pendaftaran siapa pun.
+drop policy if exists "daftar organisasi sebelum bayar" on public.organisasi_pending;
+create policy "daftar organisasi sebelum bayar"
+  on public.organisasi_pending for insert
+  with check (
+    status = 'pending'
+    and array_length(team_emails, 1) = 5
+    and buyer_email ~ '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  );
+
 -- ── profil dibuat otomatis saat daftar ────────────────────────────
 create or replace function public.ukurra_new_user()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  jadi_organisasi boolean;
 begin
-  insert into public.profiles (id, email)
-  values (new.id, new.email)
+  -- Email ini mungkin salah satu dari 5 akun Organisasi yang sudah
+  -- lunas tapi belum pernah login — kalau iya, langsung aktif.
+  select exists (
+    select 1 from public.organisasi_pending
+    where status = 'activated'
+      and new.email = any (team_emails)
+  ) into jadi_organisasi;
+
+  insert into public.profiles (id, email, plan)
+  values (new.id, new.email, case when jadi_organisasi then 'organisasi' else 'free' end)
   on conflict (id) do nothing;
   return new;
 end;

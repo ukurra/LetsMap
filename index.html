@@ -147,6 +147,10 @@
       <article class="step-card" data-reveal style="--rd:120ms">
         <h3 data-i18n="cara.3t">Olah foto drone</h3>
         <p data-i18n="cara.3d"></p>
+        <a href="https://unduh.ukurra.com/Ukurra-Studio-Setup.exe" class="step-link">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3.5 10.5 2.4v8.1H3zm8.5-1.2L21 1v9.5h-9.5zM3 11.5h7.5v8.1L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
+          <span data-i18n="desk.unduh">Unduh Ukurra Studio</span>
+        </a>
       </article>
       <article class="step-card" data-reveal style="--rd:180ms">
         <h3 data-i18n="cara.4t">Ukur &amp; analisis</h3>
@@ -183,9 +187,12 @@
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <a href="#harga" class="btn btn-accent" data-i18n="desk.cta">Lihat Paket &amp; Harga</a>
-          <a href="https://unduh.ukurra.com/Ukurra-Studio-Setup.exe" class="btn btn-ghost">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span data-i18n="desk.unduh">Unduh Ukurra Studio</span>
+          <a href="https://unduh.ukurra.com/Ukurra-Studio-Setup.exe" class="btn btn-ghost btn-unduh">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3.5 10.5 2.4v8.1H3zm8.5-1.2L21 1v9.5h-9.5zM3 11.5h7.5v8.1L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
+            <span class="btn-unduh-teks">
+              <span data-i18n="desk.unduh">Unduh Ukurra Studio</span>
+              <small data-i18n="desk.unduhSub">untuk Windows</small>
+            </span>
           </a>
         </div>
       </div>
@@ -260,8 +267,7 @@
           <li><span class="tik">&check;</span><span data-i18n-html="harga.o4"></span></li>
           <li><span class="tik">&check;</span><span data-i18n-html="harga.o5"></span></li>
         </ul>
-        <a href="mailto:haloukurra@gmail.com?subject=Ukurra%20Organisasi" class="btn btn-ghost"
-           style="width:100%" data-i18n="harga.hubungi">Hubungi Kami</a>
+        <button type="button" class="btn btn-ghost" id="btn-org" style="width:100%" data-i18n="harga.hubungi">Daftar Sekarang</button>
       </div>
     </div>
 
@@ -317,7 +323,7 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
           <span data-i18n="foot.lapor">Lapor Masalah</span>
         </a>
-        <p style="font-size:12px;color:var(--dim);line-height:1.5;margin-top:6px" data-i18n="foot.laporSub">Bug, kendala teknis, atau aduan</p>
+        <p style="font-size:12px;color:var(--dim);line-height:1.5;margin-top:6px" data-i18n-html="foot.laporSub"></p>
       </div>
     </div>
 
@@ -352,6 +358,44 @@
 
     <p style="font-size:11px;color:var(--dim-2);text-align:center;margin-top:14px;line-height:1.6">
 <span data-i18n="login.setuju"></span></p>
+  </div>
+</div>
+
+<!-- ══════════ DAFTAR ORGANISASI (sebelum checkout) ══════════ -->
+<div class="modal-scrim" id="org-modal">
+  <div class="modal-card" style="max-width:440px">
+    <button class="modal-x" id="org-x" data-i18n-aria="login.tutup" aria-label="Tutup">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div style="margin-bottom:18px">
+      <h3 style="font-size:19px;font-weight:800;margin-bottom:6px" data-i18n="org.judul">Daftar Paket Organisasi</h3>
+      <p style="font-size:13px;color:var(--dim);line-height:1.6" data-i18n="org.sub">Isi email pembeli dan 5 akun Google yang akan diaktifkan. Begitu pembayaran berhasil, kelima akun otomatis jadi Organisasi — tidak perlu daftar ulang.</p>
+    </div>
+
+    <form id="org-form" style="display:flex;flex-direction:column;gap:12px">
+      <div class="org-field">
+        <label data-i18n="org.emailPembeli">Email Pembeli</label>
+        <input type="email" id="org-buyer" required placeholder="kamu@perusahaan.com">
+      </div>
+
+      <div class="org-field">
+        <label data-i18n="org.emailTim">5 Akun Google yang Diaktifkan</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <input type="email" class="org-team" required placeholder="akun1@gmail.com">
+          <input type="email" class="org-team" required placeholder="akun2@gmail.com">
+          <input type="email" class="org-team" required placeholder="akun3@gmail.com">
+          <input type="email" class="org-team" required placeholder="akun4@gmail.com">
+          <input type="email" class="org-team" required placeholder="akun5@gmail.com">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-accent" id="org-submit" style="width:100%;margin-top:4px">
+        <span data-i18n="org.lanjut">Lanjut ke Pembayaran</span>
+      </button>
+      <div id="org-note" style="display:none;padding:11px 13px;border-radius:var(--r-md);background:#FFFBEB;border:1px solid #FDE68A;font-size:12px;color:#92400E;line-height:1.6"></div>
+      <p style="font-size:11px;color:var(--dim-2);text-align:center;line-height:1.6" data-i18n="org.harga">Rp 5.999.000/tahun, dibayar lewat Mayar.</p>
+    </form>
   </div>
 </div>
 

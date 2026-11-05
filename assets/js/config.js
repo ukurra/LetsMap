@@ -15,6 +15,9 @@ window.LM_CONFIG = {
   // jadi satu-satunya cara membedakan paket adalah produk/link itu sendiri.
   CHECKOUT_URL: 'https://ukurra.myr.id/pl/ukurra-standard-tahunan',
   CHECKOUT_URL_MONTHLY: 'https://ukurra.myr.id/pl/ukurra-standard-bulanan',
+  // TODO: isi setelah produk "Ukurra Organisasi — Tahunan" (Rp 5.999.000)
+  // dibuat di Mayar — lihat Tahap 5c di roadmap.html.
+  CHECKOUT_URL_ORGANISASI: '',
 
 };
 

@@ -180,6 +180,19 @@ a.chip:hover,button.chip:hover{border-color:var(--accent);color:var(--accent-d)}
 }
 .modal-x:hover{background:var(--line);color:var(--text)}
 
+/* ═══ FORM FIELD (dipakai modal pendaftaran, dll.) ═══════════════════ */
+.org-field label{
+  display:block;font-size:12px;font-weight:700;color:var(--dim);
+  margin-bottom:6px;
+}
+.org-field input{
+  width:100%;padding:10px 13px;border-radius:var(--r-md);
+  background:var(--surface-2);border:1.5px solid var(--line);
+  font-size:13.5px;outline:none;transition:border-color .18s,background .18s;
+}
+.org-field input:focus{border-color:var(--accent);background:var(--surface)}
+.org-field input:invalid:not(:placeholder-shown){border-color:var(--danger)}
+
 /* ═══ TOAST ════════════════════════════════════════════════════════ */
 #toast{
   position:fixed;left:50%;bottom:calc(26px + var(--sab));
