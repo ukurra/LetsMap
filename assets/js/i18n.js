@@ -180,8 +180,6 @@ window.LMI18n = (() => {
       "login.judul": "Masuk ke Ukurra",
       "login.sub": "Simpan misi kamu dan buka kembali dari perangkat mana pun.",
       "login.google": "Lanjutkan dengan Google",
-      "login.atau": "atau",
-      "login.tamu": "Coba Dulu Tanpa Akun",
       "login.setuju":
         "Dengan melanjutkan kamu menyetujui Syarat Penggunaan dan Kebijakan Privasi Ukurra.",
       "login.tutup": "Tutup",
@@ -561,8 +559,6 @@ window.LMI18n = (() => {
       "login.judul": "Sign in to Ukurra",
       "login.sub": "Save your missions and pick them up from any device.",
       "login.google": "Continue with Google",
-      "login.atau": "or",
-      "login.tamu": "Try Without an Account",
       "login.setuju":
         "By continuing you agree to Ukurra’s Terms of Service and Privacy Policy.",
       "login.tutup": "Close",

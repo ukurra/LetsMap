@@ -133,11 +133,6 @@
     });
   });
 
-  $('#btn-guest').addEventListener('click', () => {
-    window.LMAuth.signInAsGuest();
-    location.href = 'app.html';
-  });
-
   /* ── upgrade ke Pro — dua tombol, dua link checkout terpisah ────────
      Mayar tidak membaca parameter ?plan= di URL, jadi satu-satunya
      cara membedakan paket Tahunan vs Bulanan adalah link produknya
@@ -155,16 +150,6 @@
   $('#btn-pro-monthly').addEventListener('click', () =>
     bukaCheckout(window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL_MONTHLY)
   );
-
-  /* ── reflect auth state in nav ───────────────────────────────────── */
-  window.LMAuth.onChange((user) => {
-    // Opsi "tanpa akun" tidak ditawarkan lagi begitu ada akun sungguhan.
-    // Begitu Supabase terpasang, mode tamu disembunyikan sepenuhnya:
-    // tanpa akun, jatah uji coba tidak bisa dihitung dan batas 2 misi
-    // jadi bisa dilewati hanya dengan menolak login.
-    const sembunyi = window.LMAuth.configured || (user && !user.guest);
-    $('#guest-wrap').style.display = sembunyi ? 'none' : '';
-  });
 
   window.LMAuth.init().then((user) => {
     if (!user) return;

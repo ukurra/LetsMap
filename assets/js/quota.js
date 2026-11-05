@@ -36,7 +36,7 @@ window.LMQuota = (() => {
     const user = window.LMAuth && window.LMAuth.user;
 
     // Tanpa backend atau tanpa login: jangan menghalangi apa pun.
-    if (!client || !user || user.guest) {
+    if (!client || !user) {
       cache = { plan: 'dev', pro: true, missions: 0, projects: 0, unlimited: true };
       return cache;
     }
@@ -101,7 +101,7 @@ window.LMQuota = (() => {
   async function record(kind) {
     const client = db();
     const user = window.LMAuth && window.LMAuth.user;
-    if (!client || !user || user.guest) return;
+    if (!client || !user) return;
 
     const column = kind === 'missions' ? 'missions_used' : 'projects_used';
     const { error } = await client.rpc('ukurra_use_quota', { kind: column });

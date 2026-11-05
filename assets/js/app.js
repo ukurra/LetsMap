@@ -1714,7 +1714,7 @@ ${pms}
       $('#acct-av').textContent = initial;
     }
     $('#acct-name').textContent = u.name;
-    $('#acct-mail').textContent = u.guest ? 'Sesi tamu — tidak tersimpan' : u.email;
+    $('#acct-mail').textContent = u.email;
   }
 
   $$('#gate .oauth-btn').forEach((btn) => {
@@ -1724,7 +1724,7 @@ ${pms}
         const n = $('#gate-note');
         n.style.display = 'block';
         n.textContent =
-          'Login ' + provider + ' belum aktif — kredensial Supabase belum diisi di assets/js/config.js. Pakai "Coba Dulu Tanpa Akun" untuk sementara.';
+          'Login ' + provider + ' belum aktif — kredensial Supabase belum diisi di assets/js/config.js.';
         return;
       }
       btn.disabled = true;
@@ -1735,11 +1735,6 @@ ${pms}
         toast(T('login.gagal') + ' ' + err.message, 'err');
       }
     });
-  });
-
-  $('#gate-guest').addEventListener('click', () => {
-    paintUser(window.LMAuth.signInAsGuest());
-    gate.classList.add('hidden');
   });
 
   $('#avatar').addEventListener('click', () => {
@@ -1774,13 +1769,6 @@ ${pms}
     if (isMobile()) snapTo(sheetState);
     else dock.style.removeProperty('--sheet-y');
   });
-
-  /** Opsi "tanpa akun" tidak ditawarkan lagi begitu ada akun sungguhan. */
-  function syncGuestOption(user) {
-    $('#gate-guest-wrap').style.display = user && !user.guest ? 'none' : '';
-  }
-
-  window.LMAuth.onChange(syncGuestOption);
 
   window.LMAuth.init().then((user) => {
     if (user) {

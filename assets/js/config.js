@@ -1,7 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════════
    Ukurra — Configuration
    Isi kredensial di bawah setelah membuat project Supabase.
-   Selama masih placeholder, aplikasi otomatis jalan di "mode tamu".
+   Selama masih placeholder, login Google tidak bisa dipakai sama
+   sekali (tombolnya menampilkan pesan "belum dikonfigurasi").
    ═══════════════════════════════════════════════════════════════════ */
 
 window.LM_CONFIG = {

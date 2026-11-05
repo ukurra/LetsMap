@@ -1,16 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════
    Ukurra — Auth (Supabase OAuth: Google)
-
-   Jika kredensial Supabase belum diisi di config.js, modul otomatis
-   masuk "mode tamu": login disimpan di localStorage supaya aplikasi
-   tetap bisa dites tanpa backend.
    ═══════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
 
   const CFG = window.LM_CONFIG || {};
-  const GUEST_KEY = 'ukurra.guest.session';
 
   const isConfigured =
     typeof CFG.SUPABASE_URL === 'string' &&
@@ -35,17 +30,7 @@
       name: m.full_name || m.name || (user.email || '').split('@')[0] || 'Pilot',
       avatar: m.avatar_url || m.picture || '',
       provider: user.app_metadata?.provider || 'email',
-      guest: false,
     };
-  }
-
-  function readGuest() {
-    try {
-      const raw = localStorage.getItem(GUEST_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
-    }
   }
 
   const listeners = new Set();
@@ -68,7 +53,7 @@
     /** Ambil sesi aktif. Selalu await ini sebelum menggate UI. */
     async init() {
       if (!client) {
-        emit(readGuest());
+        emit(null);
         return current;
       }
       const { data } = await client.auth.getSession();
@@ -96,23 +81,7 @@
       if (error) throw error;
     },
 
-    /** Login tanpa backend — hanya untuk uji coba lokal. */
-    signInAsGuest() {
-      const u = {
-        id: 'guest-' + Math.random().toString(36).slice(2, 10),
-        email: '',
-        name: 'Pilot Tamu',
-        avatar: '',
-        provider: 'guest',
-        guest: true,
-      };
-      try { localStorage.setItem(GUEST_KEY, JSON.stringify(u)); } catch {}
-      emit(u);
-      return u;
-    },
-
     async signOut() {
-      try { localStorage.removeItem(GUEST_KEY); } catch {}
       if (client) await client.auth.signOut();
       emit(null);
     },
