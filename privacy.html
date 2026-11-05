@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kebijakan Privasi — Ukurra</title>
+<link rel="icon" href="assets/icons/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css">
+<style>
+  body{padding-bottom:60px}
+  .doc-head{
+    padding:calc(28px + var(--sat)) 20px 22px;border-bottom:1px solid var(--line);
+    background:var(--surface);
+  }
+  .doc-wrap{max-width:720px;margin:0 auto;padding:0 20px}
+  .doc-head .doc-wrap{padding:0}
+  .doc-back{
+    display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
+    color:var(--dim);margin-bottom:16px;
+  }
+  .doc-back:hover{color:var(--accent-d)}
+  .doc-head h1{font-size:26px;font-weight:800;letter-spacing:-.02em}
+  .doc-updated{font-size:12.5px;color:var(--dim-2);margin-top:6px}
+  .doc-body{padding-top:28px;font-size:14.5px;line-height:1.75;color:var(--text)}
+  .doc-body h2{font-size:17px;font-weight:800;margin:32px 0 10px;letter-spacing:-.01em}
+  .doc-body h2:first-child{margin-top:0}
+  .doc-body p{margin-bottom:12px;color:var(--dim)}
+  .doc-body ul{margin:0 0 12px;padding-left:20px;color:var(--dim)}
+  .doc-body li{margin-bottom:6px}
+  .doc-body b{color:var(--text)}
+  .doc-body a{color:var(--accent-d);font-weight:600;text-decoration:underline}
+  .doc-note{
+    background:var(--accent-wash);border:1px solid var(--accent-soft);border-radius:var(--r-md);
+    padding:13px 15px;font-size:13.5px;color:var(--accent-d);line-height:1.65;margin:16px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="doc-wrap">
+    <a class="doc-back" href="index.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Kembali ke Ukurra
+    </a>
+    <h1>Kebijakan Privasi</h1>
+    <p class="doc-updated">Terakhir diperbarui: 5 November 2026</p>
+  </div>
+</div>
+
+<div class="doc-wrap doc-body">
+
+  <p>Ukurra ("kami") menyediakan mission planner drone berbasis web dan aplikasi pengolahan data desktop ("Ukurra Studio"). Halaman ini menjelaskan data apa yang kami kumpulkan, untuk apa dipakai, dan bagaimana kamu bisa memintanya dihapus.</p>
+
+  <h2>1. Data yang kami kumpulkan</h2>
+  <p>Saat kamu login dengan Google, kami menerima dari Google:</p>
+  <ul>
+    <li><b>Email</b> dan <b>nama</b> akun Google-mu</li>
+    <li><b>Foto profil</b> (kalau ada)</li>
+  </ul>
+  <p>Kami tidak meminta akses ke Gmail, Drive, Kalender, atau data Google lain di luar identitas dasar ini.</p>
+  <p>Selama kamu memakai Ukurra, kami juga menyimpan:</p>
+  <ul>
+    <li>Data misi yang kamu buat di mission planner web (area/poligon yang digambar, parameter penerbangan, drone yang dipilih)</li>
+    <li>Status langganan dan jumlah pemakaian jatah uji coba (berapa misi/proyek yang sudah dipakai)</li>
+  </ul>
+
+  <div class="doc-note">
+    <b>Foto drone dan hasil olahan tidak pernah dikirim ke server kami.</b> Ukurra Studio (aplikasi desktop) memproses foto drone-mu sepenuhnya di komputermu sendiri — orthofoto, DSM, dan point cloud dihasilkan secara lokal. Kami tidak punya salinan foto atau hasil olahanmu di mana pun.
+  </div>
+
+  <h2>2. Untuk apa data dipakai</h2>
+  <ul>
+    <li>Mengenali akunmu saat login, di web maupun di Ukurra Studio</li>
+    <li>Menyimpan dan menampilkan kembali misi yang sudah kamu buat</li>
+    <li>Menegakkan batas uji coba gratis dan status langganan Pro/Organisasi</li>
+    <li>Mengaktifkan langganan secara otomatis setelah pembayaran berhasil</li>
+  </ul>
+  <p>Kami tidak menjual atau membagikan datamu ke pihak ketiga untuk kepentingan iklan.</p>
+
+  <h2>3. Di mana data disimpan</h2>
+  <p>Data akun dan misi disimpan di <b>Supabase</b> (server kawasan Singapura). Situs dan berkas statis dilayani lewat <b>Cloudflare</b>.</p>
+
+  <h2>4. Pembayaran</h2>
+  <p>Pembayaran langganan diproses sepenuhnya oleh <b>Mayar.id</b>, penyedia pembayaran pihak ketiga. Kami <b>tidak pernah</b> menerima atau menyimpan nomor kartu, rekening, atau data pembayaran lainnya — yang kami terima dari Mayar hanyalah konfirmasi bahwa pembayaran untuk paket tertentu sudah berhasil, dengan email pembeli, supaya kami tahu akun mana yang perlu diaktifkan.</p>
+
+  <h2>5. Berapa lama data disimpan</h2>
+  <p>Selama akunmu aktif. Kalau kamu minta akun dihapus, data akun dan misi terkait dihapus dari sistem kami — lihat bagian 7.</p>
+
+  <h2>6. Pihak ketiga yang terlibat</h2>
+  <ul>
+    <li><b>Google</b> — login (OAuth)</li>
+    <li><b>Supabase</b> — database dan autentikasi</li>
+    <li><b>Cloudflare</b> — hosting, CDN, dan penyimpanan berkas</li>
+    <li><b>Mayar.id</b> — pemrosesan pembayaran</li>
+  </ul>
+  <p>Masing-masing punya kebijakan privasi sendiri untuk data yang mereka proses atas nama kami.</p>
+
+  <h2>7. Hak kamu</h2>
+  <p>Kamu bisa minta akunmu beserta data misi yang tersimpan dihapus kapan saja dengan mengirim email ke <a href="mailto:haloukurra@gmail.com">haloukurra@gmail.com</a> dari alamat email akun Google yang kamu pakai login. Kami proses dalam maksimal 7 hari kerja.</p>
+
+  <h2>8. Anak-anak</h2>
+  <p>Ukurra tidak ditujukan untuk anak di bawah 13 tahun. Kami tidak sengaja mengumpulkan data dari anak-anak.</p>
+
+  <h2>9. Perubahan kebijakan ini</h2>
+  <p>Kalau kebijakan ini berubah secara berarti, kami akan perbarui tanggal di atas dan, kalau perubahannya signifikan, memberi tahu lewat email atau pemberitahuan di aplikasi.</p>
+
+  <h2>10. Kontak</h2>
+  <p>Pertanyaan soal privasi? Kirim ke <a href="mailto:haloukurra@gmail.com">haloukurra@gmail.com</a>.</p>
+
+</div>
+</body>
+</html>
