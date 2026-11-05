@@ -251,18 +251,18 @@ body {
   </div>
 
   <div class="prog-wrap">
-    <div class="prog-track"><div class="prog-fill" style="width:63%"></div></div>
-    <div class="prog-label"><b>5</b> dari 8 tahap selesai</div>
+    <div class="prog-track"><div class="prog-fill" style="width:75%"></div></div>
+    <div class="prog-label"><b>6</b> dari 8 tahap selesai</div>
   </div>
 
   <div class="snap">
     <div class="snap-card done">
-      <div class="n">5</div>
-      <div class="l">Selesai &amp; teruji — web hidup, login Google, domain ukurra.com, database, pembayaran otomatis</div>
+      <div class="n">6</div>
+      <div class="l">Selesai &amp; teruji — web hidup, login Google, domain, database, pembayaran otomatis, aplikasi desktop</div>
     </div>
     <div class="snap-card todo">
-      <div class="n">2</div>
-      <div class="l">Tinggal dikerjakan — build &amp; hosting installer desktop (config-nya sudah terisi)</div>
+      <div class="n">1</div>
+      <div class="l">Tinggal dikerjakan — upload installer terbaru ke R2, sambungkan unduh.ukurra.com</div>
     </div>
     <div class="snap-card block">
       <div class="n">1</div>
@@ -480,33 +480,22 @@ body {
     </div>
 
     <!-- 5b -->
-    <div class="stage ok" data-s="5b">
-      <div class="stage-dot">5b</div>
+    <div class="stage done" data-s="5b">
+      <div class="stage-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="stage-card">
         <div class="stage-head">
-          <div class="ti"><h2>Sambungkan aplikasi desktop</h2><div class="sub">Login &amp; gerbang jatah sudah dibangun di kode</div></div>
-          <span class="badge ok">Tinggal isi config</span>
+          <div class="ti"><h2>Sambungkan aplikasi desktop</h2><div class="sub">Dibangun, terpasang, login &amp; gerbang tingkat teruji 2026-11-04/05</div></div>
+          <span class="badge done">Selesai</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
         </div>
         <div class="stage-body">
-          <div class="why">Ukurra Studio memakai akun Google yang sama dengan web, supaya jatah uji coba tidak bisa diulang dengan berpindah aplikasi. Alur login (PKCE lewat peramban sistem + protokol <code>ukurra://</code>, karena Google menolak OAuth di webview tertanam) dan gerbang jatah (1 proyek) <b>sudah selesai dibangun</b> di <code>LetsMapApp/auth.js</code>, dipanggil dari <code>main.js</code>. Tahap ini cuma soal mengisi nilai, bukan menulis kode baru.</div>
+          <div class="done-note">
+            <b>Sudah dikerjakan:</b> <code>config.js</code> terisi sama dengan web, installer dibangun (<code>npm run build</code> setelah Developer Mode Windows dinyalakan — tanpa itu gagal dengan "Cannot create symbolic link"), dan dipasang + diuji di komputer sungguhan. Ditemukan &amp; diperbaiki langsung: <code>auth.js</code>/<code>config.js</code> sempat tidak ikut terpaket (lupa masuk daftar <code>files</code> di <code>package.json</code>), dan tab peramban nyangkut "loading" selamanya setelah login Google karena navigasi langsung ke <code>ukurra://auth</code> (diperbaiki lewat halaman perantara <code>desktop-login-selesai.html</code> di web, lihat Tahap 5).
+          </div>
 
-          <ol>
-            <li>Buka <code>LetsMapApp/config.js</code>.</li>
-            <li>Isi tiga nilai — <b>sama persis</b> dengan yang ada di <code>LetsMap/assets/js/config.js</code>:
-              <ul>
-                <li><code>SUPABASE_URL</code></li>
-                <li><code>SUPABASE_ANON_KEY</code></li>
-                <li><code>CHECKOUT_URL</code> (dari Tahap 5)</li>
-              </ul>
-            </li>
-            <li>Pastikan <code>ukurra://auth</code> sudah ada di Redirect URLs Supabase (sudah dikerjakan di Tahap 3 langkah C).</li>
-            <li>Bangun ulang installer-nya supaya <code>config.js</code> yang terisi ikut terpaket — lihat <code>README.md</code> bagian build untuk perintah tepatnya (biasanya lewat <code>npm run build</code> setelah Developer Mode Windows dinyalakan).</li>
-          </ol>
+          <div class="why">Ukurra Studio memakai akun Google yang sama dengan web, supaya jatah uji coba tidak bisa diulang dengan berpindah aplikasi. Login (PKCE lewat peramban sistem), gerbang jatah (1 proyek gratis), <b>dan sekarang juga gerbang tingkat Pro/Organisasi</b> — Buka Orthofoto (multi-ortho) khusus Organisasi, terbuka sementara selama uji coba berlangsung, disembunyikan total untuk Pro biasa (bukan cuma di-nonaktifkan, supaya pelanggan berbayar tidak kecewa melihat fitur yang tidak bisa dipakai) — semua sudah berjalan nyata, bukan cuma kode yang belum dites.</div>
 
-          <div class="verify"><b>Cek:</b> buka Ukurra Studio hasil build, klik <b>Masuk dengan Google</b>. Peramban sistem terbuka ke halaman login Google, setelah menyetujui, jendela aplikasi kembali ke depan dan pil status di kanan atas berisi namamu. Olah satu proyek sampai selesai, lalu di Supabase &rarr; <code>profiles</code>: <code>projects_used</code> harus jadi 1. Coba olah proyek kedua — ajakan berlangganan harus muncul, bukan diizinkan lanjut.</div>
-
-          <div class="note"><b>Selama <code>config.js</code> masih placeholder</b> (seperti kondisi default repo), aplikasi berjalan tanpa login dan tanpa batas — ini sengaja, supaya pengembangan tidak terhenti menunggu backend. Tapi berarti installer yang dibagikan ke publik <b>harus</b> sudah berisi config yang benar, bukan versi development.</div>
+          <div class="note"><b>Kalau mengubah kode desktop lagi nanti:</b> perlu <code>npm run build</code> ulang di <code>LetsMapApp</code>, lalu pasang ulang installer-nya (atau timpa langsung <code>resources/app.asar</code> di folder instalasi untuk uji cepat tanpa lewat installer). Instalasi yang dipakai pengguna publik harus selalu dari build config production, bukan <code>config.js</code> placeholder.</div>
         </div>
       </div>
     </div>
