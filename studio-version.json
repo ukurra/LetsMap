@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
-  "catatan": "Perbaikan: status langganan & jatah, laporan PDF, alur proyek baru, pengecekan mesin olah data.",
+  "version": "1.0.2",
+  "catatan": "Perbaikan: status mesin olah data tidak lagi macet di \"Memeriksa...\" setelah ganti bahasa ID/EN.",
   "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
 }
