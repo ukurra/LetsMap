@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
-  "catatan": "Perbaikan: status mesin olah data tidak lagi macet di \"Memeriksa...\" setelah ganti bahasa ID/EN.",
+  "version": "1.0.3",
+  "catatan": "Tambah label versi aplikasi di layar mulai.",
   "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
 }

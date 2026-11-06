@@ -19,6 +19,15 @@
   }
   window.LMToast = toast;
 
+  /* ── versi Ukurra Studio di label unduh ───────────────────────────── */
+  fetch('studio-version.json')
+    .then((r) => r.json())
+    .then((d) => {
+      if (!d.version) return;
+      $$('#desk-versi').forEach((el) => (el.textContent = 'v' + d.version));
+    })
+    .catch(() => { /* gagal diam-diam — label versi cuma pemanis */ });
+
   /* ── nav border on scroll ────────────────────────────────────────── */
   const nav = $('#nav');
   const onScroll = () => nav.classList.toggle('stuck', window.scrollY > 8);
