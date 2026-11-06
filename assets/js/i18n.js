@@ -355,6 +355,7 @@ window.LMI18n = (() => {
 
       /* ── kuota & upgrade ── */
       "acct.lihatPaket": "Lihat Paket Berlangganan",
+      "acct.statusGagal": "Gagal memuat status paket — coba buka lagi.",
       "kuota.dev": "Mode pengembangan — tanpa batas",
       "pwa.terpasang": "Aplikasi berhasil dipasang di perangkat kamu.",
       "pwa.tanpaToko": "Tanpa unduh dari toko aplikasi",
@@ -754,6 +755,7 @@ window.LMI18n = (() => {
 
       /* ── quota & upgrade ── */
       "acct.lihatPaket": "View Subscription Plans",
+      "acct.statusGagal": "Could not load plan status — try opening again.",
       "kuota.dev": "Development mode — unlimited",
       "pwa.terpasang": "The app was installed on your device.",
       "pwa.tanpaToko": "No app store download needed",

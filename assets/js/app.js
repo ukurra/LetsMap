@@ -1759,11 +1759,18 @@ ${pms}
     const el = $('#acct-status');
     const up = $('#acct-upgrade');
     if (!el) return;
-    await LMQuota.load(true); // paksa baca ulang — bisa berubah lewat webhook pembayaran
-    el.textContent = await LMQuota.label();
-    if (up) {
-      const s = await LMQuota.load();
-      up.style.display = s.unlimited || s.pro ? 'none' : '';
+    try {
+      await LMQuota.load(true); // paksa baca ulang — bisa berubah lewat webhook pembayaran
+      el.textContent = await LMQuota.label();
+      if (up) {
+        const s = await LMQuota.load();
+        up.style.display = s.unlimited || s.pro ? 'none' : '';
+      }
+    } catch (e) {
+      // Jangan biarkan statusnya diam-diam kosong tanpa jejak kalau gagal
+      // (mis. jaringan putus) — setidaknya kelihatan ada yang salah.
+      console.warn('[acct] gagal memuat status:', e);
+      el.textContent = T('acct.statusGagal');
     }
   }
   $('#avatar').addEventListener('click', () => {

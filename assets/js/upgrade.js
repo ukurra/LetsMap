@@ -53,7 +53,7 @@ window.LMUpgrade = (() => {
         </div>
 
         <div class="up-plans">${PLANS().map(planCard).join('')}</div>
-        <p style="font-size:11.5px;color:var(--dim);line-height:1.6;margin:-6px 0 16px">${T('up.organisasiNote')}</p>
+        <p style="font-size:11.5px;color:var(--dim);line-height:1.6;margin:12px 0 16px">${T('up.organisasiNote')}</p>
 
         <ul class="up-manfaat">${MANFAAT().map(manfaatItem).join('')}</ul>
 
