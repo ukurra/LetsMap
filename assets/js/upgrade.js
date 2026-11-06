@@ -15,6 +15,8 @@ window.LMUpgrade = (() => {
     { id: 'yearly',  nama: T('up.tahunan'), harga: 'Rp 599.000', per: T('up.perTahun'),
       hemat: T('up.hemat3Bulan'), utama: true },
     { id: 'monthly', nama: T('up.bulanan'), harga: 'Rp 69.000',  per: T('up.perBulan'), hemat: '' },
+    { id: 'organisasi', nama: T('up.organisasi'), harga: 'Rp 5.999.000', per: T('up.perTahun'),
+      hemat: T('up.limaAkun') },
   ];
 
   // Satu langganan, dua aplikasi — ini yang membedakan dari alat lain
@@ -51,6 +53,7 @@ window.LMUpgrade = (() => {
         </div>
 
         <div class="up-plans">${PLANS().map(planCard).join('')}</div>
+        <p style="font-size:11.5px;color:var(--dim);line-height:1.6;margin:-6px 0 16px">${T('up.organisasiNote')}</p>
 
         <ul class="up-manfaat">${MANFAAT().map(manfaatItem).join('')}</ul>
 
@@ -76,6 +79,14 @@ window.LMUpgrade = (() => {
     scrim.querySelector('#up-beli').addEventListener('click', () => {
       const pilih = scrim.querySelector('.up-plan.active');
       const id = pilih ? pilih.dataset.plan : 'monthly';
+      // Organisasi butuh pendaftaran 5 akun Google dulu (form "Daftar
+      // Organisasi" di landing page) sebelum checkout — webhook memakai
+      // data itu untuk tahu akun mana yang diaktifkan. Jangan buka link
+      // Mayar langsung dari sini, arahkan ke halaman harga di web.
+      if (id === 'organisasi') {
+        window.open('index.html#harga', '_blank', 'noopener');
+        return;
+      }
       const cfg = window.LM_CONFIG || {};
       // Tiap paket punya produk Mayar/Lynk sendiri dengan harga sendiri —
       // tidak bisa dibedakan lewat parameter URL, lihat CHECKOUT_URL di config.js.

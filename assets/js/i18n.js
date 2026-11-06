@@ -354,6 +354,7 @@ window.LMI18n = (() => {
       "msg.klikTitikPertama": "Klik titik pertama untuk menutup area.",
 
       /* ── kuota & upgrade ── */
+      "acct.lihatPaket": "Lihat Paket Berlangganan",
       "kuota.dev": "Mode pengembangan — tanpa batas",
       "pwa.terpasang": "Aplikasi berhasil dipasang di perangkat kamu.",
       "pwa.tanpaToko": "Tanpa unduh dari toko aplikasi",
@@ -410,6 +411,10 @@ window.LMI18n = (() => {
       "up.m4": "Olah data tanpa batas proyek",
       "up.m5": "Ukur jarak, luas, volume, dan tinggi titik",
       "up.m6": "Ekspor laporan pengukuran (HTML, CSV, PDF)",
+      "up.organisasi": "Organisasi",
+      "up.limaAkun": "5 akun",
+      "up.organisasiNote":
+        "Paket Organisasi mengaktifkan 5 akun Google sekaligus — cocok untuk tim. Memilih paket ini akan membuka halaman harga di ukurra.com untuk mendaftarkan 5 akunnya sebelum pembayaran.",
     },
 
     en: {
@@ -748,6 +753,7 @@ window.LMI18n = (() => {
       "msg.klikTitikPertama": "Click the first point to close the area.",
 
       /* ── quota & upgrade ── */
+      "acct.lihatPaket": "View Subscription Plans",
       "kuota.dev": "Development mode — unlimited",
       "pwa.terpasang": "The app was installed on your device.",
       "pwa.tanpaToko": "No app store download needed",
@@ -804,6 +810,10 @@ window.LMI18n = (() => {
       "up.m4": "Unlimited processing projects",
       "up.m5": "Measure distance, area, volume, and point height",
       "up.m6": "Export measurement reports (HTML, CSV, PDF)",
+      "up.organisasi": "Organisation",
+      "up.limaAkun": "5 accounts",
+      "up.organisasiNote":
+        "The Organisation plan activates 5 Google accounts at once — built for teams. Choosing this opens the pricing page on ukurra.com to register the 5 accounts before payment.",
     },
   };
 

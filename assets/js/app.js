@@ -66,6 +66,23 @@
   });
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+  // Begitu peta dibuka dan belum ada area yang digambar, coba pusatkan
+  // ke lokasi pengguna daripada tampilan default seluruh Indonesia.
+  // Diam-diam gagal kalau izinnya ditolak/tak tersedia — jangan
+  // mengganggu dengan pesan galat untuk sesuatu yang opsional, dan
+  // jangan menimpa tampilan kalau pengguna sudah mulai menggambar
+  // sebelum browser sempat menjawab.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        if (currentPoly) return;
+        map.setView([pos.coords.latitude, pos.coords.longitude], 16);
+      },
+      () => {},
+      { timeout: 6000, maximumAge: 300000 }
+    );
+  }
+
   // Titik biru lokasi saat ini + lingkaran akurasi, mengikuti posisi
   // selama aktif (watchPosition) — mirip tombol lokasi bawaan MapLibre/
   // Google Maps, bukan sekali tembak lalu hilang.
@@ -1737,8 +1754,26 @@ ${pms}
     });
   });
 
+  /** Status paket (jenis akun, berlaku sampai kapan, sisa jatah uji coba). */
+  async function paintAcctStatus() {
+    const el = $('#acct-status');
+    const up = $('#acct-upgrade');
+    if (!el) return;
+    await LMQuota.load(true); // paksa baca ulang — bisa berubah lewat webhook pembayaran
+    el.textContent = await LMQuota.label();
+    if (up) {
+      const s = await LMQuota.load();
+      up.style.display = s.unlimited || s.pro ? 'none' : '';
+    }
+  }
   $('#avatar').addEventListener('click', () => {
     acct.classList.add('open');
+    paintAcctStatus();
+  });
+  const acctUpgrade = $('#acct-upgrade');
+  if (acctUpgrade) acctUpgrade.addEventListener('click', () => {
+    acct.classList.remove('open');
+    LMUpgrade.show('manual');
   });
   $('#acct-x').addEventListener('click', () => acct.classList.remove('open'));
   acct.addEventListener('click', (e) => {
