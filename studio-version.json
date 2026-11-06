@@ -1,5 +1,5 @@
 {
-  "version": "1.0.3",
-  "catatan": "Tambah label versi aplikasi di layar mulai.",
+  "version": "1.0.4",
+  "catatan": "Perbaiki posisi label versi di layar mulai (sebelumnya melayang ke sudut layar, kini di bawah tombol).",
   "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
 }
