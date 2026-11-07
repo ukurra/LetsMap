@@ -87,6 +87,10 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.ukurra_new_user();
 
+-- Uji coba Studio: satu peta PDF dari "Buat Peta dari Orthofoto" (fitur
+-- Organisasi). Terpisah dari projects_used — jatah olah data tetap utuh.
+alter table public.profiles add column if not exists maps_used int not null default 0;
+
 -- ── pemakaian jatah ───────────────────────────────────────────────
 -- security definer: menembus RLS, tapi HANYA bisa menambah satu dan
 -- hanya untuk pengguna yang sedang login. Tidak bisa dipakai menurunkan.
@@ -106,6 +110,8 @@ begin
     update public.profiles set missions_used = missions_used + 1 where id = uid;
   elsif kind = 'projects_used' then
     update public.profiles set projects_used = projects_used + 1 where id = uid;
+  elsif kind = 'maps_used' then
+    update public.profiles set maps_used = maps_used + 1 where id = uid;
   else
     raise exception 'jenis jatah tidak dikenal: %', kind;
   end if;
