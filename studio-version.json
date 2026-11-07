@@ -1,5 +1,5 @@
 {
-  "version": "1.0.5",
-  "catatan": "Baru: impor data vektor KML/KMZ/SHP ke peta (Organisasi), grid & koordinat empat sudut untuk georeferensi, tombol \"Buat Peta dari Orthofoto\", dan satu akun hanya aktif di satu laptop.",
+  "version": "1.0.6",
+  "catatan": "Perbaikan: logout membersihkan seluruh ruang kerja, label grid koordinat dipindah ke luar bingkai peta, pengatur ukuran garis/titik hanya muncul saat alatnya aktif.",
   "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
 }
