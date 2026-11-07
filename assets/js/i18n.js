@@ -153,6 +153,7 @@ window.LMI18n = (() => {
       "harga.o5": "Dukungan prioritas",
       "harga.o6": "<b>Buka orthofoto dari luar</b>",
       "harga.o7": "<b>Gabung banyak orthofoto</b> jadi satu peta siap cetak",
+      "harga.o8": "<b>Impor data vektor</b> KML, KMZ & SHP — otomatis jadi legenda",
       "harga.hubungi": "Daftar Sekarang",
 
       "harga.catatan":
@@ -201,6 +202,7 @@ window.LMI18n = (() => {
       "org.gagalSimpan": "Gagal menyimpan pendaftaran, coba lagi.",
       "org.checkoutBelumSiap": "Pembayaran Organisasi belum tersedia, hubungi haloukurra@gmail.com.",
       "login.gagal": "Gagal masuk. Coba lagi.",
+      "login.ditendang": "Akun ini baru saja masuk di perangkat lain, jadi sesi di sini diakhiri. Masuk lagi untuk memakainya di perangkat ini.",
 
       /* ── perencana: panel ── */
       "msg.geoTidakDidukung": "Geolokasi tidak didukung browser ini.",
@@ -552,6 +554,7 @@ window.LMI18n = (() => {
       "harga.o6":
         "<b>Open external orthophotos</b> — Agisoft, Pix4D, any GeoTIFF",
       "harga.o7": "<b>Combine many orthophotos</b> into one print-ready map",
+      "harga.o8": "<b>Import vector data</b> (KML, KMZ & SHP) — added to the legend automatically",
       "harga.hubungi": "Register Now",
 
       "harga.catatan":
@@ -586,6 +589,7 @@ window.LMI18n = (() => {
       "login.belumAktif":
         "Sign-in is not active yet — Supabase credentials are missing in assets/js/config.js.",
       "login.gagal": "Sign-in failed. Please try again.",
+      "login.ditendang": "This account just signed in on another device, so this session was ended. Sign in again to use it here.",
 
       /* ── Organisation sign-up (before checkout) ── */
       "org.judul": "Register for the Organisation Plan",

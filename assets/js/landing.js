@@ -252,7 +252,12 @@
   /* ── service worker ──────────────────────────────────────────────── */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});
+    });
+    let sudahDikendalikan = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!sudahDikendalikan) { sudahDikendalikan = true; return; }
+      location.reload();
     });
   }
 })();

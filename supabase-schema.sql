@@ -115,6 +115,42 @@ $$;
 revoke all on function public.ukurra_use_quota(text) from public;
 grant execute on function public.ukurra_use_quota(text) to authenticated;
 
+-- ── satu perangkat aktif per aplikasi ─────────────────────────────
+-- Setiap login menulis ID acak perangkatnya ke sini; perangkat lain
+-- yang memegang ID berbeda keluar sendiri saat berikutnya mengecek.
+-- Web dan Studio punya slot masing-masing: merencanakan misi di HP
+-- sambil mengolah data di laptop adalah pemakaian normal satu orang.
+alter table public.profiles add column if not exists device_web    text;
+alter table public.profiles add column if not exists device_studio text;
+
+create or replace function public.ukurra_claim_device(app text, device text)
+returns void
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  uid uuid := auth.uid();
+begin
+  if uid is null then
+    raise exception 'harus login';
+  end if;
+  if device is null or length(device) < 16 or length(device) > 64 then
+    raise exception 'ID perangkat tidak sah';
+  end if;
+
+  if app = 'web' then
+    update public.profiles set device_web = device where id = uid;
+  elsif app = 'studio' then
+    update public.profiles set device_studio = device where id = uid;
+  else
+    raise exception 'aplikasi tidak dikenal: %', app;
+  end if;
+end;
+$$;
+
+revoke all on function public.ukurra_claim_device(text, text) from public;
+grant execute on function public.ukurra_claim_device(text, text) to authenticated;
+
 -- ── misi tersimpan (opsional, untuk nanti) ────────────────────────
 create table if not exists public.missions (
   id         uuid primary key default gen_random_uuid(),

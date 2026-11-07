@@ -7,7 +7,7 @@
    • Nominatim  : selalu online, tidak pernah di-cache
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v36';
+const VERSION = 'v37';
 const SHELL = `ukurra-shell-${VERSION}`;
 const VENDOR = `ukurra-vendor-${VERSION}`;
 const TILES = `ukurra-tiles-${VERSION}`;
@@ -161,19 +161,25 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // ── app shell: cache-first dengan refresh diam-diam ──
+  // ── app shell: jaringan dulu, cache hanya cadangan saat luring ──
+  // Dulu cache-first: salinan lama selalu disajikan duluan, jadi di HP
+  // pembaruan baru terlihat setelah dua-tiga kali muat ulang — atau
+  // tidak sama sekali di PWA yang jarang ditutup.
   if (url.origin === self.location.origin) {
     e.respondWith(
       caches.open(SHELL).then(async (cache) => {
-        const hit = await cache.match(req, { ignoreSearch: true });
         const net = fetch(req)
           .then(bersihkanRedirect)
           .then((res) => {
             if (res.ok) cache.put(req, res.clone());
             return res;
-          })
-          .catch(() => hit || cache.match('./app.html'));
-        return hit || net;
+          });
+        const hit = await cache.match(req, { ignoreSearch: true });
+        if (!hit) return net.catch(() => cache.match('./app.html'));
+        // Sinyal lapangan sering lemah: kalau jaringan belum menjawab
+        // dalam 4 detik, pakai salinan yang ada daripada layar kosong.
+        const tunggu = new Promise((r) => setTimeout(() => r(hit), 4000));
+        return Promise.race([net, tunggu]).catch(() => hit);
       })
     );
   }

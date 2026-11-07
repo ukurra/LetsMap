@@ -1786,6 +1786,14 @@ ${pms}
   acct.addEventListener('click', (e) => {
     if (e.target === acct) acct.classList.remove('open');
   });
+  window.addEventListener('ukurra:ditendang', () => {
+    acct.classList.remove('open');
+    gate.classList.remove('hidden');
+    const n = $('#gate-note');
+    n.style.display = 'block';
+    n.textContent = T('login.ditendang');
+  });
+
   $('#btn-signout').addEventListener('click', async () => {
     await window.LMAuth.signOut();
     acct.classList.remove('open');
@@ -1825,6 +1833,25 @@ ${pms}
   });
 
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('sw.js', { updateViaCache: 'none' })
+        .then((reg) => {
+          // PWA di HP jarang benar-benar ditutup — cek sw.js baru setiap
+          // kali aplikasinya dibuka lagi dari latar belakang.
+          document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') reg.update().catch(() => {});
+          });
+        })
+        .catch(() => {});
+    });
+
+    // Service worker baru mengambil alih: muat ulang supaya halaman ini
+    // ikut versi terbaru — tapi jangan kalau area survei sedang digambar.
+    let sudahDikendalikan = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!sudahDikendalikan) { sudahDikendalikan = true; return; }
+      if (!currentPoly) location.reload();
+    });
   }
 })();
