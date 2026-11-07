@@ -1,5 +1,5 @@
 {
-  "version": "1.0.4",
-  "catatan": "Perbaiki posisi label versi di layar mulai (sebelumnya melayang ke sudut layar, kini di bawah tombol).",
+  "version": "1.0.5",
+  "catatan": "Baru: impor data vektor KML/KMZ/SHP ke peta (Organisasi), grid & koordinat empat sudut untuk georeferensi, tombol \"Buat Peta dari Orthofoto\", dan satu akun hanya aktif di satu laptop.",
   "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
 }
