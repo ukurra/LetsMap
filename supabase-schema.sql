@@ -121,6 +121,26 @@ $$;
 revoke all on function public.ukurra_use_quota(text) from public;
 grant execute on function public.ukurra_use_quota(text) to authenticated;
 
+-- ── versi terbaru aplikasi (notifikasi update Ukurra Studio) ───────
+-- Dibaca Studio setiap kali dibuka, sudah login atau belum. Menaikkan
+-- `versi` di sini langsung memunculkan notifikasi di semua laptop yang
+-- daring, tanpa menunggu deploy web. Boleh dibaca siapa pun; mengubahnya
+-- hanya lewat dasbor Supabase (tidak ada policy tulis).
+create table if not exists public.rilis (
+  aplikasi    text primary key,          -- 'studio'
+  versi       text not null,             -- mis. '1.0.7'
+  catatan     text,
+  unduh       text,
+  diperbarui  timestamptz not null default now()
+);
+
+alter table public.rilis enable row level security;
+
+drop policy if exists "siapa pun boleh baca rilis" on public.rilis;
+create policy "siapa pun boleh baca rilis"
+  on public.rilis for select
+  using (true);
+
 -- ── satu perangkat aktif per aplikasi ─────────────────────────────
 -- Setiap login menulis ID acak perangkatnya ke sini; perangkat lain
 -- yang memegang ID berbeda keluar sendiri saat berikutnya mengecek.
