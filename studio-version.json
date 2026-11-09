@@ -1,5 +1,5 @@
 {
-  "version": "1.0.6",
-  "catatan": "Perbaikan: logout membersihkan seluruh ruang kerja, label grid koordinat dipindah ke luar bingkai peta, pengatur ukuran garis/titik hanya muncul saat alatnya aktif.",
+  "version": "1.0.7",
+  "catatan": "Notifikasi update kini muncul saat aplikasi dibuka, sudah login atau belum.",
   "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
 }
