@@ -70,6 +70,13 @@ window.LMI18n = (() => {
       "drone.menit": "menit",
       "drone.kmz": "Dibuka lewat DJI Fly",
       "drone.json": "Dibuka lewat aplikasi Potensic",
+      "drone.didukung": "Drone yang sudah didukung:",
+      "drone.dan": "dan",
+      "drone.serta": "serta",
+      "drone.eksporKmz": "(ekspor KMZ)",
+      "drone.eksporJson": "(ekspor JSON)",
+      "drone.lihatSpek": "Buka daftar di bawah untuk melihat spesifikasi tiap drone.",
+      "proses.siap": "Selesai",
 
       /* ── cara pakai ── */
       "cara.label": "Enam Langkah",
@@ -463,6 +470,13 @@ window.LMI18n = (() => {
       "drone.menit": "min",
       "drone.kmz": "Opens in DJI Fly",
       "drone.json": "Opens in the Potensic app",
+      "drone.didukung": "Supported drones:",
+      "drone.dan": "and",
+      "drone.serta": "plus",
+      "drone.eksporKmz": "(KMZ export)",
+      "drone.eksporJson": "(JSON export)",
+      "drone.lihatSpek": "Open the lists below to see each drone's specs.",
+      "proses.siap": "Done",
 
       /* ── how it works ── */
       "cara.label": "Six Steps",

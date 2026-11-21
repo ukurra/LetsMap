@@ -103,8 +103,46 @@
     });
     $('#jumlah-dji').textContent = jumlah.dji;
     $('#jumlah-potensic').textContent = jumlah.potensic;
+
+    // Paragraf ringkas di atas daftar lipat: semua drone yang didukung
+    // terbaca sekilas tanpa harus membuka daftarnya.
+    const nama = { dji: [], potensic: [] };
+    Object.entries(window.DRONES).forEach(([n, d]) => nama[d.type === 'dji' ? 'dji' : 'potensic'].push(`<b>${n}</b>`));
+    const gabung = (arr) =>
+      arr.length < 2 ? arr.join('') : `${arr.slice(0, -1).join(', ')} ${T('drone.dan')} ${arr[arr.length - 1]}`;
+    const p = $('#drone-didukung');
+    if (p) {
+      p.innerHTML =
+        `<span class="drone-didukung-judul">${T('drone.didukung')}</span> ` +
+        `${gabung(nama.dji)} ${T('drone.eksporKmz')}, ${T('drone.serta')} ` +
+        `${gabung(nama.potensic)} ${T('drone.eksporJson')}. ${T('drone.lihatSpek')}`;
+    }
   }
   buildDrones();
+
+  /* ── animasi jendela proses Ukurra Studio ────────────────────────
+     Langkah menyala satu per satu (seperti saat mengolah sungguhan),
+     lalu hasil orthofoto/DSM/point cloud muncul, dan berulang. */
+  (function () {
+    const kotak = $('#proses');
+    if (!kotak) return;
+    const baris = Array.from(kotak.querySelectorAll('.pipe-row'));
+    const set = (k) => {
+      baris.forEach((b, i) => {
+        b.classList.toggle('selesai', i < k);
+        b.classList.toggle('jalan', i === k);
+      });
+      kotak.classList.toggle('beres', k >= baris.length);
+    };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return set(baris.length);
+    let k = 0;
+    set(0);
+    setInterval(() => {
+      if (document.hidden) return;
+      k = (k + 1) % (baris.length + 4);
+      set(k);
+    }, 1100);
+  })();
 
   /* ── tahun di footer ─────────────────────────────────────────────── */
   $('#year').textContent = new Date().getFullYear();
