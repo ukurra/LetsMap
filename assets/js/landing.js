@@ -160,7 +160,6 @@
     document.body.style.overflow = '';
   }
 
-  $('#nav-login').addEventListener('click', openLogin);
   $('#login-x').addEventListener('click', closeLogin);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeLogin();
@@ -283,15 +282,9 @@
     bukaCheckout(window.LM_CONFIG && window.LM_CONFIG.CHECKOUT_URL_MONTHLY)
   );
 
-  window.LMAuth.init().then((user) => {
-    if (!user) return;
-    const btn = $('#nav-login');
-    // Penanda dilepas supaya pergantian bahasa tidak menimpa nama
-    // pengguna dengan kata "Masuk" lagi.
-    btn.removeAttribute('data-i18n');
-    btn.textContent = user.name;
-    btn.onclick = () => (location.href = 'app.html');
-  });
+  // Tombol navbar kini selalu "Buat Misi" (tautan ke app.html, yang
+  // mengurus login sendiri). Sesi tetap diinisialisasi seperti sebelumnya.
+  window.LMAuth.init();
 
   window.LMI18n.onChange(buildDrones);
 
