@@ -8,6 +8,7 @@
      data-i18n-ph    → placeholder
      data-i18n-title → title / tooltip
      data-i18n-aria  → aria-label
+     data-i18n-alt   → teks alt gambar
 
    Teks dinamis dari JavaScript dipanggil lewat LMI18n.t('kunci').
 
@@ -22,9 +23,9 @@ window.LMI18n = (() => {
   const DICT = {
     id: {
       /* ── navigasi ── */
-      "nav.drone": "Drone",
+      "nav.drone": "Misi Drone",
       "nav.cara": "Cara Pakai",
-      "nav.desktop": "Pengolahan Data",
+      "nav.desktop": "Ukurra Studio",
       "nav.harga": "Harga",
       "nav.install": "Pasang App",
       "nav.installTitle": "Pasang Ukurra di perangkat ini",
@@ -34,21 +35,25 @@ window.LMI18n = (() => {
       "nav.pasangHp": "Pasang di HP",
       "nav.bukaPeta": "Buka Peta →",
       "nav.menu": "Menu",
+      "cara.youtube": "Tonton tutorialnya di YouTube",
+      "drone.model": "model",
+      "drone.ctaSub": "2 misi uji coba, tanpa kartu kredit",
+      "drone.cta": "Buat Misi Gratis",
+      "desk.p0": "Pilih folder foto, klik Mulai",
+      "hero.shotAlt": "Ukurra Studio menampilkan orthofoto hasil olahan, dengan ukur jarak 230,19 m dan ukur luas 1.287,37 m²",
+      "nav.brandSub": "Olah Data Drone",
+      "nav.youtube": "Tutorial di YouTube",
+      "nav.unduh": "Unduh Studio",
 
       /* ── hero ── */
-      "hero.label":
-        "Rencana misi → olah data → peta siap cetak • Rp 599.000/tahun",
-      "hero.title": "Bikin misi waypoint<br>semudah <span>menggambar.</span>",
-      "hero.sub":
-        "Tandai area di peta, Ukurra menyusun seluruh jalur terbang dan titik " +
-        "fotonya otomatis. Olah hasilnya jadi orthofoto dan DSM untuk " +
-        "mengukur luas dan menghitung volume, lalu cetak jadi peta PDF — " +
-        "semuanya dalam satu langganan.",
+      "hero.label": "Ukurra Studio • Windows 10 & 11",
+      "hero.title": "Semua foto drone jadi<br><span>orthofoto &amp; DSM</span><br>dalam satu klik.",
+      "hero.sub": "Pilih folder foto drone tegak lurus — dari drone apa pun — lalu klik <b>Mulai</b>. Ukurra Studio mengolahnya di laptop kamu sendiri jadi orthofoto, DSM, dan point cloud, siap untuk ukur luas, hitung volume, dan cetak peta PDF.",
       "hero.cobaGratis": "Coba Gratis",
       "hero.lihatHarga": "Lihat Harga",
-      "hero.chip1": "2 misi uji coba, tanpa kartu kredit",
-      "hero.chip2": "1 proyek olah data gratis",
-      "hero.chip3": "Tanpa iklan",
+      "hero.chip1": "1 proyek olah data gratis",
+      "hero.chip2": "Foto drone apa pun, asal ber-GPS",
+      "hero.chip3": "Diolah di laptop sendiri",
 
       "promo.badge": "Termasuk Ukurra Standard",
       "promo.title": "Olah foto drone jadi<br>orthofoto &amp; DSM.",
@@ -59,11 +64,9 @@ window.LMI18n = (() => {
       "promo.cta": "Mulai pengolahan data",
 
       /* ── drone ── */
-      "drone.label": "Kompatibilitas",
-      "drone.title": "Drone yang sudah didukung.",
-      "drone.desc":
-        "Setiap model punya profil sensor sendiri, jadi perhitungan resolusi tanah " +
-        "dan jarak antar jalur menyesuaikan kamera yang kamu pakai.",
+      "drone.label": "Mission Planner",
+      "drone.title": "Drone kamu sudah punya waypoint.<br><span>Bikin misi semudah menggambar.</span>",
+      "drone.desc": "Tandai area di peta, Ukurra menyusun jalur terbang dan titik fotonya otomatis. Ekspor ke KMZ atau JSON, timpa misi di remote atau HP, lalu terbangkan — foto hasilnya langsung siap diolah di Ukurra Studio.",
       "drone.menit": "menit",
       "drone.kmz": "Dibuka lewat DJI Fly",
       "drone.json": "Dibuka lewat aplikasi Potensic",
@@ -93,15 +96,9 @@ window.LMI18n = (() => {
         "Ekspor GeoTIFF untuk GIS, JPG untuk presentasi, atau PDF untuk klien di lapangan.",
 
       /* ── pengolahan data ── */
-      "desk.badge": "Termasuk Ukurra Standard",
-      "desk.title": "Dari waypoint jadi orthofoto &amp; DSM.",
-      "desk.body":
-        "Misi yang kamu buat di sini menghasilkan ratusan foto udara. " +
-        "<b>Ukurra Studio</b> mengolahnya di PC sendiri jadi <b>orthofoto</b> — " +
-        "peta foto tegak berskala — dan <b>DSM</b>, model permukaan tanah. " +
-        "<b>Ukur luas lahan</b>, <b>hitung volume</b> galian atau timbunan, " +
-        "lalu tata hasilnya jadi <b>peta siap cetak</b> lengkap dengan legenda " +
-        "dan skala. Ekspor ke PDF, GeoTIFF, atau JPG.",
+      "desk.badge": "Satu klik, tanpa pengaturan rumit",
+      "desk.title": "Foto masuk, <span>peta</span> keluar.",
+      "desk.body": "Tidak perlu paham fotogrametri. Masukkan foto udara tegak lurus dari <b>drone apa pun</b> — DJI, Potensic, Autel, atau lainnya, asal ber-GPS — dan <b>Ukurra Studio</b> menjalankan seluruh tahapnya otomatis: <b>orthofoto</b> berskala, <b>DSM</b> model permukaan, dan point cloud 3D. Lalu <b>ukur luas</b>, <b>hitung volume</b> galian atau timbunan, dan tata hasilnya jadi <b>peta siap cetak</b>. Ekspor ke PDF, GeoTIFF, atau JPG.",
       "desk.c1": "Orthofoto",
       "desk.c2": "DSM",
       "desk.c3": "Point cloud",
@@ -161,13 +158,10 @@ window.LMI18n = (() => {
         "Ukurra Studio berjalan di <b>Windows 10 dan 11</b>; perencana misi " +
         "berjalan di peramban mana pun, termasuk HP.",
       /* ── cta & footer ── */
-      "cta.title": "Siap memetakan lahan pertama kamu?",
-      "cta.desc":
-        "Mulai dengan 2 misi gratis dan 1 proyek olah data. Tanpa kartu kredit.",
-      "cta.btn": "Coba Gratis Sekarang",
-      "foot.about":
-        "Perencana misi pemetaan udara untuk pilot drone consumer di Indonesia. " +
-        "Dibuat supaya siapa pun bisa menghasilkan peta yang layak dipakai.",
+      "cta.title": "Siap mengolah foto drone pertamamu?",
+      "cta.desc": "Unduh Ukurra Studio dan olah 1 proyek gratis. Belum punya foto? Buat misinya dulu — 2 misi gratis, tanpa kartu kredit.",
+      "cta.btn": "Buat Misi Gratis",
+      "foot.about": "Ukurra Studio mengolah foto drone jadi orthofoto, DSM, dan peta siap cetak, dilengkapi perencana misi waypoint untuk pilot drone di Indonesia.",
       "foot.produk": "Produk",
       "foot.bantuan": "Bantuan",
       "foot.privasi": "Kebijakan Privasi",
@@ -422,9 +416,9 @@ window.LMI18n = (() => {
 
     en: {
       /* ── navigation ── */
-      "nav.drone": "Drones",
+      "nav.drone": "Drone Missions",
       "nav.cara": "How It Works",
-      "nav.desktop": "Data Processing",
+      "nav.desktop": "Ukurra Studio",
       "nav.harga": "Pricing",
       "nav.install": "Install App",
       "nav.installTitle": "Install Ukurra on this device",
@@ -434,21 +428,25 @@ window.LMI18n = (() => {
       "nav.pasangHp": "Install on Phone",
       "nav.bukaPeta": "Open Map →",
       "nav.menu": "Menu",
+      "cara.youtube": "Watch the tutorials on YouTube",
+      "drone.model": "models",
+      "drone.ctaSub": "2 trial missions, no credit card",
+      "drone.cta": "Plan a Free Mission",
+      "desk.p0": "Pick the photo folder, click Start",
+      "hero.shotAlt": "Ukurra Studio showing a processed orthophoto, with a 230.19 m distance and a 1,287.37 m² area measurement",
+      "nav.brandSub": "Drone Data Processing",
+      "nav.youtube": "Tutorials on YouTube",
+      "nav.unduh": "Get Studio",
 
       /* ── hero ── */
-      "hero.label": "Plan → process → print-ready map • Rp 599,000/year",
-      "hero.title":
-        "Plan waypoint missions<br>as easily as <span>drawing.</span>",
-      "hero.sub":
-        "Mark an area on the map and Ukurra lays out every flight line and photo " +
-        "point automatically. Process the results into an orthophoto and DSM to " +
-        "measure area and calculate volume, then print it as a map PDF — " +
-        "all in one subscription.",
+      "hero.label": "Ukurra Studio • Windows 10 & 11",
+      "hero.title": "Turn every drone photo into<br><span>an orthophoto &amp; DSM</span><br>in one click.",
+      "hero.sub": "Pick a folder of top-down drone photos — from any drone — and click <b>Start</b>. Ukurra Studio processes them on your own laptop into an orthophoto, DSM, and point cloud, ready to measure area, calculate volume, and print as a map PDF.",
       "hero.cobaGratis": "Start Free",
       "hero.lihatHarga": "See Pricing",
-      "hero.chip1": "2 trial missions, no credit card",
-      "hero.chip2": "1 free processing project",
-      "hero.chip3": "No ads",
+      "hero.chip1": "1 free processing project",
+      "hero.chip2": "Any drone's photos, as long as they're geotagged",
+      "hero.chip3": "Processed on your own laptop",
 
       "promo.badge": "Included with Ukurra Standard",
       "promo.title": "Turn drone photos into<br>an orthophoto &amp; DSM.",
@@ -459,11 +457,9 @@ window.LMI18n = (() => {
       "promo.cta": "Start processing data",
 
       /* ── drones ── */
-      "drone.label": "Compatibility",
-      "drone.title": "Drones we already support.",
-      "drone.desc":
-        "Every model carries its own sensor profile, so ground resolution and " +
-        "line spacing adapt to the camera you actually fly.",
+      "drone.label": "Mission Planner",
+      "drone.title": "Your drone now has waypoints.<br><span>Plan missions as easily as drawing.</span>",
+      "drone.desc": "Mark an area on the map and Ukurra lays out the flight lines and photo points automatically. Export to KMZ or JSON, replace the mission on your controller or phone, and fly — the photos are ready to process in Ukurra Studio.",
       "drone.menit": "min",
       "drone.kmz": "Opens in DJI Fly",
       "drone.json": "Opens in the Potensic app",
@@ -493,15 +489,9 @@ window.LMI18n = (() => {
         "Export GeoTIFF for GIS, JPG for presentations, or PDF for clients in the field.",
 
       /* ── data processing ── */
-      "desk.badge": "Included with Ukurra Standard",
-      "desk.title": "From waypoints to orthophoto &amp; DSM.",
-      "desk.body":
-        "The missions you plan here produce hundreds of aerial photos. " +
-        "<b>Ukurra Studio</b> processes them on your own PC into an " +
-        "<b>orthophoto</b> — a scaled top-down photo map — and a <b>DSM</b>, " +
-        "a surface model. <b>Measure land area</b>, <b>calculate volume</b> " +
-        "for cut, fill, or stockpiles, then lay the results out as a " +
-        "<b>print-ready map</b> with legend and scale. Export to PDF, GeoTIFF, or JPG.",
+      "desk.badge": "One click, no fiddly settings",
+      "desk.title": "Photos in, <span>map</span> out.",
+      "desk.body": "No photogrammetry know-how needed. Feed in top-down aerial photos from <b>any drone</b> — DJI, Potensic, Autel, or anything else that geotags — and <b>Ukurra Studio</b> runs every stage automatically: a scaled <b>orthophoto</b>, a <b>DSM</b> surface model, and a 3D point cloud. Then <b>measure area</b>, <b>calculate volume</b> for cut or fill, and lay the results out as a <b>print-ready map</b>. Export to PDF, GeoTIFF, or JPG.",
       "desk.c1": "Orthophoto",
       "desk.c2": "DSM",
       "desk.c3": "Point cloud",
@@ -562,13 +552,10 @@ window.LMI18n = (() => {
         "Ukurra Studio runs on <b>Windows 10 and 11</b>; the mission planner " +
         "runs in any browser, including on a phone.",
       /* ── cta & footer ── */
-      "cta.title": "Ready to map your first site?",
-      "cta.desc":
-        "Start with 2 free missions and 1 processing project. No credit card.",
-      "cta.btn": "Start Free Now",
-      "foot.about":
-        "An aerial mapping mission planner for consumer drone pilots in Indonesia. " +
-        "Built so anyone can produce a map worth using.",
+      "cta.title": "Ready to process your first drone photos?",
+      "cta.desc": "Download Ukurra Studio and process 1 project free. No photos yet? Plan the mission first — 2 free missions, no credit card.",
+      "cta.btn": "Plan a Free Mission",
+      "foot.about": "Ukurra Studio turns drone photos into orthophotos, DSMs, and print-ready maps, with a waypoint mission planner for drone pilots in Indonesia.",
       "foot.produk": "Product",
       "foot.bantuan": "Help",
       "foot.privasi": "Privacy Policy",
@@ -874,6 +861,7 @@ window.LMI18n = (() => {
     pasang("data-i18n-ph", (el, s) => (el.placeholder = s));
     pasang("data-i18n-title", (el, s) => (el.title = s));
     pasang("data-i18n-aria", (el, s) => el.setAttribute("aria-label", s));
+    pasang("data-i18n-alt", (el, s) => (el.alt = s));
 
     document.documentElement.lang = lang;
     // Sakelar di navbar ikut menyesuaikan tanpa perlu diurus pemanggil.

@@ -24,7 +24,7 @@
     .then((r) => r.json())
     .then((d) => {
       if (!d.version) return;
-      $$('#desk-versi').forEach((el) => (el.textContent = 'v' + d.version));
+      $$('.studio-versi').forEach((el) => (el.textContent = 'v' + d.version));
     })
     .catch(() => { /* gagal diam-diam — label versi cuma pemanis */ });
 
@@ -79,22 +79,30 @@
 
   const T = (k, v) => window.LMI18n.t(k, v);
 
-  const grid = $('#drone-grid');
+  /* Dua kelompok yang bisa dibuka-tutup (DJI dan Potensic) — tertutup di
+     awal supaya halaman tidak langsung dipenuhi daftar model. */
   function buildDrones() {
-  grid.innerHTML = '';
-  Object.entries(window.DRONES).forEach(([name, d]) => {
-    const isDji = d.type === 'dji';
-    const card = document.createElement('div');
-    card.className = 'drone-card';
-    card.innerHTML =
-      `<span class="drone-ico">${droneIcon}</span>` +
-      `<span class="drone-meta">` +
-      `<span class="drone-name">${name}</span>` +
-      `<span class="drone-spec">${d.mp} MP &bull; ${d.battMin} ${T('drone.menit')}</span>` +
-      `</span>` +
-      `<span class="badge ${isDji ? 'badge-kmz' : 'badge-json'}">${isDji ? 'KMZ' : 'JSON'}</span>`;
-    grid.appendChild(card);
-  });
+    const grup = { dji: $('#drone-grid-dji'), potensic: $('#drone-grid-potensic') };
+    const jumlah = { dji: 0, potensic: 0 };
+    Object.values(grup).forEach((g) => g && (g.innerHTML = ''));
+    Object.entries(window.DRONES).forEach(([name, d]) => {
+      const isDji = d.type === 'dji';
+      const kunci = isDji ? 'dji' : 'potensic';
+      if (!grup[kunci]) return;
+      jumlah[kunci]++;
+      const card = document.createElement('div');
+      card.className = 'drone-card';
+      card.innerHTML =
+        `<span class="drone-ico">${droneIcon}</span>` +
+        `<span class="drone-meta">` +
+        `<span class="drone-name">${name}</span>` +
+        `<span class="drone-spec">${d.mp} MP &bull; ${d.battMin} ${T('drone.menit')}</span>` +
+        `</span>` +
+        `<span class="badge ${isDji ? 'badge-kmz' : 'badge-json'}">${isDji ? 'KMZ' : 'JSON'}</span>`;
+      grup[kunci].appendChild(card);
+    });
+    $('#jumlah-dji').textContent = jumlah.dji;
+    $('#jumlah-potensic').textContent = jumlah.potensic;
   }
   buildDrones();
 

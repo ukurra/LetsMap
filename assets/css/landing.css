@@ -307,3 +307,102 @@ footer{
   .nav-in .btn-accent{padding:8px 12px;font-size:12.5px}
 }
 
+
+/* ═══ UKURRA STUDIO DI DEPAN ═══════════════════════════════════════
+   Halaman kini membuka dengan Ukurra Studio (pengolahan foto); perencana
+   misi turun ke baris kedua. Tombol unduh jadi aksi utama di mana-mana. */
+.btn-accent .btn-unduh-teks small{color:rgba(255,255,255,.82)}
+.btn-unduh{gap:11px}
+.btn-unduh-utama{
+  padding-top:13px;padding-bottom:13px;
+  box-shadow:0 12px 28px -12px rgba(2,132,199,.7);
+}
+.btn-unduh-utama:hover{box-shadow:0 16px 32px -12px rgba(2,132,199,.8)}
+.btn-unduh-utama .btn-unduh-teks > span{font-size:16px}
+.btn-unduh-utama .btn-unduh-teks small{font-size:11px}
+.nav-unduh{gap:7px}
+h1.hero-title{font-size:clamp(32px,4.2vw,50px)}
+.hero-sub b{color:var(--text)}
+
+/* tangkapan layar asli Ukurra Studio di hero */
+.hero-shot{
+  margin:0;border-radius:var(--r-xl);overflow:hidden;
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow-lg);
+}
+.hero-shot-bar{
+  display:flex;align-items:center;gap:6px;padding:9px 13px;
+  background:var(--surface-2);border-bottom:1px solid var(--line);
+  font-size:11.5px;font-weight:700;color:var(--dim);
+}
+.hero-shot-bar i{width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+.hero-shot-bar span{margin-left:6px}
+.hero-shot img{display:block;width:100%;height:auto}
+.hero-shot-cap{display:flex;flex-wrap:wrap;gap:7px;padding:12px 13px;border-top:1px solid var(--line)}
+
+h2.sec-title span{color:var(--accent-d)}
+.pipe-klik{background:var(--accent-wash);border-color:var(--accent-soft);color:var(--accent-d)}
+.pipe-klik .pipe-num{background:var(--accent);color:#fff;font-size:9px}
+
+/* ═══ MISI DRONE: judul + daftar drone yang bisa dibuka-tutup ═══════ */
+.misi-head{
+  display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+  gap:22px 40px;margin-bottom:30px;
+}
+.misi-head .sec-head{max-width:640px}
+.misi-cta{display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.misi-cta-sub{font-size:12px;color:var(--dim-2)}
+.drone-grup-list{display:grid;gap:12px}
+.drone-grup{
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--bg);overflow:hidden;
+}
+.drone-grup[open]{background:var(--surface-2)}
+.drone-grup summary{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 18px;cursor:pointer;list-style:none;
+  user-select:none;
+}
+.drone-grup summary::-webkit-details-marker{display:none}
+.drone-grup summary:hover .drone-grup-nama{color:var(--accent-d)}
+.drone-grup summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:var(--r-lg)}
+.drone-grup-nama{font-size:16px;font-weight:800;transition:color .18s}
+.drone-grup-sub{flex:1;min-width:0;font-size:12.5px;color:var(--dim)}
+.drone-grup-panah{flex-shrink:0;margin-left:auto;color:var(--dim);transition:transform .22s var(--ease)}
+.drone-grup[open] .drone-grup-panah{transform:rotate(180deg)}
+.drone-grup .drone-grid{padding:0 18px 18px}
+
+/* ═══ YOUTUBE & MEDIA SOSIAL ═══════════════════════════════════════ */
+.yt-btn{margin-top:18px;gap:9px}
+.yt-btn svg{color:#FF0000}
+.cta-tombol{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.sosmed{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.foot-col a.sosmed-ikon{
+  display:grid;place-items:center;width:38px;height:38px;padding:0;
+  border-radius:50%;border:1px solid var(--line);background:var(--surface-2);
+  color:var(--dim);transition:color .18s, border-color .18s, background .18s;
+}
+.foot-col a.sosmed-instagram:hover{color:#E1306C;border-color:#E1306C}
+.foot-col a.sosmed-youtube:hover{color:#FF0000;border-color:#FF0000}
+.foot-col a.sosmed-tiktok:hover{color:#111;border-color:#111}
+.foot-col a.sosmed-facebook:hover{color:#1877F2;border-color:#1877F2}
+
+@media (max-width:920px){
+  .hero-shot{max-width:620px}
+}
+@media (max-width:700px){
+  .misi-head{align-items:flex-start}
+  .drone-grup summary{flex-wrap:wrap;padding:14px 15px}
+  .drone-grup-sub{flex-basis:100%;order:3}
+  .drone-grup .drone-grid{padding:0 14px 14px}
+  .hero-cta .btn-unduh-utama{flex-basis:100%}
+  .cta-tombol .btn{flex:1;min-width:200px}
+}
+/* Di layar sangat sempit, tombol "Buat Misi" di navbar disembunyikan —
+   masih ada di laci dan di bagian Misi Drone. Unduh Studio tetap. */
+@media (max-width:560px){
+  .nav-misi{display:none}
+}
+@media (max-width:440px){
+  .nav-unduh svg{display:none}
+}
