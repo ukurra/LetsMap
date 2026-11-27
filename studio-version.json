@@ -1,5 +1,5 @@
 {
-  "version": "1.0.7",
-  "catatan": "Notifikasi update kini muncul saat aplikasi dibuka, sudah login atau belum.",
-  "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup.exe"
+  "version": "1.0.8",
+  "catatan": "Mesin olah data terpasang otomatis; pengolahan dilanjutkan sendiri saat RAM penuh.",
+  "unduh": "https://unduh.ukurra.com/Ukurra-Studio-Setup-1.0.8.exe"
 }
